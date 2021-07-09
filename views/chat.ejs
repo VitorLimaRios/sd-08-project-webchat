@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <main>
+    <% if(messages) { %>
+      <ul>
+        <% messages.forEach((item) => { %>
+          <li data-testid="message"><%= item.message %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <form>
+      <input data-testid="message-box" name="message" type="text" />
+      <button data-testid="send-button">Send</button>
+    </form>
+  </main>
+  <aside>
+
+  </aside>
+</body>
+</html>
