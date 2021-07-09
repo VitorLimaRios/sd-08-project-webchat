@@ -25,19 +25,19 @@ const d = new Date();
                d.getSeconds()].join(':')} ${(d.getHours() > 12) ? 'PM' : 'AM'}`;
 
 // https://stackoverflow.com/questions/3954438/how-to-remove-item-from-array-by-value
-Array.prototype.remove = function () {
-    let what; 
-    const a = arguments; 
-    let L = a.length;
-    let ax;
-    while (L && this.length) {
-        what = a[--L];
-        while ((ax = this.indexOf(what)) !== -1) {
-            this.splice(ax, 1);
-        }
-    }
-    return this;
-};
+// const remove = function (array, key) {
+//     let what; 
+//     const a = arguments; 
+//     let L = a.length;
+//     let ax;
+//     while (L && this.length) {
+//         what = a[--L];
+//         while ((ax = this.indexOf(what)) !== -1) {
+//             this.splice(ax, 1);
+//         }
+//     }
+//     return this;
+// };
 
 const PORT = 3000;
 
@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
         io.emit('message', result);
       });
     socket.on('disconnect', () => {
-        listOnline.remove(socket.id);
+        // listOnline.remove(socket.id);
         console.log('user disconnected');
       });
   });
