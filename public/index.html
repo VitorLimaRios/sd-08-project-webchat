@@ -19,24 +19,32 @@
 <body>
   <h1>WEB CHAT</h1>
   <div>
-    <form id="userNickname">
-      <input type="text" id="nickname" placeholder="Write your nickname here" />
-      <button type="submit">save</button>
+    <form id="nicknameForm">
+      <input type="text" id="nicknameInput" placeholder="Write your nickname here" data-testid="nickname-box" />
+      <button type="submit" data-testid="nickname-button">save</button>
     </form>
   </div>
   <div id="userContainer">
     <h3>Users online</h3>
-    <ul id="usersList"></ul>
+    <span>Your nickname:</span>
+    <h5 id="userNickname" data-testid="online-user"></h5>
+    <span>Other users:</span>
+    <ul id="usersList">
+    </ul>
   </div>
   <div id="messagesContainer">
     <h3>Messages</h3>
-    <ul id="messagesList"></ul>
+    <ul id="messagesList">
+      <div style="display: none;">
+        <li data-testid="message" id="messageItem"></li>
+      </div>
+    </ul>
   </div>
   <div id="editorContainer">
     <h3>Message editor</h3>
     <form id="messageForm">
-      <input type="text" id="messageInput" placeholder="Write your message here" />
-      <button type="submit">send</button>
+      <input type="text" id="messageInput" placeholder="Write your message here" data-testid="message-box" />
+      <button type="submit" data-testid="send-button">send</button>
     </form>
   </div>
 </body>

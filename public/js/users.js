@@ -1,17 +1,22 @@
 const socket = window.io();
 
-socket.on('userConection', () => {
+const userNicknameTag = '#userNickname';
+
+socket.on('getconnection', () => {
   socket.emit('getNickname');
-  socket.emit('getUsers');
 });
 
 socket.on('yourNickname', (nickname) => {
-  const ulUser = document.querySelector('#usersList');
-  const liUser = document.createElement('li');
-  liUser.textContent = nickname;
-  ulUser.appendChild(liUser);
+  const userNickname = document.querySelector(userNicknameTag);
+  userNickname.textContent = nickname;
 
   localStorage.setItem('nickname', nickname);
+  socket.emit('getUsers');
+});
+
+socket.on('sendNickname', () => {
+  const nickname = localStorage.getItem('nickname');
+  socket.emit('myNickname', nickname);
 });
 
 socket.on('newUser', (nickname) => {
@@ -23,10 +28,9 @@ socket.on('newUser', (nickname) => {
 
 socket.on('message', (message) => {
   const ulMessage = document.querySelector('#messagesList');
-
   const liMessage = document.createElement('li');
+  liMessage.setAttribute('data-testid', 'message');
   liMessage.textContent = message;
-
   ulMessage.appendChild(liMessage);
 });
 
@@ -36,8 +40,7 @@ const input = document.getElementById('messageInput');
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   if (input.value) {
-    const nickname = localStorage.getItem('nickname')
-      ? localStorage.getItem('nickname') : socket.id;
+    const nickname = document.querySelector(userNicknameTag).value;
     const chatMessage = input.value;
     socket.emit('message', { chatMessage, nickname });
     input.value = '';
@@ -47,11 +50,12 @@ form.addEventListener('submit', (e) => {
 const nicknameForm = document.getElementById('userNickname');
 const nicknameInput = document.getElementById('nickname');
 
-nicknameForm.addEventListener('click', (e) => {
+nicknameForm.addEventListener('submit', (e) => {
   e.preventDefault();
   if (nicknameInput.value) {
+    console.log(nicknameInput.value);
     localStorage.setItem('nickname', nicknameInput.value);
-
+    document.querySelector(userNicknameTag).textContent = nicknameInput.value;
     nicknameInput.value = '';
   }
 });

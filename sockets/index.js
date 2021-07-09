@@ -3,10 +3,15 @@ const { getRandomNickname } = require('../services/randomNickname');
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
+    console.log(`User connected! ID: ${socket.id}`);
+    socket.emit('getconnection');
     socket.on('getNickname', () => {
-      const nickname = getRandomNickname();
-      socket.emit('yourNickname', nickname);
-      socket.broadcast.emit('newUser', nickname);
+      const randomNickname = getRandomNickname();
+      socket.emit('yourNickname', randomNickname);
+    });
+
+    socket.on('getUsers', () => {
+      socket.broadcast.emit('sendNickname');
     });
 
     socket.on('message', ({ chatMessage, nickname }) => {
