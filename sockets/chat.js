@@ -21,7 +21,11 @@ const connectAndDisconectEvents = (io, socket) => {
     console.log(`ID: ${socket.id} / Nickname: ${randomUser} conectou à sala`);
     io.emit('saveStorage', { socketId: socket.id, nickname: randomUser });
     onlineUsers[socket.id] = randomUser;
-    io.emit('onlineUsers', onlineUsers);
+    const onlineUsersArray = Object.values(onlineUsers);
+    io.emit('onlineUsers', onlineUsersArray);
+    const lastUserConnected = onlineUsersArray.pop();
+    onlineUsersArray.unshift(lastUserConnected);
+    socket.emit('onlineUsers', onlineUsersArray);
     const messageHistory = await messagesModel.getMessages();
     io.emit('history', messageHistory);
   });
@@ -29,13 +33,11 @@ const connectAndDisconectEvents = (io, socket) => {
   socket.on('disconnect', () => {
     console.log(`ID: ${onlineUsers[socket.id]} desconectou-se`);
     delete onlineUsers[socket.id];
-    io.emit('onlineUsers', onlineUsers);
+    io.emit('onlineUsers', Object.values(onlineUsers));
   });
 };
 
-module.exports = (io) => io.on('connection', (socket) => {
-  connectAndDisconectEvents(io, socket);
-
+const messageEvents = (io, socket) => {
   socket.on('message', async ({ chatMessage, nickname }) => {
     const date = generateFormatedDate();
     const message = `${date} - ${nickname}: ${chatMessage}`;
@@ -44,9 +46,23 @@ module.exports = (io) => io.on('connection', (socket) => {
     await messagesModel
       .saveMessage({ nickname, content: chatMessage, date });
   });
+};
 
+const nicknameEvents = (io, socket) => {
   socket.on('changeNickname', (newNickname) => {
     onlineUsers[socket.id] = newNickname;
-    io.emit('onlineUsers', onlineUsers);
+    const onlineUsersArray = Object.values(onlineUsers);
+    io.emit('onlineUsers', onlineUsersArray);
+    const lastUserConnected = onlineUsersArray.pop();
+    onlineUsersArray.unshift(lastUserConnected);
+    socket.emit('onlineUsers', onlineUsersArray);
   });
+};
+
+module.exports = (io) => io.on('connection', (socket) => {
+  connectAndDisconectEvents(io, socket);
+
+  messageEvents(io, socket);
+
+  nicknameEvents(io, socket);  
 });

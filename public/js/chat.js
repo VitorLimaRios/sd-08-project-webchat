@@ -25,8 +25,7 @@ const createOnlineUsers = (onlineUsers) => {
   while (onlineUsersList.firstChild) {
     onlineUsersList.removeChild(onlineUsersList.firstChild);
   }
-  const onlineUsersNicknames = Object.values(onlineUsers);
-  onlineUsersNicknames.forEach((user) => {
+  onlineUsers.forEach((user) => {
     const li = document.createElement('li');
     li.innerText = user;
     li.setAttribute(TESTID, 'online-user');
