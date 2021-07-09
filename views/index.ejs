@@ -72,6 +72,7 @@
         formMessage.addEventListener('submit', function(e) {
         e.preventDefault();
         if (chatMessage.value) {
+            message.nickname=userName;
             message.chatMessage= chatMessage.value
             console.log('chat ',message)
             socket.emit('message', message);
@@ -81,16 +82,16 @@
 
         // socket.on('mudança de nick', function(myNick))
 
-        socket.on('chat message', function(message) {
-        console.log('mensagem geral ',`${socket.id} ${message.nickname} ${message.chatMessage}`)
-        message.nickname = message.nickname || socket.id
+        socket.on('message', function(message) {
+        // console.log('mensagem geral ',`${socket.id} ${message.nickname} ${message.chatMessage}`)
+        // message.nickname = message.nickname || socket.id
         const item = document.createElement('li');
-        item.textContent = `${socket.id} ${message.nickname} ${message.chatMessage}`;
-        if(message.chatMessage){
+        item.textContent = message;
+        // if(message.chatMessage){
             messages.appendChild(item);
             item.setAttribute('data-testid','message');
             window.scrollTo(0, document.body.scrollHeight);
-        }
+        // }
         // return nickname=message.nickname, chatMessage=message.chatMessage;
         });
 
