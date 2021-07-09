@@ -14,6 +14,7 @@ const saveNicknameButton = document.querySelector('#nickname-button');
 saveNicknameButton.addEventListener('click', () => {
   const nicknameInput = document.querySelector('#nickname-input');
   socket.emit('changeNickname', nicknameInput.value);
+  localStorage.setItem(socket.id, nicknameInput.value);
   nicknameInput.value = '';
 });
 

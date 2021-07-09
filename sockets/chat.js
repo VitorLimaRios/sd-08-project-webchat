@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const messagesModel = require('../models/messagesModel');
 
 // Referência: https://www.horadecodar.com.br/2020/05/13/como-formatar-data-no-javascript-date-moment-js/
 const generateFormatedDate = () => {
@@ -7,13 +8,9 @@ const generateFormatedDate = () => {
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
   const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-  if (hours < 12) return `${day}-${month}-${year} ${hours}:${minutes}:${seconds} AM`;
-  if (hours > 12) {
-    return `${day}-${month}-${year} ${(hours - 12)
-        .toString().padStart(2, '0')}:${minutes}:${seconds} PM`;
-  }
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+  return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
 };
 
 const onlineUsers = {};
@@ -37,12 +34,13 @@ const connectAndDisconectEvents = (io, socket) => {
 module.exports = (io) => io.on('connection', (socket) => {
   connectAndDisconectEvents(io, socket);
 
-  socket.on('message', ({ chatMessage, _nickname }) => {
+  socket.on('message', ({ chatMessage, nickname }) => {
     const date = generateFormatedDate();
-    const userNickname = onlineUsers[socket.id];
-    const message = `${date} - ${userNickname}: ${chatMessage}`;
-    console.log(`${date} - ${userNickname}: ${chatMessage}`);
+    const message = `${date} - ${nickname}: ${chatMessage}`;
+    console.log(`${date} - ${nickname}: ${chatMessage}`);
     io.emit('message', message);
+    messagesModel
+      .saveMessage({ nickname, content: chatMessage, date });
   });
 
   socket.on('changeNickname', (newNickname) => {
