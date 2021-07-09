@@ -8,29 +8,29 @@
   </head>
 
   <body>
-    <div id="Container">
-      <div id="upchat">
-        <div id="leftPart">
-          <div id="leftContent">
-            <!-- <div id="nicknameBox"> -->
-            <form id="nicknameBox">
-              <input id="username" type="text" />
-              <button id="saveuser">SALVAR</button>
-              <!-- <div id="username"> USER </div>
-              <div id="saveuser"> SALVAR </div> -->
+    <div class="Container">
+      <div class="upchat">
+        <div class="leftPart">
+          <div class="leftContent">
+            <!-- <div class="nicknameBox"> -->
+            <form class="nicknameBox">
+              <input class="username" type="text" />
+              <button class="saveuser">SALVAR</button>
+              <!-- <div class="username"> USER </div>
+              <div class="saveuser"> SALVAR </div> -->
             </form>
             <!--  </div> -->
-            <div id="usuariosOnline"> blabla </div>
+            <div class="usuariosOnline"> blabla </div>
           </div>
         </div>
-        <div id="rightPart">
-          <div id="messagesContainer"></div>
+        <div class="rightPart">
+          <div class="messagesContainer"></div>
         </div>
       </div>
-      <div id="botchat">
-        <form id="messageForm" action="">
-          <input id="textinput" type="text" />
-          <button id="sendmessage"> Enviar </button>
+      <div class="botchat">
+        <form class="messageForm" action="">
+          <input class="textinput" type="text" />
+          <button class="sendmessage"> Enviar </button>
         </form>
       </div>
     </div>
@@ -41,18 +41,18 @@
 
 
     //ENVIA A MENSAGEM DE TEXTO
-    document.querySelector("#messageForm").addEventListener("submit", (e) => {
+    document.querySelector(".messageForm").addEventListener("submit", (e) => {
       e.preventDefault();
-      const chatMessage = document.querySelector('#textinput').value
+      const chatMessage = document.querySelector('.textinput').value
       console.log(chatMessage)
       const nickname = socket.id
       socket.emit("message", { chatMessage, nickname })
-      document.querySelector('#textinput').value = '';
+      document.querySelector('.textinput').value = '';
     })
 
     //CRIA A MENSAGEM DE TEXTO
     const createMessage = (message) => {
-      const messagesUl = document.querySelector('#messagesContainer');
+      const messagesUl = document.querySelector('.messagesContainer');
       const li = document.createElement('li');
       li.innerText = message;
       messagesUl.appendChild(li);
@@ -60,13 +60,6 @@
     //RECEBE A MENSGAEM E CHAMA A FUNCAO DE EXIBIR
     socket.on('message', (data) => createMessage(data))
 
-    /*  document.querySelector("#messageForm").addEventListener("submit", (e) => {
-       e.preventDefault();
-       const chatMessage = document.querySelector('#textinput').value
-       const nickname = socket.id
-       socket.emit("message", { chatMessage, nickname })
-       document.querySelector('#textinput').value = '';
-     }) */
   </script>
   <style>
     * {
@@ -74,23 +67,21 @@
       margin: 0;
     }
 
-    #Container {
-      width: 100vw;
-      height: 100vh;
-      background-color: yellow;
+    .Container {
       display: flex;
       flex-direction: column;
+      height: 100vh;
+      width: 100vw;
     }
 
-    #upchat {
-      background-color: red;
+    .upchat {
       display: flex;
       height: 800px;
     }
 
-    #botchat {
+    .botchat {
       align-items: center;
-      background-color: maroon;
+      border-top: 1px black solid;
       display: flex;
       flex: 1;
       height: 100%;
@@ -98,86 +89,83 @@
       width: 100vw;
     }
 
-    #leftPart {
+    .leftPart {
       display: flex;
       flex-direction: column;
-      width: 40%;
       height: 800px;
-      background-color: pink;
+      width: 40%;
     }
 
-    #leftContent {
+    .leftContent {
       height: 600px;
       padding: 20px;
     }
 
-    #rightPart {
+    .rightPart {
       display: flex;
       flex: 1;
-      background-color: black;
       height: 800px;
       padding: 20px;
     }
 
-    #messagesContainer {
-      width: 100%;
-      height: 100%;
+    .messagesContainer {
       background-color: yellow;
+      height: 100%;
+      width: 100%;
     }
 
-    #nicknameBox {
-      display: flex;
+    .nicknameBox {
+      align-items: center;
       background-color: purple;
-      width: 100%;
+      display: flex;
       height: 200px;
       justify-content: space-around;
-      align-items: center;
+      width: 100%;
     }
 
-    #usuariosOnline {
-      height: 100%;
+    .usuariosOnline {
       background-color: blue;
+      height: 100%;
     }
 
-    #username {
-      display: flex;
+    .username {
+      align-items: center;
       background-color: green;
-      width: 60%;
-      height: 100px;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #saveuser {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-      background-color: indianred;
       height: 100px;
+      justify-content: center;
+      width: 60%;
     }
 
-    #messageForm {
+    .saveuser {
+      align-items: center;
+      background-color: indianred;
+      display: flex;
+      flex: 1;
+      height: 100px;
+      justify-content: center;
+    }
+
+    .messageForm {
       display: flex;
       height: 100px;
       width: inherit;
     }
 
-    #textinput {
-      width: 70%;
-      display: flex;
-      justify-content: center;
+    .textinput {
       align-items: center;
+      display: flex;
       height: inherit;
-      background-color: white;
+      justify-content: center;
+      width: 70%;
     }
 
-    #textinput input {
-      width: 100%;
+    .textinput input {
       height: 50%;
+      width: 100%;
     }
 
-    #sendmessage {
+    .sendmessage {
       flex: 1;
     }
 
