@@ -1,14 +1,24 @@
 const socket = window.io();
 
 socket.on('userConection', () => {
+  socket.emit('getNickname');
+  socket.emit('getUsers');
+});
+
+socket.on('yourNickname', (nickname) => {
   const ulUser = document.querySelector('#usersList');
-
   const liUser = document.createElement('li');
-  liUser.textContent = socket.id;
-
+  liUser.textContent = nickname;
   ulUser.appendChild(liUser);
 
-  localStorage.setItem('nickname', socket.id);
+  localStorage.setItem('nickname', nickname);
+});
+
+socket.on('newUser', (nickname) => {
+  const ulUser = document.querySelector('#usersList');
+  const liUser = document.createElement('li');
+  liUser.textContent = nickname;
+  ulUser.appendChild(liUser);
 });
 
 socket.on('message', (message) => {
