@@ -18,7 +18,7 @@ sendButton.addEventListener('click', () => {
     nickname: nick,
     chatMessage: messageInput.value,
   });
-  nickname.value = '';
+  nick = '';
   messageInput.value = '';
   return false;
 });
@@ -32,6 +32,5 @@ const createMessage = (message) => {
 };
 
 socket.on('message', (message) => {
-  console.log(message);
   createMessage(message);
 });
