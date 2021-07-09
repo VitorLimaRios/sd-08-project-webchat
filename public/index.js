@@ -1,26 +1,44 @@
 const socket = window.io();
 
-const form = document.querySelector('form');
-const inputNome = document.querySelector('#staticEmail2');
-const inputTexto = document.querySelector('#inputPassword2');
+const sendButton = document.querySelector('#button-message');
+const nickNamebutton = document.querySelector('#nickname-btn');
+const nickname = document.querySelector('#nickname');
+const inputText = document.querySelector('#message-box');
 
-form.addEventListener('submit', (e) => {
+nickNamebutton.addEventListener('click', () => {
+  localStorage.setItem('nickname', nickname.value);
+});
+
+sendButton.addEventListener('click', (e) => {
   e.preventDefault();
-  socket.emit('sendMessage', {
-    nome: inputNome.value,
-    texto: inputTexto.value,
+  let findNickName = localStorage.getItem('nickname');
+  if (!findNickName) {
+    findNickName = 'nyancaaaaaaaaaat';
+  }
+  socket.emit('message', {
+    nickname: findNickName,
+    chatMessage: inputText.value,
   });
-  inputNome.value = '';
-  inputTexto.value = '';
+  findNickName = '';
+  inputText.value = '';
   return false;
 });
 
-const createMessage = (message) => {
-  const messagesUl = document.querySelector('#lista');
+const createUser = (user) => {
+  const messagesUl = document.querySelector('#list');
   const li = document.createElement('li');
-  li.className = 'list-group-item';
+  li.dataset.testid = 'online-user';
+  li.innerText = user;
+  messagesUl.appendChild(li);
+};
+
+const createMessage = (message) => {
+  const messagesUl = document.querySelector('#list');
+  const li = document.createElement('li');
+  li.dataset.testid = 'message';
   li.innerText = message;
   messagesUl.appendChild(li);
 };
 
-socket.on('createMessage', (message) => createMessage(message));
+socket.on('message', (message) => createMessage(message));
+socket.on('connection', (user) => createUser(user));

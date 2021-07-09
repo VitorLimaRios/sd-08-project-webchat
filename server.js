@@ -6,22 +6,23 @@ const cors = require('cors');
 const app = express();
 const http = require('http').createServer(app);
 
+const PORT = process.env.PORT || 3000;
+
 const io = require('socket.io')(http, {
   cors: {
-    origin: `http://localhost:${process.env.PORT}`,
+    origin: `http://localhost:${PORT}`,
     method: ['GET', 'POST'],
   },
 });
 
 app.use(cors());
+app.use(express.static('public'));
 
 require('./sockets')(io);
 
 app.get('/', (_req, res) => {
-  res.sendFile(`${__dirname}/public/index.html`);
+  res.sendFile(`${__dirname}/public/chat.html`);
 });
-
-const PORT = process.env.PORT || 3000;
 
 http.listen(PORT, () => {
   console.log(`App ovindo na porta ', ${PORT}`);

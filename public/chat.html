@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Chatzinho da discórdia \o/</h1>
+  <fieldset>
+    <ul id="list"></ul>
+    <form>
+      <input type="text" data-testid="nickname-box" placeholder="Insira seu nickname" id="nickname">
+      <button type="submit" data-testid="nickname-button" id="nickname-btn">Salvar</button>
+      <input type="text" data-testid="message-box" id="message-box" placeholder="Digite sua mensagem aqui">
+      <button type="submit" data-testid="send-button" id="button-message">Enviar</button>
+    </form>
+  </fieldset>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
