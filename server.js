@@ -6,9 +6,11 @@ const app = express();
 const http = require('http').createServer(app);
 require('dotenv/config');
 
+const PORT = process.env.PORT || 3000;
+
 const io = require('socket.io')(http, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: `http://localhost:${PORT}`,
     method: ['GET', 'POST'],
   },
 });
@@ -23,6 +25,6 @@ app.get('/', (_req, res) => {
   res.sendFile(`${__dirname}/public/index.html`);
 });
 
-http.listen(process.env.PORT, () => {
-  console.log(`Ouvindo na porta ${process.env.PORT}`);
+http.listen(PORT, () => {
+  console.log(`Ouvindo na porta ${PORT}`);
 });
