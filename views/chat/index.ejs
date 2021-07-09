@@ -8,33 +8,47 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+  <p class='username' data-testid="online-user">
+    <%= name %> 
+  </p>
   <div class="left-content">
-    <input type="text" class="nickname">
-    <button class="btn-save-nick">save</button>
+    <input type="text" class="nickname" data-testid="nickname-box">
+    <button class="btn-save-nick" data-testid="nickname-button">save</button>
   </div>
   <div class="right-content">
     <ul class="web-chat"></ul>
   </div>
-  <textarea class="write-message"></textarea>
-  <button class="send-message-btn">Enviar</button>
+  <input class="write-message" data-testid="message-box" ></input>
+  <button class="send-message-btn" data-testid="send-button" >Enviar</button>
 </body>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
   const socket = io()
 
-  const textArea = document.querySelector('.write-message');
+  const inputMessage = document.querySelector('.write-message');
   const btnSendMessage = document.querySelector('.send-message-btn');
   const nicknameInput = document.querySelector('.nickname');
+  const userName = document.querySelector('.username')
+  const btnSetUsername = document.querySelector('.btn-save-nick')
 
   const sendMessage = () => {
-    const nickname = nicknameInput.value;
-    const chatMessage = textArea.value;
+    const nickname = userName.innerText
+    const chatMessage = inputMessage.value;
 
     socket.emit('message', { nickname, chatMessage })
   }
 
+  const setUserName = () => {
+    console.log(`${userName.innerText} mudou o nome para ${nicknameInput.value}`)
+    
+    userName.innerText = nicknameInput.value;
+
+    nicknameInput.value = ''
+  }
+
   btnSendMessage.addEventListener('click', sendMessage);
+  btnSetUsername.addEventListener('click', setUserName);
 
   socket.on('message', (message) => {
     const ulChat = document.querySelector('.web-chat');
@@ -42,12 +56,11 @@
     const li = document.createElement('li')
 
     li.innerText = message;
+    li.setAttribute('data-testid', 'message')
     
     ulChat.appendChild(li);
     
-    textArea.value = ''
-
-    console.log(message, ulChat, li)
+    inputMessage.value = ''
   })
 
 </script>
