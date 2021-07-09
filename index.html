@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="Container">
+      <div id="upchat">
+        <div id="leftPart">
+          <div id="leftContent">
+            <!-- <div id="nicknameBox"> -->
+            <form id="nicknameBox">
+              <input id="username" type="text" />
+              <button id="saveuser">SALVAR</button>
+              <!-- <div id="username"> USER </div>
+              <div id="saveuser"> SALVAR </div> -->
+            </form>
+            <!--  </div> -->
+            <div id="usuariosOnline"> blabla </div>
+          </div>
+        </div>
+        <div id="rightPart">
+          <div id="messagesContainer"></div>
+        </div>
+      </div>
+      <div id="botchat">
+        <form id="messageForm" action="">
+          <input id="textinput" type="text" />
+          <button id="sendmessage"> Enviar </button>
+        </form>
+      </div>
+    </div>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = window.io();
+
+
+    //ENVIA A MENSAGEM DE TEXTO
+    document.querySelector("#messageForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const chatMessage = document.querySelector('#textinput').value
+      console.log(chatMessage)
+      const nickname = socket.id
+      socket.emit("message", { chatMessage, nickname })
+      document.querySelector('#textinput').value = '';
+    })
+
+    //CRIA A MENSAGEM DE TEXTO
+    const createMessage = (message) => {
+      const messagesUl = document.querySelector('#messagesContainer');
+      const li = document.createElement('li');
+      li.innerText = message;
+      messagesUl.appendChild(li);
+    };
+    //RECEBE A MENSGAEM E CHAMA A FUNCAO DE EXIBIR
+    socket.on('message', (data) => createMessage(data))
+
+    /*  document.querySelector("#messageForm").addEventListener("submit", (e) => {
+       e.preventDefault();
+       const chatMessage = document.querySelector('#textinput').value
+       const nickname = socket.id
+       socket.emit("message", { chatMessage, nickname })
+       document.querySelector('#textinput').value = '';
+     }) */
+  </script>
+  <style>
+    * {
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    #Container {
+      width: 100vw;
+      height: 100vh;
+      background-color: yellow;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #upchat {
+      height: 800px;
+      background-color: red;
+      display: flex;
+    }
+
+    #botchat {
+      width: 100vw;
+      height: 100%;
+      display: flex;
+      flex: 1;
+      background-color: maroon;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #leftPart {
+      display: flex;
+      flex-direction: column;
+      width: 40%;
+      height: 800px;
+      background-color: pink;
+    }
+
+    #leftContent {
+      height: 600px;
+      padding: 20px;
+    }
+
+    #rightPart {
+      display: flex;
+      flex: 1;
+      background-color: black;
+      height: 800px;
+      padding: 20px;
+    }
+
+    #messagesContainer {
+      width: 100%;
+      height: 100%;
+      background-color: yellow;
+    }
+
+    #nicknameBox {
+      display: flex;
+      background-color: purple;
+      width: 100%;
+      height: 200px;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    #usuariosOnline {
+      height: 100%;
+      background-color: blue;
+    }
+
+    #username {
+      display: flex;
+      background-color: green;
+      width: 60%;
+      height: 100px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #saveuser {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      background-color: indianred;
+      height: 100px;
+    }
+
+    #messageForm {
+      display: flex;
+      height: 100px;
+      width: inherit;
+    }
+
+    #textinput {
+      width: 70%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: inherit;
+      background-color: white;
+    }
+
+    #textinput input {
+      width: 100%;
+      height: 50%;
+    }
+
+    #sendmessage {
+      flex: 1;
+    }
+
+  </style>
+
+</html>
