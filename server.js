@@ -12,22 +12,50 @@ const io = require('socket.io')(http, {
         methods: ['POST', 'GET'],
     },
 });
-const LanguagesController = require('./controllers/LanguageController.js');  
 
-const PORT = 3001;
+// Para formatação de datas peguei 
+//  https://stackoverflow.com/questions/10632346/how-to-format-a-date-in-mm-dd-yyyy-hhmmss-format-in-javascript
+
+const d = new Date();
+ const dformat = `${[d.getDate(),
+               d.getMonth() + 1,
+               d.getFullYear()].join('-')} ${
+               ((d.getHours() > 12) ? (d.getHours() - 12) : d.getHours())}:${
+                [d.getMinutes(),
+               d.getSeconds()].join(':')} ${(d.getHours() > 12) ? 'PM' : 'AM'}`;
+
+// https://stackoverflow.com/questions/3954438/how-to-remove-item-from-array-by-value
+Array.prototype.remove = function () {
+    let what; 
+    const a = arguments; 
+    let L = a.length;
+    let ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};
+
+const PORT = 3000;
 
 app.set('view engine', 'ejs');
-
+const listOnline = [];
 app.set('views', './views');
 let myId = 'Nick Não definido';
 io.on('connection', (socket) => {
+    listOnline.push(socket.id);
     myId = socket.id;
     console.log('a user connected', myId);
-    socket.on('chat message', (message) => {
-        console.log('mensage', socket.id, message.nickname, message.chatMessage);
-        io.emit('chat message', message);
+    socket.on('message', (message) => {
+        console.log(dformat, `- ${message.nickname}: ${message.chatMessage}`);
+        const result = `${dformat} - ${message.nickname}: ${message.chatMessage}`;
+        io.emit('message', result);
       });
     socket.on('disconnect', () => {
+        listOnline.remove(socket.id);
         console.log('user disconnected');
       });
   });
@@ -36,16 +64,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.status(200).json({ ok: true });
-});
-
-app.get('/teste', (req, res) => {
-    const authors = [{ name: '102' }, 
-    { name: '104' }, { name: '106' }, { name: '108' }, { name: '110' }];
-    res.status(200).render('index', { authors, myId });
+    res.status(200).render('index', { myId, listOnline });
   });
-
-app.use('/languages', LanguagesController);
-require('./sockets/votes')(io);
 
 http.listen(PORT, () => console.log('App listening on PORT %s', PORT));
