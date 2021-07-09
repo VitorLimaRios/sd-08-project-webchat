@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css"> -->
+  <!-- <link rel="stylesheet" href="./css/feed.css"> -->
+  <title>WebChat</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- <script>
+    const socketLoad = io();
+    window.onload = () => socketLoad.emit('getPosts');
+  </script> -->
+</head>
+
+<body>
+  <h1>WEB CHAT</h1>
+  <div>
+    <form id="userNickname">
+      <input type="text" id="nickname" placeholder="Write your nickname here" />
+      <button type="submit">save</button>
+    </form>
+  </div>
+  <div id="userContainer">
+    <h3>Users online</h3>
+    <ul id="usersList"></ul>
+  </div>
+  <div id="messagesContainer">
+    <h3>Messages</h3>
+    <ul id="messagesList"></ul>
+  </div>
+  <div id="editorContainer">
+    <h3>Message editor</h3>
+    <form id="messageForm">
+      <input type="text" id="messageInput" placeholder="Write your message here" />
+      <button type="submit">send</button>
+    </form>
+  </div>
+</body>
+<script src="./js/users.js"></script>
+
+</html>
