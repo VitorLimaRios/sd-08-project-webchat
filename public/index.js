@@ -24,14 +24,6 @@ sendButton.addEventListener('click', (e) => {
   return false;
 });
 
-const createUser = (user) => {
-  const messagesUl = document.querySelector('#list');
-  const li = document.createElement('li');
-  li.dataset.testid = 'online-user';
-  li.innerText = user;
-  messagesUl.appendChild(li);
-};
-
 const createMessage = (message) => {
   const messagesUl = document.querySelector('#list');
   const li = document.createElement('li');
@@ -41,4 +33,3 @@ const createMessage = (message) => {
 };
 
 socket.on('message', (message) => createMessage(message));
-socket.on('connection', (user) => createUser(user));

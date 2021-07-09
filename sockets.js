@@ -1,6 +1,7 @@
 const moment = require('moment');
 
 const currentDateTime = moment().format('DD-MM-yyyy HH:mm:ss');
+// const sockets = [];
 
 module.exports = (io) => io.on('connection', (socket) => {
   socket.on('message', ({ chatMessage, nickname }) => {
