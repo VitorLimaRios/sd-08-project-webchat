@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+  <head>
+    <title>MVC - Exemplo</title>
+    <link rel="shortcut icon" href="#">
+  </head>
+  <body>
+    <h1 data-testid="online-user" id=onlineUser></h1>
+    <ul>
+        <li><%=myId%></li>
+      <% listOnline.forEach((client) => { %>
+        <li><%= client %></li>
+      <% }) %>
+    </ul>
+    <ul id="messages"></ul>
+    <>
+    --------------------------------------------
+    </>
+    <form id="formMessage" action="">
+        <input id="chatMessage" autocomplete="off" data-testid="message-box" /><button data-testid="send-button">Envia</button>
+    </form>
+    
+    <>
+    --------------------------------------------
+    </>
+
+
+    <form id="formNick" action="">
+        <input id="nickname" autocomplete="off" data-testid="nickname-box" /><button data-testid="nickname-button">Mudar</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+      var socket = io();
+      var messages = document.getElementById('messages');
+      var formMessage = document.getElementById('formMessage');
+      var formNick = document.getElementById('formNick');
+      var chatMessage = document.getElementById('chatMessage');
+      var nickname = document.getElementById('nickname');
+      var muNick = document.getElementById('muNick');
+      var onlineUser= document.getElementById('onlineUser');
+      let message={};
+      function makeid(length) {
+        let result           = '';
+        const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() * 
+          charactersLength));
+        }
+        return result;
+      }
+      let userName = localStorage.getItem('userName') || makeid(16)
+      // let userName = Math.random().toString(36).replace(/[^A-z]+/g, '').substr(0, 16);
+      onlineUser.textContent=userName;
+      nickname.value=userName;
+      console.log(userName);
+        formNick.addEventListener('submit', function(e) {
+          e.preventDefault();
+          if (nickname.value) {
+            userName=nickname.value;
+            localStorage.setItem('submit',userName)
+            message.nickname=userName;
+            console.log('nick ',message)
+            socket.emit('message', message);
+            nickname.value = userName;
+            onlineUser.textContent=userName;
+        }
+        });
+
+        formMessage.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (chatMessage.value) {
+            message.chatMessage= chatMessage.value
+            console.log('chat ',message)
+            socket.emit('message', message);
+            chatMessage.value = '';
+        }
+        });
+
+        // socket.on('mudança de nick', function(myNick))
+
+        socket.on('chat message', function(message) {
+        console.log('mensagem geral ',`${socket.id} ${message.nickname} ${message.chatMessage}`)
+        message.nickname = message.nickname || socket.id
+        const item = document.createElement('li');
+        item.textContent = `${socket.id} ${message.nickname} ${message.chatMessage}`;
+        if(message.chatMessage){
+            messages.appendChild(item);
+            item.setAttribute('data-testid','message');
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+        // return nickname=message.nickname, chatMessage=message.chatMessage;
+        });
+
+    </script>
+  </body>
+</html>
