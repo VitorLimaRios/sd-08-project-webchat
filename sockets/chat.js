@@ -1,9 +1,7 @@
-module.exports = (io) => {
-  io.on('connection', (socket) => {
-    console.log(`${socket.id} se conectou`);
+const chatModel = require('../models/chat');
 
-    socket.on('message', ({ nickname, chatMessage }) => {
-      const date = new Date();
+const getFinalMessage = (nickname, chatMessage) => {
+  const date = new Date();
       const day = date.getDate();
       const month = (date.getMonth() + 1);
       const year = date.getFullYear();
@@ -17,8 +15,22 @@ module.exports = (io) => {
       const timeNow = `${hours}:${incZero(minutes)}:${incZero(seconds)}`;
 
       const finalMessage = `${dateNow} ${timeNow} ${nickname}: ${chatMessage}`;
+      const timestamp = `${dateNow} ${timeNow}`;
 
-      console.log(finalMessage);
+      return {
+        finalMessage,
+        timestamp,
+      };
+};
+
+module.exports = (io) => {
+  io.on('connection', (socket) => {
+    console.log(`${socket.id} se conectou`);
+
+    socket.on('message', async ({ nickname, chatMessage }) => {
+      const { finalMessage, timestamp } = getFinalMessage(nickname, chatMessage);
+
+      await chatModel.create({ nickname, chatMessage, timestamp });
 
       io.emit('message', finalMessage);
     });

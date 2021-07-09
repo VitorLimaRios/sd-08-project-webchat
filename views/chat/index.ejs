@@ -5,7 +5,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Web chat</title>
-  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <p class='username' data-testid="online-user">
@@ -16,7 +15,13 @@
     <button class="btn-save-nick" data-testid="nickname-button">save</button>
   </div>
   <div class="right-content">
-    <ul class="web-chat"></ul>
+    <ul class="web-chat">
+      <% messages.map(({nickname, chatMessage, timestamp}) => { %>
+        <li data-testid="message">
+          <%= `${timestamp} ${nickname}: ${chatMessage}` %>
+        </li>
+      <% }) %>
+    </ul>
   </div>
   <input class="write-message" data-testid="message-box" ></input>
   <button class="send-message-btn" data-testid="send-button" >Enviar</button>

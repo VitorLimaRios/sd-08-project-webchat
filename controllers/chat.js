@@ -1,7 +1,14 @@
 const crypto = require('crypto');
 
-module.exports = (_req, res) => {
-const randomId = crypto.randomBytes(8).toString('hex');
+const chatModel = require('../models/chat');
 
-  res.render('chat', { name: randomId });
+const chat = async (_req, res) => {
+const randomId = crypto.randomBytes(8).toString('hex');
+const messages = await chatModel.getAll();
+
+  res.render('chat', { name: randomId, messages });
+};
+
+module.exports = {
+  chat,
 };
