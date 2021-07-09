@@ -5,10 +5,15 @@
   </head>
   <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
-    <form>
-      <ul id="chatBox"></ul>
-      <input data-testid="message-box" type="text">
-      <button data-testid="send-button" type="button">Enviar</button>
+    <form id="nickname-form">
+      <input data-testid="nickname-box" type="text" id="nick-input">
+      <button data-testid="nickname-button" type="button" id="nick-button">Atualizar Nickname</button>
     </form>
+    <ul id="chat-box"></ul>
+    <form id="message-form">
+      <input data-testid="message-box" type="text" id="message-input">
+      <button data-testid="send-button" type="button" id="send-button">Enviar</button>
+    </form>
+    <script src="index.js"></script>
   </body>
 </html>
