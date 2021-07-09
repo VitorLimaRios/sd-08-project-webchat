@@ -9,28 +9,9 @@ const io = require('socket.io')(http, {
     methods: ['GET', 'POST'],
   } });
 
-// require('./sockets/webchat')(io);
+require('./sockets/webchat')(io);
 
-const formattedDate = () => {
-  const dateTimeNow = new Date();
-
-  return `${dateTimeNow.getDate()}-`
-  + `${dateTimeNow.getMonth() + 1}-`
-  + `${dateTimeNow.getFullYear()} `
-  + `${dateTimeNow.getHours()}:`
-  + `${dateTimeNow.getMinutes()}`;
-};
-
-io.on('connection', (socket) => {
-  console.log(`Usuário conectado com sucesso! SocketId: ${socket.id} `);
-
-  socket.on('message', ({ chatMessage, nickname }) => {
-    console.log(chatMessage);
-
-    const message = `${formattedDate()} - ${nickname}: ${chatMessage}`;
-    io.emit('message', message);
-  });
-});
+app.get('/', (req, res) => res.end());
 
 http.listen(3000, () => {
   console.log('Servidor ouvindo na porta 3000');

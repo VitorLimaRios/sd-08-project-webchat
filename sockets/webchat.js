@@ -9,7 +9,7 @@ const formattedDate = () => {
 };
 
 module.exports = (io) => io.on('connection', (socket) => {
-  console.log(`Usuário conectado com sucesso! SocketId: ${socket.id} `);
+  // console.log(`Usuário conectado com sucesso! SocketId: ${socket.id} `);
 
   socket.on('message', ({ chatMessage, nickname }) => {
     console.log(chatMessage);
