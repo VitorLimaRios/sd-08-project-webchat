@@ -15,6 +15,14 @@ const io = require('socket.io')(http, {
   },
 });
 
+io.on('connection', (socket) => {
+  console.log('conectado');
+
+  socket.on('disconnect', () => {
+    console.log('to off');
+  });
+});
+
 app.use(cors());
 app.use(express.static('public'));
 
@@ -25,5 +33,5 @@ app.get('/', (_req, res) => {
 });
 
 http.listen(PORT, () => {
-  console.log(`App ovindo na porta ', ${PORT}`);
+  console.log(`App ouvindo na porta ', ${PORT}`);
 });

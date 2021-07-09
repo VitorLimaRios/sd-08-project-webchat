@@ -1,6 +1,6 @@
 const socket = window.io();
 
-const sendButton = document.querySelector('#button-message');
+const form = document.querySelector('form');
 const nickNamebutton = document.querySelector('#nickname-btn');
 const nickname = document.querySelector('#nickname');
 const inputText = document.querySelector('#message-box');
@@ -9,7 +9,7 @@ nickNamebutton.addEventListener('click', () => {
   localStorage.setItem('nickname', nickname.value);
 });
 
-sendButton.addEventListener('click', (e) => {
+form.addEventListener('submit', (e) => {
   e.preventDefault();
   let findNickName = localStorage.getItem('nickname');
   if (!findNickName) {
