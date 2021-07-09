@@ -7,6 +7,15 @@
   <title>Webchat</title>
 </head>
 <body>
-  <h1>Testando</h1>
+  <form>
+    <label for="nicknameInput">Digite seu nome aqui</label>
+    <input type="text" id="nicknameInput" />
+    <button type="button" id="btn-salvar">Salvar</button>
+    <textarea id="message-area"></textarea>
+    <button type="button" id="btn-enviar">Enviar</button>
+  </form>
+  <textarea id="chat"></textarea>
 </body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/scripts/chat.js"></script>
 </html>
