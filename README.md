@@ -50,17 +50,17 @@ Aqui você vai encontrar os detalhes de como estruturar o desenvolvimento do seu
 ---
 
 ## O que deverá ser desenvolvido
+
 Neste projeto você vai desenvolver um _chat_ online e ao utilizar essa aplicação um usuário deverá ser capaz de:
 
- - Usar um front-end para enviar mensagens a clientes conectados;
- - Visualizar o histórico de mensagens da conversa;
- - Visualizar os usuários online no momento;
- - Alterar o nome de usuário no chat em tempo real;
+- Usar um front-end para enviar mensagens a clientes conectados;
+- Visualizar o histórico de mensagens da conversa;
+- Visualizar os usuários online no momento;
+- Alterar o nome de usuário no chat em tempo real;
 
 O desenho abaixo demonstra como o projeto pode ser estruturado ao decorrer do desenvolvimento, use a sua criatividade para surpreender! 🧑‍🎨
 
 ![image](./exemplo.png)
-
 
 Para entregar o seu projeto você deverá criar um Pull Request neste repositório.
 
@@ -76,11 +76,11 @@ O MVC será usado para renderizar as mensagens do histórico e usuários online,
 
 ### Data de Entrega
 
-  - Projeto individual.
+- Projeto individual.
 
-  - Serão `X` dias de projeto.
+- Serão `X` dias de projeto.
 
-  - Data de entrega para avaliação final do projeto: `20/07/2021 - 14:00h`.
+- Data de entrega para avaliação final do projeto: `20/07/2021 - 14:00h`.
 
 ---
 
@@ -199,6 +199,7 @@ e na linha 13:
 ** ⚠️ Neste projeto é obrigatório deixar o nome do database como `webchat` **
 
 ## Conexão com o banco:
+
 As variáveis de ambiente receberão os seguintes valores
 
 ```
@@ -232,11 +233,11 @@ Caso prefira testar um requisito por vez pode executar o teste da seguinte forma
 
 - Toda mensagem que um cliente recebe deve conter as informações acerca de quem a enviou: _nickname_ (apelido), data-hora do envio e o conteúdo da mensagem em si.
 
- - O evento da mensagem deve ter o nome `message` e deve enviar como parâmetro o objeto `{ chatMessage, nickname }`. O `chatMessage` deve ser a mensagem enviada enquanto o `nickname` deverá ser o apelido de quem a enviou;
+- O evento da mensagem deve ter o nome `message` e deve enviar como parâmetro o objeto `{ chatMessage, nickname }`. O `chatMessage` deve ser a mensagem enviada enquanto o `nickname` deverá ser o apelido de quem a enviou;
 
- - A data na mensagem deve seguir o padrão 'dd-mm-yyyy' e o horário deve seguir o padrão 'hh:mm:ss' sendo os segundos opcionais;
+- A data na mensagem deve seguir o padrão 'dd-mm-yyyy' e o horário deve seguir o padrão 'hh:mm:ss' sendo os segundos opcionais;
 
- - O formato da mensagem deve seguir esse padrão:
+- O formato da mensagem deve seguir esse padrão:
 
 `DD-MM-yyyy HH:mm:ss ${message.nickname} ${message.chatMessage}`
 
@@ -248,13 +249,14 @@ Caso prefira testar um requisito por vez pode executar o teste da seguinte forma
 
 - Tanto o evento enviado do cliente para o servidor, como do servidor para o cliente deve ser **message**.
 
-
 #### As seguintes verificações serão feitas:
+
 ```
 - Será validado que todos os clientes que estão conectados ao chat recebem as mensagens enviadas;
 
 - Será validado que toda mensagem que um cliente recebe contém as informações acerca de quem a enviou, data-hora do envio e o conteúdo da mensagem em si.
 ```
+
 ---
 
 ### 2 - Crie um frontend para que as pessoas interajam com o chat.
@@ -266,13 +268,16 @@ Caso prefira testar um requisito por vez pode executar o teste da seguinte forma
 - O front-end e o back-end têm que usar a mesma porta - `localhost:3000`;
 
 - O front-end deve gerar um um _nickname_ **aleatório de 16 caracteres** quando um novo cliente se conecta, para identificar quem está enviando a mensagem.
+
   - O elemento com o nome do cliente deve conter o `data-testid="online-user"`.
 
 - O front-end deve ter uma caixa de texto através da qual seja possível enviar mensagens para o _chat_:
+
   - A caixa de texto deve conter o `data-testid="message-box"`;
   - O botão de enviar mensagem deve conter o `data-testid="send-button"`.
 
 - As mensagens devem ser renderizadas na tela;
+
   - Cada mensagem deve conter o `data-testid="message"`.
 
 - O front-end deve exibir todas as mensagens já enviadas no _chat_, ordenadas verticalmente da mais antiga para a mais nova _(as mensagens mais recentes devem aparecer abaixo das mensagens mais antigas)_;
@@ -282,8 +287,8 @@ Caso prefira testar um requisito por vez pode executar o teste da seguinte forma
   - O botão que será clicado para salvar o _nickname_ deve conter `data-testid="nickname-button"`;
   - Ao salvar o _nickname_ ele deve ser atualizado para todos os clientes conectados.
 
-
 #### As seguintes verificações serão feitas:
+
 ```
 - Será validado que um _nickname_ aleatório é gerado quando o cliente se conecta;
 
@@ -297,6 +302,7 @@ Caso prefira testar um requisito por vez pode executar o teste da seguinte forma
 
 - Será validado que é possível enviar mensagens após alterar o _nickname_.
 ```
+
 ---
 
 ### 3 - Elabore o histórico do chat para que as mensagens persistam.
@@ -312,17 +318,18 @@ Caso prefira testar um requisito por vez pode executar o teste da seguinte forma
 - O seu banco de dados deve salvar o _nickname_ de quem enviou a mensagem, a mensagem em si e uma _timestamp_ com precisão de segundos de quando ela foi salva no banco;
 
   - Exemplo de um documento:
-      ```js
-      {
-        message: 'Lorem ipsum',
-        nickname: 'xablau',
-        timestamp: '2021-04-01 12:00:00'
-      }
-      ```
+    ```js
+    {
+      message: 'Lorem ipsum',
+      nickname: 'xablau',
+      timestamp: '2021-04-01 12:00:00'
+    }
+    ```
 
 - Envie o histórico de mensagens salvo no banco via `html` quando um novo cliente se conectar.
 
 #### As seguintes verificações serão feitas:
+
 ```
 - Será validado que todo o histórico de mensagens irá aparecer quando o cliente se conectar;
 
@@ -330,6 +337,7 @@ Caso prefira testar um requisito por vez pode executar o teste da seguinte forma
 
 - Será validado que ao alterar o _nickname_ e enviar uma mensagem, a mensagem persistirá;
 ```
+
 ---
 
 ### 4 - Informe a todos os clientes quem está online no momento.
@@ -339,13 +347,13 @@ Caso prefira testar um requisito por vez pode executar o teste da seguinte forma
 - No front-end deve haver uma lista na tela de cada cliente que mostra quais clientes estão _online_ em um dado momento. Um cliente é identificado pelo seu _nickname_.
   - O elemento com o nome do cliente deve conter o `data-testid="online-user"`;
   - Quando um cliente se conecta, a lista de clientes deve ser atualizada para todos:
-      - Para o cliente que acabou de se conectar, seu nickname deve ser colocado no começo da lista;
-      - Para os demais clientes, o nickname do cliente que acabou de se conectar deve ser colocado no final da lista.
+    - Para o cliente que acabou de se conectar, seu nickname deve ser colocado no começo da lista;
+    - Para os demais clientes, o nickname do cliente que acabou de se conectar deve ser colocado no final da lista.
   - A lista de clientes _online_ deve ser renderizada no `html` ao carregar a página;
   - Quando um cliente atualiza seu _nickname_ a lista de clientes deve ser atualizada para todos da mesma forma.
 
-
 #### As seguintes verificações serão feitas:
+
 ```
 - Será validado que quando um cliente se conecta, seu _nickname_ aparece no front-end de todos;
 
@@ -390,7 +398,7 @@ Use o conteúdo sobre [Code Review](https://course.betrybe.com/real-life-enginee
 
 # Avisos Finais
 
-Ao finalizar e submeter o projeto, não se esqueça de avaliar sua experiência preenchendo o formulário. Leva menos de 3 minutos!	Ao finalizar e submeter o projeto, não se esqueça de avaliar sua experiência preenchendo o formulário. Leva menos de 3 minutos!
+Ao finalizar e submeter o projeto, não se esqueça de avaliar sua experiência preenchendo o formulário. Leva menos de 3 minutos! Ao finalizar e submeter o projeto, não se esqueça de avaliar sua experiência preenchendo o formulário. Leva menos de 3 minutos!
 
 Link: [FORMULÁRIO DE AVALIAÇÃO DE PROJETO](https://be-trybe.typeform.com/to/ZTeR4IbH)
 
