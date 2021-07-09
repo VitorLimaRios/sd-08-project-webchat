@@ -21,6 +21,8 @@ app.get('/', (_req, res) => {
   res.sendFile(`${__dirname}/public/index.html`);
 });
 
-http.listen(process.env.PORT, () => {
-  console.log(`App ovindo na porta ', ${process.env.PORT}`);
+const PORT = process.env.PORT || 3000;
+
+http.listen(PORT, () => {
+  console.log(`App ovindo na porta ', ${PORT}`);
 });
