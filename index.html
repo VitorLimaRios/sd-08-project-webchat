@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WEBChat</title>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <h1>NinjaWEBChat</h1>
+    <input type="text" placeholder="Insira seu nickname">
+    <button id='pingButton'>SALVAR</button>
+    <div>
+      <h3>list of users</h3>
+    </div>
+    <div>
+      <h4 id='messages'>message</h4>
+      <form action="">
+        <input id="messageInput" autocomplete="off" /><button>ENVIAR</button>
+      </form>
+    </div>
+    <script src="./js/message.js"></script>
+  </body>
+
+</html>
