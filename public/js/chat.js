@@ -1,5 +1,7 @@
 const socket = window.io();
 
+const TESTID = 'data-testid';
+
 socket.emit('userConnected');
 
 const sendButton = document.querySelector('#send-button-id');
@@ -27,7 +29,7 @@ const createOnlineUsers = (onlineUsers) => {
   onlineUsersNicknames.forEach((user) => {
     const li = document.createElement('li');
     li.innerText = user;
-    li.setAttribute('data-testid', 'online-user');
+    li.setAttribute(TESTID, 'online-user');
     onlineUsersList.appendChild(li);
   });
 };
@@ -36,10 +38,22 @@ const createMessage = (message) => {
   const messagesList = document.querySelector('#messages-list');
   const li = document.createElement('li');
   li.innerText = message;
-  li.setAttribute('data-testid', 'message');
+  li.setAttribute(TESTID, 'message');
   messagesList.appendChild(li);
+};
+
+const showMessageHistory = (messageHistory) => {
+  const messagesList = document.querySelector('#messages-list');
+  messageHistory.forEach((message) => {
+    const { timestamp, nickname, message: content } = message;
+    const li = document.createElement('li');
+    li.innerText = `${timestamp} - ${nickname}: ${content}`;
+    li.setAttribute(TESTID, 'message');
+    messagesList.appendChild(li);
+  });
 };
 
 socket.on('onlineUsers', (onlineUsers) => createOnlineUsers(onlineUsers));
 socket.on('saveStorage', ({ socketId, nickname }) => localStorage.setItem(socketId, nickname));
 socket.on('message', (message) => createMessage(message));
+socket.on('history', (messageHistory) => showMessageHistory(messageHistory));

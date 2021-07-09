@@ -16,12 +16,14 @@ const generateFormatedDate = () => {
 const onlineUsers = {};
 
 const connectAndDisconectEvents = (io, socket) => {
-  socket.on('userConnected', () => {
+  socket.on('userConnected', async () => {
     const randomUser = crypto.randomBytes(8).toString('hex');
     console.log(`ID: ${socket.id} / Nickname: ${randomUser} conectou à sala`);
     io.emit('saveStorage', { socketId: socket.id, nickname: randomUser });
     onlineUsers[socket.id] = randomUser;
     io.emit('onlineUsers', onlineUsers);
+    const messageHistory = await messagesModel.getMessages();
+    io.emit('history', messageHistory);
   });
 
   socket.on('disconnect', () => {
@@ -34,12 +36,12 @@ const connectAndDisconectEvents = (io, socket) => {
 module.exports = (io) => io.on('connection', (socket) => {
   connectAndDisconectEvents(io, socket);
 
-  socket.on('message', ({ chatMessage, nickname }) => {
+  socket.on('message', async ({ chatMessage, nickname }) => {
     const date = generateFormatedDate();
     const message = `${date} - ${nickname}: ${chatMessage}`;
     console.log(`${date} - ${nickname}: ${chatMessage}`);
     io.emit('message', message);
-    messagesModel
+    await messagesModel
       .saveMessage({ nickname, content: chatMessage, date });
   });
 

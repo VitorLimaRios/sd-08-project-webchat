@@ -8,6 +8,13 @@ const saveMessage = async (message) => {
   return newMessage;
 };
 
+const getMessages = async () => {
+  const db = await connection();
+  const messages = await db.collection('messages').find().toArray();
+  return messages;
+};
+
 module.exports = {
   saveMessage,
+  getMessages,
 };
