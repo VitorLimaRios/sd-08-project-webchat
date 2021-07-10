@@ -5,7 +5,7 @@ const app = express();
 const http = require('http').createServer(app);
 const cors = require('cors');
 
-const { PORT } = process.env || 3000;
+const { PORT } = process.env;
 
 const io = require('socket.io')(http, {
   cors: {
@@ -24,6 +24,6 @@ require('./sockets/chat')(io);
 
 app.get('/', chatController);
 
-http.listen(PORT, () => {
+http.listen(PORT || 3000, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
