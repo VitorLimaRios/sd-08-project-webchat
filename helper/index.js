@@ -13,7 +13,13 @@ const removeArray = (array, value) => {
     return array;
 };
 
+const findIndex = (array, id) => {
+    const index = array.findIndex((xablau) => xablau.id === id);
+    return index;
+};
+
 module.exports = {
     dformat,
     removeArray,
+    findIndex,
   };

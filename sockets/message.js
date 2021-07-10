@@ -1,4 +1,6 @@
-const { dformat } = require('../helper');
+const { dformat, findIndex } = require('../helper');
+
+const nickList = [];
 
 const mensageria = async (message, io) => {
     const d = new Date();
@@ -7,7 +9,6 @@ const mensageria = async (message, io) => {
     await io.emit('message', result);
 };
 
-const nickList = [];
 module.exports = (io) => io.on('connection', (socket) => {
     console.log('a user connected', socket.id);
     socket.on('message', (message) => mensageria(message, io));
@@ -16,15 +17,15 @@ module.exports = (io) => io.on('connection', (socket) => {
         await io.emit('nickname', nickList);
     });
     socket.on('nickname change', async (nickname) => {
-        const index = nickList.findIndex((xablau) => xablau.id === socket.id);
+        const index = findIndex(nickList, socket.id);
         nickList[index].nickname = nickname;
         await io.emit('nickname', nickList);
-        console.log('cahnge nickname', nickList, nickname, index);
     });
     socket.on('disconnect', async () => {
-        const index = nickList.findIndex((xablau) => xablau.id === socket.id);
-        nickList.splice(index);
+        const index = findIndex(nickList, socket.id);    
+        // while (index < 0) { console.log('Aguarde', index); index = findIndex(nickList, socket.id); }
+        nickList.splice(index, 1);
         await io.emit('nickname', nickList);
-        console.log('user disconnected', nickList, index, socket.id);
+        console.log('disconnected', nickList, index, socket.id);
       });
   });
