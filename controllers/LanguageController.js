@@ -1,17 +1,17 @@
 const { Router } = require('express');
 
-const Language = require('../models/Language');
+const WebChat = require('../models/WebChat');
 
 const router = Router();
 
 router.get('/', async (req, res) => {
-  const languages = await Language.getAll();
-  res.status(200).json(languages);
+  const WebChats = await WebChat.getAll();
+  res.status(200).json(WebChats);
 });
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
-    const languages = await Language.getById(id);
-    res.status(200).json(languages);
+    const WebChats = await WebChat.getById(id);
+    res.status(200).json(WebChats);
   });
 
 module.exports = router;
