@@ -2,10 +2,10 @@
 const connection = require('./connection');
 require('dotenv').config();
 
-const getAll = () => connection().then((db) => db.collection('historicMessage').find({}).toArray());
+const getAll = () => connection().then((db) => db.collection('messages').find({}).toArray());
 
 const insert = (message) => connection().then((db) => 
-db.collection('historicMessage').insert(message));
+db.collection('messages').insert(message));
 
 // const increaseVotes = (id) => console.log('increaseVotes', id);
 // // connection().then((db) => db.collection('languages')

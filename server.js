@@ -15,17 +15,14 @@ const io = require('socket.io')(http, {
 
 const PORT = 3000;
 
-const listOnline = [];
-
 app.set('view engine', 'ejs');
 app.set('views', './views');
-require('./sockets/message')(io, listOnline);
+const webChat = require('./controllers/webchatControllers');
+require('./sockets/message')(io);
 
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get('/', (req, res) => {
-    res.status(200).render('index', { listOnline });
-  });
+app.get('/', webChat);
 
 http.listen(PORT, () => console.log('App listening on PORT %s', PORT));

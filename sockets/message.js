@@ -1,4 +1,5 @@
 const { dformat, findIndex } = require('../helper');
+const { insert } = require('../models/WebChat');
 
 const nickList = [];
 
@@ -6,6 +7,9 @@ const mensageria = async (message, io) => {
     const d = new Date();
     console.log(dformat(d), `- ${message.nickname}: ${message.chatMessage}`);
     const result = `${dformat(d)} - ${message.nickname}: ${message.chatMessage}`;
+    await insert({ message: message.chatMessage,
+         nickname: message.nickname,
+        timestamp: dformat(d) });
     await io.emit('message', result);
 };
 
