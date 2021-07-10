@@ -4,26 +4,59 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="css/chat.css" />
   <title>Trybe WebChat</title>
 </head>
 <body>
   <script src="/socket.io/socket.io.js"></script>
   <h1>Trybe WebChat</h1>
-  <section id='nickname'>
-    <h3>Nickname</h4>
-    <input type="text" id='nickname-input' data-testid='nickname-box'/>
-    <button type='button' id='nickname-button' data-testid="nickname-button">SALVAR</button>
-  </section>
-  <section id='online-users'>
-    <ul id='users-list'></ul>
-  </section>
-  <section id='messages-list-section'>
-    <ul id='messages-list'></ul>
-  </section>
-  <section id='message-section'>
-    <input type='text' id='message-box-id' data-testid='message-box'/>
-    <button type='button' id='send-button-id' data-testid='send-button'>ENVIAR</button>
-  </section>
+  <main class='container main'>
+    <div class='container left-side-container'>
+      <section id='nickname' class='container nickname-container'>  
+        <input
+          type="text"
+          id='nickname-input'
+          data-testid='nickname-box'
+          class='nickname-input'
+          placeholder='Insira seu nickname'
+        />
+        <button 
+          type='button'
+          id='nickname-button'
+          data-testid="nickname-button"
+          class="btn btn-success"
+        >
+          SALVAR
+        </button>
+      </section>
+      <section id='online-users' class='container online-users-container'>
+        <h4 class='online-users-header'>Usuários Online</h4>
+        <ul id='users-list' class="list-group"></ul>
+      </section>
+    </div>
+    <div class='container right-side-container'>
+      <section id='messages-list-section' class='container message-history-container'>
+        <ul id='messages-list' class="list-group"></ul>
+      </section>
+      <section id='message-section' class='container message-container'>
+        <input
+          type='text'
+          id='message-box-id'
+          data-testid='message-box'
+          class='message-input'
+        />
+        <button 
+          type='button'
+          id='send-button-id'
+          data-testid='send-button'
+          class="btn btn-primary"
+        >
+          ENVIAR
+        </button>
+      </section>
+    </div>
+  </main>
   <script src="./js/chat.js"></script>
 </body>
 </html>

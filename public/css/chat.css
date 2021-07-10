@@ -1,0 +1,61 @@
+h1 {
+  margin-bottom: 50px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+h4 {
+  text-align: center;
+}
+
+.main {
+  display: flex;
+  height: 100%;
+}
+
+.left-side-container {
+  border: 2px solid gray;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  width: 40%;
+}
+
+.right-side-container {
+  border: 2px solid gray;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  margin-left: 10px;
+}
+
+.nickname-container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 30px;
+  margin-top: 10px;
+}
+
+.nickname-input {
+  margin-right: 10px;
+  padding: 5px;
+  width: 100%;
+}
+
+.message-container {
+  display: flex;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.message-input {
+  margin-right: 20px;
+  padding: 5px;
+  width: 100%;
+}
+
+.message-history-container {
+  margin-top: 10px;
+}

@@ -27,7 +27,7 @@ const connectAndDisconectEvents = (io, socket) => {
     onlineUsersArray.unshift(lastUserConnected);
     socket.emit('onlineUsers', onlineUsersArray);
     const messageHistory = await messagesModel.getMessages();
-    io.emit('history', messageHistory);
+    socket.emit('history', messageHistory);
   });
 
   socket.on('disconnect', () => {

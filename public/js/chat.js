@@ -1,6 +1,7 @@
 const socket = window.io();
 
 const TESTID = 'data-testid';
+const listItemBootstrap = 'list-group-item';
 
 socket.emit('userConnected');
 
@@ -29,6 +30,7 @@ const createOnlineUsers = (onlineUsers) => {
     const li = document.createElement('li');
     li.innerText = user;
     li.setAttribute(TESTID, 'online-user');
+    li.classList.add(listItemBootstrap);
     onlineUsersList.appendChild(li);
   });
 };
@@ -38,6 +40,7 @@ const createMessage = (message) => {
   const li = document.createElement('li');
   li.innerText = message;
   li.setAttribute(TESTID, 'message');
+  li.classList.add(listItemBootstrap, 'list-group-item-action');
   messagesList.appendChild(li);
 };
 
@@ -48,6 +51,7 @@ const showMessageHistory = (messageHistory) => {
     const li = document.createElement('li');
     li.innerText = `${timestamp} - ${nickname}: ${content}`;
     li.setAttribute(TESTID, 'message');
+    li.classList.add(listItemBootstrap, 'list-group-item-action');
     messagesList.appendChild(li);
   });
 };
