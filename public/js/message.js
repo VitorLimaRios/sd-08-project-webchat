@@ -44,3 +44,6 @@ const createMessageOnPage = (message) => {
 };
 
 socket.on('message', (message) => createMessageOnPage(message));
+socket.on('sessionStart', (allMessages) => {
+  allMessages.forEach((message) => createMessageOnPage(message));
+});
