@@ -1,29 +1,23 @@
 <!doctype html>
 <html>
   <head>
-    <title>MVC - Exemplo</title>
+    <title>Web Chat</title>
     <link rel="shortcut icon" href="#">
   </head>
   <body>
-    <h1 data-testid="online-user" id=onlineUser></h1>
-    <ul>
-        <li><%=myId%></li>
-      <% listOnline.forEach((client) => { %>
-        <li><%= client %></li>
-      <% }) %>
-    </ul>
     <ul id="messages"></ul>
     <>
     --------------------------------------------
     </>
     <form id="formMessage" action="">
-        <input id="chatMessage" autocomplete="off" data-testid="message-box" /><button data-testid="send-button">Envia</button>
+      <input id="chatMessage" autocomplete="off" data-testid="message-box" /><button data-testid="send-button">Envia</button>
     </form>
     
     <>
     --------------------------------------------
     </>
-
+    <ul id="onlineList"></ul>
+    
 
     <form id="formNick" action="">
         <input id="nickname" autocomplete="off" data-testid="nickname-box" /><button data-testid="nickname-button">Mudar</button>
@@ -32,14 +26,14 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
       // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
-      var socket = io();
-      var messages = document.getElementById('messages');
-      var formMessage = document.getElementById('formMessage');
-      var formNick = document.getElementById('formNick');
-      var chatMessage = document.getElementById('chatMessage');
-      var nickname = document.getElementById('nickname');
-      var muNick = document.getElementById('muNick');
-      var onlineUser= document.getElementById('onlineUser');
+      const socket = io();
+      const messages = document.getElementById('messages');
+      const formMessage = document.getElementById('formMessage');
+      const formNick = document.getElementById('formNick');
+      const chatMessage = document.getElementById('chatMessage');
+      const nickname = document.getElementById('nickname');
+      const onlineUser= document.getElementById('onlineUser');
+      const onlineList= document.getElementById('onlineList');
       let message={};
       function makeid(length) {
         let result           = '';
@@ -51,21 +45,24 @@
         }
         return result;
       }
-      let userName = localStorage.getItem('userName') || makeid(16)
-      // let userName = Math.random().toString(36).replace(/[^A-z]+/g, '').substr(0, 16);
-      onlineUser.textContent=userName;
-      nickname.value=userName;
+      const nickSave= localStorage.getItem('userName');
+      let userName = makeid(16);
       console.log(userName);
+     // if(nickSave){
+      //  userName = nickSave;
+      // }
+      console.log(userName);
+      socket.emit('nickname add', userName);
+
+
         formNick.addEventListener('submit', function(e) {
           e.preventDefault();
           if (nickname.value) {
             userName=nickname.value;
-            localStorage.setItem('submit',userName)
+            localStorage.setItem('userName',userName)
             message.nickname=userName;
             console.log('nick ',message)
-            socket.emit('message', message);
-            nickname.value = userName;
-            onlineUser.textContent=userName;
+            socket.emit('nickname change', userName);
         }
         });
 
@@ -80,20 +77,36 @@
         }
         });
 
-        // socket.on('mudança de nick', function(myNick))
-
         socket.on('message', function(message) {
-        // console.log('mensagem geral ',`${socket.id} ${message.nickname} ${message.chatMessage}`)
-        // message.nickname = message.nickname || socket.id
-        const item = document.createElement('li');
-        item.textContent = message;
-        // if(message.chatMessage){
-            messages.appendChild(item);
-            item.setAttribute('data-testid','message');
-            window.scrollTo(0, document.body.scrollHeight);
-        // }
-        // return nickname=message.nickname, chatMessage=message.chatMessage;
+          const item = document.createElement('li');
+          item.textContent = message;
+          messages.appendChild(item);
+          item.setAttribute('data-testid','message');
+          window.scrollTo(0, document.body.scrollHeight);
         });
+
+        socket.on('nickname', function(nickList) {
+          console.log("nickList",nickList)
+          while (onlineList.firstChild) {
+            onlineList.removeChild(onlineList.firstChild);
+          }
+          const item = document.createElement('li');
+          item.textContent = userName;
+          onlineList.appendChild(item);
+          item.setAttribute('data-testid','online-user');
+          window.scrollTo(0, document.body.scrollHeight);
+          nickList.forEach((name)=>{
+            if(name.id!==socket.id){
+              console.log('está aqui o erro' ,name.id, socket.id,name.id!==socket.id)
+              const position = document.createElement('li');
+              position.textContent = name.nickname;
+              onlineList.appendChild(position);
+              position.setAttribute('data-testid','online-user');
+              window.scrollTo(0, document.body.scrollHeight);
+            }
+          })
+        });
+
 
     </script>
   </body>
