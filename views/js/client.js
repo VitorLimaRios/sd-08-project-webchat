@@ -7,6 +7,9 @@ const inputMessage = document.querySelector('#mensagem');
 
 let NICK = '';
 
+const datatestID = 'data-testid';
+const onlineUser = 'online-user';
+
 formNickname.addEventListener('submit', (e) => {
   e.preventDefault();
   socket.emit('changeNickname', {
@@ -25,7 +28,7 @@ formMessage.addEventListener('submit', (e) => {
 const createMessage = (message) => {
   const messagesUl = document.querySelector('#messages');
   const li = document.createElement('li');
-  li.setAttribute('data-testid', 'message');
+  li.setAttribute(datatestID, 'message');
   li.innerText = message;
   messagesUl.appendChild(li);
 };
@@ -33,8 +36,8 @@ const createMessage = (message) => {
 const createUserNickname = (nickname) => {
   const userNameList = document.querySelector('#localUser');
   const li = document.createElement('li');
-  li.setAttribute('data-testid', 'online-user');
-  li.setAttribute('id', 'online-user');
+  li.setAttribute(datatestID, onlineUser);
+  li.setAttribute('id', onlineUser);
   li.innerText = nickname;
   NICK = nickname;
   userNameList.appendChild(li);
@@ -44,6 +47,7 @@ const appendNewUser = (nickname, id) => {
   const onlineUsersList = document.querySelector('#onlineUsers');
   const li = document.createElement('li');
   li.setAttribute('id', id);
+  li.setAttribute(datatestID, onlineUser);
   li.innerText = nickname;
   onlineUsersList.appendChild(li);
 };
@@ -91,4 +95,9 @@ socket.on('changeUserNickList', ({ newNick, id }) => {
 
 socket.on('message', (message) => {
   createMessage(message);
+});
+
+socket.on('disconnectClient', (id) => {
+  const clientToRemove = document.querySelector(`#${id}`);
+  clientToRemove.parentNode.removeChild(clientToRemove);
 });
