@@ -24,9 +24,9 @@ const updateAllClients = (newName, id) => {
 
 const changeNick = (io, socket) => {
   socket.on('changeNickname', ({ nickname: newNick }) => {
-    io.to(socket.id).emit('changeUserNick', newNick);
-    socket.broadcast.emit('changeUserNickList', { newNick, id: socket.id });
     updateAllClients(newNick, socket.id);
+    socket.broadcast.emit('changeUserNickList', { newNick, id: socket.id });
+    io.to(socket.id).emit('changeUserNick', newNick);
   });
 };
 
@@ -52,8 +52,8 @@ const newMessage = (io, socket) => {
     let date = new Date().toLocaleString();
     date = date.replace('/', '-');
     date = date.replace('/', '-');
-    await clientModel.insertUserMessage(chatMessage, nickname, date);
     io.emit('message', `${date} - ${nickname}: ${chatMessage}`);
+    await clientModel.insertUserMessage(chatMessage, nickname, date);
   });
 };
 
