@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebChat</title>
+  </head>
+
+  <body>
+    <div>
+      <ul id="messages"></ul>
+      <input id="input" type="text" />
+      <button type="button" id="button">Enviar</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const client = window.io();
+
+      const messages = document.querySelector('#messages');
+      const input = document.querySelector('#input');
+      const button = document.querySelector('#button');
+
+      button.addEventListener('click', () => {
+        const newMessage = input.value;
+        client.emit('message', { newMessage, nickname: 'user' });
+      });
+
+      client.on('message', (messageChat) => {
+        const li = document.createElement('li');
+        li.classList.add('msg');
+        li.innerText = messageChat;
+        messages.appendChild(li);
+      });
+    </script>
+  </body>
+
+</html>
