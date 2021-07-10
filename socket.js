@@ -1,3 +1,5 @@
+const clientModel = require('./models/clientModel');
+
 let allClients = [];
 
 const generateRandomNick = () => {
@@ -21,16 +23,18 @@ const updateAllClients = (newName, id) => {
 };
 
 module.exports = (io) =>
-  io.on('connection', (socket) => {
+  io.on('connection', async (socket) => {
     const randomNickname = generateRandomNick();
-    io.to(socket.id).emit('userNickname', { randomNickname, allClients });
+    const allMessages = await clientModel.getAllUsersMessages();
+    io.to(socket.id).emit('userNickname', { randomNickname, allClients, allMessages });
     socket.broadcast.emit('newUser', { randomNickname, id: socket.id });
     allClients = [...allClients, { nickname: randomNickname, id: socket.id }];
 
-    socket.on('message', ({ chatMessage, nickname }) => {
+    socket.on('message', async ({ chatMessage, nickname }) => {
       let date = new Date().toLocaleString();
       date = date.replace('/', '-');
       date = date.replace('/', '-');
+      await clientModel.insertUserMessage(chatMessage, nickname, date);
       io.emit('message', `${date} - ${nickname}: ${chatMessage}`);
     });
 

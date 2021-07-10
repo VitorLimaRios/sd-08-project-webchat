@@ -54,11 +54,18 @@ const createAllOnlineUsers = (allClients) => {
   });
 };
 
-socket.on('userNickname', ({ randomNickname: nickname, allClients }) => {
-  createUserNickname(nickname);
-  console.log(allClients);
-  createAllOnlineUsers(allClients);
-});
+socket.on(
+  'userNickname',
+  ({ randomNickname: nickname, allClients, allMessages }) => {
+    createUserNickname(nickname);
+    createAllOnlineUsers(allClients);
+    allMessages.forEach((message) => {
+      createMessage(
+        `${message.timestamp} - ${message.nickname}: ${message.message}`,
+      );
+    });
+  },
+);
 
 const changeUserNick = (nick) => {
   const userNick = document.querySelector('#online-user');
