@@ -1,8 +1,8 @@
 const { MongoClient } = require('mongodb');
-require('dotenv').config();
+const pathconfig = require('find-config');
+require('dotenv').config({ path: pathconfig('.env') });
 
 let schema = null;
-
 async function connection() {
   if (schema) return Promise.resolve(schema);
   return MongoClient
