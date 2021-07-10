@@ -15,6 +15,10 @@ module.exports = (io) => {
       const postMessage = `${timestamp} - ${nickname}: ${chatMessage} \n`;
       io.emit('postMessage', postMessage);
     });
+
+    socket.on('disconnect', () => {
+      socket.broadcast.emit('serverMessage', `Xiii! ${socket.id} acabou de se desconectar! :( \n`);
+    });
   });
 };
 

@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Webchat</title>
+  <link rel="stylesheet" href="./public/styles/chat.css">
 </head>
 <body>
   <form>
@@ -14,7 +15,7 @@
     <textarea id="message-area"></textarea>
     <button type="button" id="btn-enviar">Enviar</button>
   </form>
-  <textarea id="chat"></textarea>
+  <textarea id="chat" class="chatBox"></textarea>
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/scripts/chat.js"></script>
