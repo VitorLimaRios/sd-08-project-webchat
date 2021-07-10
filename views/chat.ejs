@@ -10,9 +10,11 @@
   <body>
     <div>
       <ul id="chat"></ul>
-      <input id="message" type="text" placeholder="mensagem" />
-      <input type="text" id="nickname" placeholder="nickname">
-      <button type="button" id="button">Enviar</button>
+      <input data-testid="message-box" id="message" type="text" placeholder="mensagem" />
+      <input data-testid="nickname-box" type="text" id="nickname" placeholder="nickname">
+      <button data-testid="nickname-button" id="buttonNick">Enviar nickname</button>
+      <button data-testid="send-button" type="button" id="button">Enviar Mensagem</button>
+      <span data-testid="online-user" id="username"></span>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/index.js"></script>
