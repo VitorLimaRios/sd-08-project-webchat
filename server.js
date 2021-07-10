@@ -18,6 +18,7 @@ const { chatController } = require('./controllers/chatController');
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
+app.use(express.static(`${__dirname}/public`));
 app.use(cors());
 require('./sockets/chat')(io);
 

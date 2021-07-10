@@ -9,30 +9,13 @@
 
   <body>
     <div>
-      <ul id="messages"></ul>
-      <input id="input" type="text" />
+      <ul id="chat"></ul>
+      <input id="message" type="text" placeholder="mensagem" />
+      <input type="text" id="nickname" placeholder="nickname">
       <button type="button" id="button">Enviar</button>
     </div>
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-      const client = window.io();
-
-      const messages = document.querySelector('#messages');
-      const input = document.querySelector('#input');
-      const button = document.querySelector('#button');
-
-      button.addEventListener('click', () => {
-        const newMessage = input.value;
-        client.emit('message', { newMessage, nickname: 'user' });
-      });
-
-      client.on('message', (messageChat) => {
-        const li = document.createElement('li');
-        li.classList.add('msg');
-        li.innerText = messageChat;
-        messages.appendChild(li);
-      });
-    </script>
+    <script src="/index.js"></script>
   </body>
 
 </html>
