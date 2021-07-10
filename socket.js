@@ -60,7 +60,7 @@ const newMessage = (io, socket) => {
 const onDisconnect = (io, socket) => {
   socket.on('disconnect', () => {
     removeClientFromAllClients(socket.id);
-    socket.emit('disconnectClient', socket.id);
+    io.emit('disconnectClient', socket.id);
   });
 };
 
