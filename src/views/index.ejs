@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+  <title>WeChat - Connecting the world</title>
+</head>
+<body>
+  <div id="hero" class="container border border-primary rounded">
+
+    <div id="up-side" class="container-fluid row">      
+      <div id="user-area" class="container-fluid col-sm-6 col-md-4 border border-primary w-25">
+        <div id="nick-name" class="form-group">
+          <div class="form-row">
+            <div id="nick-input">
+              <input
+                type="text"
+                name="nick"
+                id="nick"
+                class="form-control"
+                data-testid="nickname-box"
+                data-testid="nickname-box"
+                placeholder="Insert your nick name"
+              >
+            </div>
+            <div id="nick-button">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                data-testid="nickname-button"
+              >
+              <i class="fas fa-save"> </i> Save
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="logged-uers">
+
+          <div id="title">
+            <h4><i class="fas fa-users"></i> Users</h4>
+          </div>
+
+          <div id="users-list">
+            <ol id="users-list-nick"></ol>
+          </div>
+
+        </div>
+      </div>
+    <div id="message-area" class="container col-sm-6 border border-primary w-75">
+      <ol id="message-list"></ol>
+    </div>
+    </div>
+
+    <div id="down-side" class="container">
+      <div class="container-fluid">
+        <div id="form-container">
+          <form id="chat-form" class="form-group">
+            <div class="form-row input-group mb-3">
+              </div>
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  data-testid="message-box"
+                  placeholder="Type your message here"
+                >
+                <div class="input-group-append">
+                  <button 
+                  type="submit"
+                  data-testid="send-button"
+                  class="btn btn-primary"
+                >
+                  <i class="fas fa-paper-plane"> </i> Send
+                </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
+      integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4="
+      crossorigin="anonymous"
+    ></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../sockets/server.js"></script>
+</body>
+</html>
