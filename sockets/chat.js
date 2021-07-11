@@ -1,6 +1,13 @@
+const getDate = require('../public/utils/getDate');
+
 module.exports = (io) => {
   io.on('connection', (socket) => {
-    socket.emit('serverMessage', 'Bem vindo ao chat');
-    console.log(socket.id);
+    socket.emit('serverMessage', `Olá, seja bem vindo ao chat ID: ${socket.id}`);
+    socket.on('message', ({ chatMessage, nickname }) => {
+      io.emit('serverMessage', `${getDate()} - ${chatMessage}: ${nickname}`);
+    });
+    socket.on('disconnect', () => {
+      socket.broadcast.emit('serverMessage', 'Cliente disconectado.');
+    });
   });
 };

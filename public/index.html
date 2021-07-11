@@ -10,7 +10,7 @@
         <div class="upper-left">
           <div class="username">
             <form>
-              <input placeholder="Insira seu nickname" autocomplete="off" />
+              <input placeholder="Insira seu nickname" autocomplete="off" name="nickname"/>
               <button>Salvar</button>
             </form>
           </div>
@@ -33,12 +33,13 @@
       </div>
       <div class="under-div">
         <form>
-          <input placeholder="Digite uma nova mensagem aqui" autocomplete="off" />
+          <input placeholder="Digite uma nova mensagem aqui" autocomplete="off" name="chatMessage"/>
           <button>Enviar</button>
         </form>
       </div>
     </div>
-
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
+    integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4=" crossorigin="anonymous"></script> -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/chat.js"></script>
   </body>
