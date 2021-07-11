@@ -1,27 +1,60 @@
-<!--
-  https://github.com/tryber/sd-07-live-lectures/blob/lecture_32_3/chat-socket-io/public/index.html
--->
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projeto WebChat</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/style.css">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projeto WebChat - Trybe</title>
+    <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
-    <ul class="message-history">
-        <% messages.forEach((message) => { %>
-          <li data-testid="message">
-            <%= `${message.timestamp} ${message.nickname} ${message.message}` %>
-          </li>
-        <% }) %>
-    </ul>
+    <header class="header"><h2>Projeto WebChat - Trybe</h2></header>
+    <div class="container">
+      <div class="container-one">
+        <section class="nickname">
+          <input
+            type="text"
+            class="nickBox"
+            placeholder="Insira seu nickname"
+            data-testid="nickname-box"
+          />
+          <button class="nickButton" data-testid="nickname-button">
+            Salvar
+          </button>
+        </section>
+        <section class="user">
+          <h3>Usuários</h3>
+          <ul class="userOn">
+            <li>user</li>
+          </ul>
+        </section>
+      </div>
+      <div class="container-two">
+        <section class="chat">
+          <h2>Mensagens</h2>
+          <ul class="message-history">
+            <% messages.forEach((message) => { %>
+            <li data-testid="message">
+              <%= `${message.timestamp} ${message.nickname} ${message.message}`
+              %>
+            </li>
+            <% }) %>
+          </ul>
+        </section>
+      </div>
+    </div>
+    <div class="footer">
+      <section class="newMessage">
+        <input
+          type="text"
+          class="msgBox"
+          placeholder="Digite uma nova mensagem aqui"
+          data-testid="message-box"
+        />
+        <button class="sendButton" data-testid="send-button">Enviar</button>
+      </section>
+    </div>
   </body>
   <script src="/socket.io/socket.io.js"></script>
-  <script src='/js/script.js'></script>
+  <script src="/js/script.js"></script>
 </html>

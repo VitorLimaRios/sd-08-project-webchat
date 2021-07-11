@@ -1,0 +1,109 @@
+* {
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+}
+
+body {
+  width: 100%;
+}
+
+.header {
+  background-color: black;
+  color: aliceblue;
+  padding: 30px;
+}
+
+.container {
+  display: flex;
+  margin-top: 20px;
+}
+
+.container-one {
+  margin-left: 20px;
+  width: 45%;
+}
+
+.container-two {
+  margin-right: 20px;
+  width: 55%;
+}
+
+.footer {
+  bottom: 0;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+}
+
+/* .nickname {
+  background-color: aqua;
+} */
+
+.user {
+  background-color: rgb(221, 222, 243);
+  border-color:rgb(80, 78, 78);
+  border-radius: 5px;
+  border-style: solid;
+  height: 100%;
+  margin-right: 20px;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.chat {
+  background-color: rgb(220, 223, 217);
+  border-color:rgb(80, 78, 78);
+  border-radius: 5px;
+  border-style: solid;
+  height: 100%;
+  padding: 10px;
+}
+
+.newMessage {
+  background-color: rgb(173, 165, 165);
+}
+
+.nickBox {
+  background: #FFFFFF;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  margin: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.msgBox {
+  background: #FFFFFF;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  margin: 10px;
+  padding: 10px;
+  text-align: center;
+  width: 350px;
+}
+
+.nickButton {
+  background: #4c82af;
+  border: 0;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  outline: 0;
+  padding: 8px;
+}
+
+.sendButton {
+  background: #2b662d;
+  border: 0;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  outline: 0;
+  padding: 10px;
+}
+
+li {
+  margin-left: 20px;
+  margin-top: 10px;
+}
