@@ -16,24 +16,28 @@ const setAllOnlineUsers = async (io) => {
   io.emit('setAllOnlineUsers', allUsersNickname);
 };
 
+const userSockets = (socket, io) => {
+  socket.on('login', async (initialNickname) => {
+    await ChatModel.addNewUser(initialNickname);
+    await setAllOnlineUsers(io);
+  });
+  socket.on('updateNickname', async (nicknames) => {
+    await ChatModel.updateUser(nicknames);
+    await setAllOnlineUsers(io);
+  });
+  socket.on('disconectUser', async (unlogUserNickname) => {
+    await ChatModel.deleteUser(unlogUserNickname);
+    await setAllOnlineUsers(io);
+  });
+};
+
 module.exports = (io) => {
   io.on('connection', async (socket) => {
     await setAllSavedMessages(socket);
-    socket.on('login', async (initialNickname) => {
-      await ChatModel.addNewUser(initialNickname);
-      await setAllOnlineUsers(io);
-    });
     socket.on('message', async (messageData) => {
       const formatedMessage = await ChatController.formatMessage(messageData);
       io.emit('message', formatedMessage);
     });
-    socket.on('updateNickname', async (nicknames) => {
-      await ChatModel.updateUser(nicknames);
-      await setAllOnlineUsers(io);
-    });
-    socket.on('disconectUser', async (unlogUserNickname) => {
-      await ChatModel.deleteUser(unlogUserNickname);
-      await setAllOnlineUsers(io);
-    });
+    userSockets(socket, io);
   });
 };
