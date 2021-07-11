@@ -54,7 +54,7 @@ function updateListOfLoggedUsersWhenDisconnect(socket, io) {
     const opsid = socket.id;
     console.log('O array', usersLoggeds);
     console.log('testao doido', objstest[opsid]);
-    const praremover = objstest[opsid];
+    // const praremover = objstest[opsid];
     let ops = socket.id;
     ops = ops.substring(0, 16);
     const whoRemove = usersLoggeds.indexOf(ops);
