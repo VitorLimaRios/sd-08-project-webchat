@@ -1,30 +1,29 @@
-const socket = io();
+const socket = window.io();
 
 const form = document.querySelector('form');
-const nickname = document.querySelector('#nickname');
-const chat = document.querySelector('#mensagem');
-
+const nome = document.querySelector('#nickname');
+const msg = document.querySelector('#mensagem');
 
 form.addEventListener('submit', (event) => {
     event.preventDefault();
-    socket.emit('message', {nickname: nickname.value, chatMessage: chat.value}); 
-    nickname = "";
-    chatMessage = "";
+    socket.emit('message', { nickname: nome.value, chatMessage: msg.value }); 
+    nome.value = '';
+    msg.value = '';
     return false;
-}) 
+}); 
 
-
-const createMessage = async(nickname, chatMessage, data) => {
+const createMessage = async (nickname, chatMessage, data) => {
     const chat = document.querySelector('#chat');
     const li = document.createElement('li');
     li.innerText = `${data} PM - ${nickname}: ${chatMessage}`;
     chat.appendChild(li);
-}
+};
 
+socket.on('entrar', async (message) => createMessage(message)); // aguardando o evento 'message' do server.js
 
-socket.on('entrar', async(message) => createMessage(message));  //aguardando o evento 'message' do server.js
-
-socket.on('serverMessage', async({nickname, chatMessage, data}) => createMessage(nickname, chatMessage, data));
+socket.on('serverMessage', async ({ nickname, chatMessage, data }) => (
+    createMessage(nickname, chatMessage, data)
+));
 
 // const nameRandom = () => {
 //     var result           = '';

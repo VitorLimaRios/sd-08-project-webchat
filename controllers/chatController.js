@@ -4,4 +4,4 @@ const getAll = async (_req, res) => {
 
 module.exports = {
     getAll,
-}
+};
