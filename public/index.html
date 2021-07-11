@@ -2,45 +2,38 @@
 <html>
   <head>
     <title>Projeto Zapzap Fake</title>
-    <!-- <link rel="stylesheet" type="text/css" href="./styles/main.css"> -->
+    <link rel="stylesheet" type="text/css" href="./styles/main.css">
   </head>
   <body>
     <div class="container">
       <div class="upper-div">
         <div class="upper-left">
           <div class="username">
-            <form>
-              <input placeholder="Insira seu nickname" autocomplete="off" name="nickname"/>
-              <button>Salvar</button>
+            <form action="">
+              <input data-testid="nickname-box" placeholder="Insira seu nickname" autocomplete="off"/>
+              <button type="button" data-testid="nickname-button">Salvar</button>
             </form>
           </div>
           <div class="users">
-            <ul>
-              <li>Usuário 1</li>
-              <li>Usuário 2</li>
-              <li>Usuário 3</li>
+            <ul data-testid="online-user" class="online">
             </ul>
           </div>
         </div>
         <div class="upper-right">
           <ul class="messages">
-            <li>Mensagem 1</li>
-            <li>Mensagem 2</li>
-            <li>Mensagem 3</li>
-            <li>Mensagem 4</li>
           </ul>
         </div>
       </div>
       <div class="under-div">
         <form>
-          <input placeholder="Digite uma nova mensagem aqui" autocomplete="off" name="chatMessage"/>
-          <button>Enviar</button>
+          <input placeholder="Digite uma nova mensagem aqui" autocomplete="off" data-testid="message-box"/>
+          <button type="submit" data-testid="send-button">Enviar</button>
         </form>
       </div>
     </div>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
     integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4=" crossorigin="anonymous"></script> -->
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
     <script src="./js/chat.js"></script>
   </body>
 </html>

@@ -71,23 +71,24 @@ describe('2 - Crie um frontend para que as pessoas interajam com o chat', () => 
     const sendButton = await page.$(`button${dataTestid('send-button')}`);
 
     //send one message
-    await messageBox.type(chatMessage);
+    await messageBox.type(chatMessage); // the more i study
     await sendButton.click();
     await page.waitForSelector(dataTestid('message'));
 
     //send another message
-    await messageBox.type(anotherChatMessage);
+    await messageBox.type(anotherChatMessage); // the best wisest
     await sendButton.click();
     await page.waitForTimeout(500);
 
     //send yet another message
-    await messageBox.type(yetAnotherChatMessage);
+    await messageBox.type(yetAnotherChatMessage); // the science
     await sendButton.click();
     await page.waitForTimeout(500);
 
     // peek the messages we sent
     const messages = await page.$$eval(dataTestid('message'), (nodes) => nodes.map((n) => n.innerText));
     const latestMessages = _.takeRight(messages, 3);
+    console.log(latestMessages)
 
 
     expect(latestMessages[0]).toMatch(chatMessage);
