@@ -1,17 +1,18 @@
 const socket = window.io();
 
-const form = document.querySelector('form');
+const buttonMsg = document.querySelector('#button-message');
 const nickNamebutton = document.querySelector('#nickname-btn');
-const nickname = document.querySelector('#nickname');
+const userNicknameInput = document.querySelector('#nickname');
 const inputText = document.querySelector('#message-box');
+let userNickname = '';
 
 nickNamebutton.addEventListener('click', () => {
-  localStorage.setItem('nickname', nickname.value);
+  localStorage.setItem('nickname', userNicknameInput.value);
 });
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
+buttonMsg.addEventListener('click', (e) => {
   let findNickName = localStorage.getItem('nickname');
+  e.preventDefault();
   if (!findNickName) {
     findNickName = 'nyancaaaaaaaaaat';
   }
@@ -24,6 +25,14 @@ form.addEventListener('submit', (e) => {
   return false;
 });
 
+nickNamebutton.addEventListener('click', (e) => {
+  e.preventDefault();
+  userNickname = userNicknameInput.value;
+  socket.emit('message', userNickname);
+  userNicknameInput.value = '';
+  return false;
+});
+
 const createMessage = (message) => {
   const messagesUl = document.querySelector('#list');
   const li = document.createElement('li');
@@ -32,4 +41,13 @@ const createMessage = (message) => {
   messagesUl.appendChild(li);
 };
 
+const createUser = (user) => {
+  const messagesUl = document.querySelector('#online');
+  const li = document.createElement('li');
+  li.dataset.testid = 'online-user';
+  li.innerText = user;
+  messagesUl.appendChild(li);
+};
+
 socket.on('message', (message) => createMessage(message));
+socket.on('message', (user) => createUser(user));
