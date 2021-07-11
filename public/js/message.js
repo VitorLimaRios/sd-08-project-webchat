@@ -8,20 +8,6 @@ const messageForm = document.getElementById('message-form');
 const messageInput = document.getElementById('message-input');
 const usersOnlineContainer = document.getElementById('users');
 
-const randomNicknameGenerator = () => {
-  const letters = 'abcdefghijklmnopqrstuvwxyz';
-  const upperLetters = letters.toUpperCase();
-  const numbers = '0123456789_';
-  const allChars = letters + upperLetters + numbers;
-  let randomNick = '';
-  for (let i = 0; i < 16; i += 1) {
-    randomNick += allChars[Math.floor(Math.random() * allChars.length)];
-  }
-  return randomNick;
-};
-
-nicknameContainer.innerText = randomNicknameGenerator();
-
 messageForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const chatMessage = messageInput.value;
@@ -33,9 +19,8 @@ messageForm.addEventListener('submit', (e) => {
 nicknameForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const newNickname = nicknameInput.value;
-  const oldNickname = nicknameContainer.innerText;
   nicknameContainer.innerText = newNickname;
-  socket.emit('updateNickname', { newNickname, oldNickname });
+  socket.emit('updateNickname', newNickname);
   nicknameInput.value = '';
 });
 
@@ -53,12 +38,11 @@ const createUserOnPage = (user) => {
   usersOnlineContainer.insertBefore(newUser, usersOnlineContainer.firstChild);
 };
 
-socket.emit('login', nicknameContainer.innerText);
-
 socket.on('message', (message) => createMessageOnPage(message));
 socket.on('setAllSavedMessages', (allMessages) => {
   allMessages.forEach((message) => createMessageOnPage(message));
 });
+socket.on('login', (nickname) => { nicknameContainer.innerText = nickname; });
 socket.on('setAllOnlineUsers', (usersOnline) => {
   usersOnlineContainer.innerHTML = '';
   usersOnline.forEach((user) => {
@@ -67,7 +51,3 @@ socket.on('setAllOnlineUsers', (usersOnline) => {
     }
   });
 });
-
-window.onbeforeunload = () => {
-  socket.emit('disconectUser', nicknameContainer.innerText);
-};
