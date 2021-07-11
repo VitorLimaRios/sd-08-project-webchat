@@ -20,7 +20,15 @@ function createChat(chatHour, nickname, chatMessage) {
 
 function userList(socket, io) {
   socket.on('toLeftPanel', async (tempUser) => {
+    console.log('O ususario temporario', tempUser);
     usersLoggeds.push(tempUser);
+
+    const idLogged = socket.id;
+    // idLogged.substring(0, 16);
+    objstest = { [idLogged.substring(0, 16).toString()]: tempUser, ...objstest };
+
+    console.log('obejto de usuarios', objstest);
+
     console.log('Usuarios logados', usersLoggeds);
     const tramela = await findHistoryChatByUser();
     socket.emit('allchats', tramela);
@@ -31,10 +39,16 @@ function userList(socket, io) {
 function updateUserList(socket, io) {
   socket.on('userChangeNickName', async (nicknameObj) => {
       console.log(nicknameObj);
-      const socketId = socket.id;
-      objstest = { [socketId]: nicknameObj.newNickName, ...objstest };
+      const newOps = nicknameObj.newNickName;
+      const idLogged = socket.id;
+      // idLogged.substring(0, 16);
+      console.log('Id na atualização', idLogged);
+      const source = { [idLogged.substring(0, 16).toString()]: newOps };
+      // objstest = { [idLogged.substring(0, 16).toString()]: newOps, ...objstest };
 
-      console.log(objstest);
+      const returnedTarget = Object.assign(objstest, source);
+      console.log('Retornado', returnedTarget);
+      console.log('objeto apos atualização', objstest);
 
       const actualNicknamePosition = usersLoggeds.indexOf(nicknameObj.actualNickName);
       console.log('position to update', actualNicknamePosition);
@@ -49,18 +63,25 @@ function updateUserList(socket, io) {
 }
 
 function updateListOfLoggedUsersWhenDisconnect(socket, io) {
-  socket.on('disconnect', () => {
-    console.log('soliditante', socket.id);
-    const opsid = socket.id;
-    console.log('O array', usersLoggeds);
-    console.log('testao doido', objstest[opsid]);
-    // const praremover = objstest[opsid];
+    socket.on('disconnect', () => {
+      console.log('Desconectando');
     let ops = socket.id;
     ops = ops.substring(0, 16);
-    const whoRemove = usersLoggeds.indexOf(ops);
+
+    const whois = objstest[ops];
+
+    console.log('ID solicitantes', ops);
+      console.log('####Who is', whois);
+
+    const whoRemove = usersLoggeds.indexOf(whois);
+    console.log('who remove ', whoRemove);
     usersLoggeds.splice(whoRemove, 1);
+
+    console.log('obejto de usuarios no Disconnect', objstest);
+    console.log('----------------', usersLoggeds);
     console.log(`desconectou ${ops} position ${whoRemove}`);
     io.emit('userConnecteds', usersLoggeds);
+    // io.emit('testeMarreta', 123);
   });
 }
 

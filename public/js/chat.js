@@ -8,10 +8,11 @@ const dataTestid = 'data-testid';
 
 addUserButton.addEventListener('click', () => {
   const actualNickName = document.querySelector(nickNameOnline).innerText;
-  console.log('atual', actualNickName);
   nickname = document.querySelector('#nickName').value;
   document.querySelector(nickNameOnline).innerText = nickname;
-  localStorage.setItem('nickname', nickname);
+  // localStorage.setItem('nickname', nickname);
+  sessionStorage.setItem('nickname', nickname);
+  console.log('atual', actualNickName, nickname);
   socket.emit('userChangeNickName', { actualNickName, newNickName: nickname });
 });
 
@@ -28,8 +29,9 @@ form.addEventListener('submit', (e) => {
 
 const newUser = (nickNameTemp) => {
   console.log('Nome de inicio', nickNameTemp);
-  const localNick = localStorage.getItem('nickname');
-  console.log('--------------Local', localNick);
+  // const localNick = localStorage.getItem('nickname');
+  const localNick = sessionStorage.getItem('nickname');
+  console.log('--------------Local', localNick, nickNameTemp);
   document.querySelector(nickNameOnline).innerText = localNick || nickNameTemp;
   // const user = localNick || nickNameTemp;
   // socket.emit('toLeftPanel', user);
@@ -81,3 +83,4 @@ socket.on('message', (data) => createMessage(data));
 socket.on('newUser', (nickNameTemp) => newUser(nickNameTemp));
 socket.on('userConnecteds', (userConnected) => usersConnected(userConnected));
 socket.on('allchats', (tramela) => renderChat(tramela));
+socket.on('testeMarreta', (nickNameTemp) => newUser(nickNameTemp));
