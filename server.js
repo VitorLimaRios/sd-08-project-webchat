@@ -15,7 +15,7 @@ const io = require('socket.io')(http, {
 
 require('./sockets/chatSocket')(io);
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   res.sendFile(`${__dirname}/index.html`);
 });
 
