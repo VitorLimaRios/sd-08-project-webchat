@@ -1,0 +1,27 @@
+<!--
+  https://github.com/tryber/sd-07-live-lectures/blob/lecture_32_3/chat-socket-io/public/index.html
+-->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto WebChat</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+  </head>
+  <body>
+    <ul class="message-history">
+        <% messages.forEach((message) => { %>
+          <li data-testid="message">
+            <%= `${message.timestamp} ${message.nickname} ${message.message}` %>
+          </li>
+        <% }) %>
+    </ul>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src='/js/script.js'></script>
+</html>
