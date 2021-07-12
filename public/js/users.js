@@ -2,29 +2,40 @@ const socket = window.io();
 
 const userNicknameTag = '#userNickname';
 
-socket.on('getconnection', () => {
-  socket.emit('getNickname');
-});
-
 socket.on('yourNickname', (nickname) => {
   const userNickname = document.querySelector(userNicknameTag);
   userNickname.textContent = nickname;
 
   localStorage.setItem('nickname', nickname);
-  socket.emit('getUsers');
+
+  socket.emit('getUsers', nickname);
 });
 
-socket.on('sendNickname', () => {
+socket.on('usersOnline', (usersOnline) => {
+  const usersList = document.querySelector('#usersList');
+
+  while (usersList.lastElementChild) {
+    usersList.removeChild(usersList.lastElementChild);
+  }
   const nickname = localStorage.getItem('nickname');
-  socket.emit('myNickname', nickname);
+
+  usersOnline.forEach((user) => {
+    if (user.nickname !== nickname) {
+      const liUser = document.createElement('li');
+      liUser.textContent = user.nickname;
+      usersList.appendChild(liUser);
+    }
+  });
 });
 
 socket.on('newUser', (nickname) => {
-  const ulUser = document.querySelector('#usersList');
-  const liUser = document.createElement('li');
-  liUser.textContent = nickname;
-  ulUser.appendChild(liUser);
+  const usersList = document.querySelector('#usersList');
+  const liNewUser = document.createElement('li');
+  liNewUser.textContent = nickname;
+  usersList.appendChild(liNewUser);
 });
+
+socket.on('updateUsers', () => socket.emit('getUsers'));
 
 socket.on('message', (message) => {
   const ulMessage = document.querySelector('#messagesList');
@@ -39,23 +50,27 @@ const input = document.getElementById('messageInput');
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+
   if (input.value) {
-    const nickname = document.querySelector(userNicknameTag).value;
+    const nickname = localStorage.getItem('nickname');
     const chatMessage = input.value;
     socket.emit('message', { chatMessage, nickname });
     input.value = '';
   }
 });
 
-const nicknameForm = document.getElementById('userNickname');
-const nicknameInput = document.getElementById('nickname');
+const nicknameForm = document.getElementById('nicknameForm');
+const nicknameInput = document.getElementById('nicknameInput');
 
 nicknameForm.addEventListener('submit', (e) => {
   e.preventDefault();
   if (nicknameInput.value) {
-    console.log(nicknameInput.value);
     localStorage.setItem('nickname', nicknameInput.value);
     document.querySelector(userNicknameTag).textContent = nicknameInput.value;
     nicknameInput.value = '';
   }
+});
+
+socket.on('disconnect', () => {
+  socket.emit('removeUser', { id: socket.id });
 });

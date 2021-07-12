@@ -18,10 +18,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, '/public')));
 
-// io.on('connect', async (socket) => {
-//   console.log(`User connected! ID: ${socket.id}`);
-// });
-
 require('./sockets/index')(io);
 
 app.get('/', (_req, res) => {

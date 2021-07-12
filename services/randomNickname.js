@@ -3,20 +3,21 @@ function getRandomIntInclusive(min, max) {
 }
 
 function getRandomCharacter() {
-  const listaLetras = 'ABCDEFGHIJKLMNOPQRSTUVYWXZ';
-  const numeroAleatorio = getRandomIntInclusive(0, 25);
+  const characterList = 'abcdefghijklmnopqrstuvywz';
+  const randomNumber = getRandomIntInclusive(0, 25);
 
-  return listaLetras.substring(numeroAleatorio, numeroAleatorio + 1);
+  return characterList.substring(randomNumber, randomNumber + 1);
 }
 
 function getRandomNickname() {
-  let nome = '';
+  let nickname = '';
 
-  for (let contadorLetra = 1; contadorLetra <= 16; contadorLetra += 1) {
-    nome += getRandomCharacter();
+  for (let i = 1; i <= 16; i += 1) {
+    if (i === 1) { nickname = getRandomCharacter(); }
+    nickname += getRandomCharacter();
   }
 
-  return nome;
+  return nickname;
 }
 
 module.exports = { getRandomNickname };
