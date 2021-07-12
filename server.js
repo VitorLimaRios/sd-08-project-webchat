@@ -18,8 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, '/public')));
 
-require('./sockets/usersConnection')(io);
-require('./sockets/usersLogout')(io);
+require('./sockets/users')(io);
 require('./sockets/messages')(io);
 
 app.get('/', (_req, res) => {

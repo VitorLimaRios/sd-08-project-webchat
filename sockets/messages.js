@@ -6,8 +6,8 @@ module.exports = (io) => {
     socket.on('message', async ({ chatMessage, nickname }) => {
       const date = formatDate(new Date(Date.now()));
       await messageModel.createMessage(date, nickname, chatMessage);
-      const messageFormatted = `${date} - ${nickname}: ${chatMessage}`;
-      io.emit('message', messageFormatted);
+      const message = `${date} - ${nickname}: ${chatMessage}`;
+      io.emit('message', message);
     });
 
     socket.on('getMessagesHistory', async () => {
