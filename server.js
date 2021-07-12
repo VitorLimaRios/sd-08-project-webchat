@@ -16,6 +16,8 @@ const io = require('socket.io')(http, {
   },
 });
 
+const messageModel = require('./models/messageModel');
+
 const PORT = 3000;
 
 const formatMessage = ({ time, nickname, message }) => (`${time} - ${nickname}: ${message}`);
@@ -27,22 +29,27 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static(path.join(__dirname, '/public')));
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
   console.log('Client connected');
+
+  const allMessages = await messageModel.findAllMessages();
+  const eachMessage = await allMessages.map((elem) => 
+    formatMessage({ time: elem.timestamp, nickname: elem.nickname, message: elem.message }));  
+  io.emit('start', eachMessage);
 
   socket.on('user', (user) => {
     io.emit('user', user);
   });
 
-  socket.on('message', ({ chatMessage, nickname }) => {
+  socket.on('message', async ({ chatMessage, nickname }) => {
     const timeNow = dateFormat(now, 'dd-mm-yyyy h:MM:ss TT');
+    await messageModel.createMessage({ message: chatMessage, nickname, timestamp: timeNow });
     const value = formatMessage({ time: timeNow, nickname, message: chatMessage });
     io.emit('message', value);
   });
 });
 
 app.get('/', async (_req, res) => {
-  // res.sendFile(path.join(__dirname, 'index.html'));
   res.status(200).render('../views/chat.ejs');
 });
 

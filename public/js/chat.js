@@ -60,3 +60,9 @@ socket.on('message', (msg) => {
 socket.on('user', (msg) => {  
   renderUsers(msg);
 });
+
+socket.on('start', (allMessages) => {
+  allMessages.forEach((elem) => {
+    renderMessage(elem);
+  });
+});
