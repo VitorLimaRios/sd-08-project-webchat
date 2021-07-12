@@ -3,30 +3,31 @@ const onlineUsers = [];
 const randomUser = () => {
   let result = '';
   const characters = '0123456789';
-  let cLength = characters.length;
-  for (let i = 0; i < 12; i++) {
+  const cLength = characters.length;
+  for (let i = 0; i < 12; i += 1) {
     result += characters.charAt(Math.floor(Math.random() * cLength));
   }
-  return 'User' + result;
-}
+  return `User${result}`;
+};
 
 module.exports = (io) => io.on('connection', (socket) => {
-  socket.guest = randomUser();
-  onlineUsers.unshift(String(socket.guest));
+  let socketGuest = socket.guest;
+  socketGuest = randomUser();
+  onlineUsers.unshift(String(socketGuest));
   socket.emit('new-user', onlineUsers);
-  socket.broadcast.emit('new-user', [String(socket.guest)]);
+  socket.broadcast.emit('new-user', [String(socketGuest)]);
 
   socket.on('disconnect', () => {
     onlineUsers.splice(onlineUsers.indexOf(socket.guest), 1);
-    socket.broadcast.emit('user-left', String(socket.guest))
+    socket.broadcast.emit('user-left', String(socket.guest));
   });
 
   socket.on('change-name', (name) => {
-    const oldName = String(socket.guest);
-    onlineUsers.splice(onlineUsers.indexOf(socket.guest), 1);
-    socket.guest = name;
+    socketGuest = socket.guest;
+    const oldName = String(socketGuest);
+    onlineUsers.splice(onlineUsers.indexOf(socketGuest), 1);
+    socketGuest = name;
     onlineUsers.unshift(name);
     io.emit('change-onlineUsers', { name, oldName });
-  })
-
+  });
 });
