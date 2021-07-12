@@ -5,46 +5,62 @@ const btnSalvar = document.getElementById('btn-salvar');
 const btnEnviar = document.getElementById('btn-enviar');
 const messageArea = document.getElementById('message-area');
 const chat = document.getElementById('chat');
-// const users = document.getElementById('users');
-// let userQuantity = 1;
+
+const createMessage = (message) => {
+  const chatBox = document.getElementById('chat');
+  const li = document.createElement('li');
+  li.id = 'message';
+  li.setAttribute('data-testid', 'message');
+  li.innerText = message;
+  chatBox.appendChild(li);
+};
 
 btnSalvar.addEventListener('click', () => {
   localStorage.setItem('nickname', nicknameInput.value);
+  const userList = document.getElementById('usersConnected');
+  userList.firstChild.textContent = nicknameInput.value;
   return false;
 });
 
 btnEnviar.addEventListener('click', () => {
-  let nickname = localStorage.getItem('nickname');
+  const nickname = localStorage.getItem('nickname');
   const chatMessage = messageArea.value;
-  if (!nickname) nickname = 'anônimo';
   socket.emit('message', { chatMessage, nickname });
   return false;
 });
 
+const createUser = (name, id = '', test = '') => {
+  const usersList = document.getElementById('usersConnected');
+  const li = document.createElement('li');
+  li.id = id;
+  li.setAttribute('data-testid', test);
+  li.innerText = name;
+  usersList.appendChild(li);
+};
+
+const mainUserName = () => {
+  const socketId = socket.id;
+  const randomUserName = `Usuário-${socketId.substring(0, 8)}`;
+  localStorage.setItem('nickname', randomUserName);
+  createUser(randomUserName, 'mainUser', 'online-user');
+  socket.emit('userConnect', randomUserName);
+  return false;
+};
+
 socket.on('message', (message) => {
-  chat.value += message;
+  createMessage(message);
 });
 
 socket.on('serverMessage', (message) => {
   chat.value += message;
 });
 
-// socket.on('connection', () => {
-//   users.value += `Usuário${userQuantity}`;
-//   userQuantity += 1;
-// });
+socket.on('userConnect', (userName) => {
+  createUser(userName, 'otherUser');
+});
 
-// socket.on('getUsers', (othersUsers) => {
-//   users.value += '';
-// });
-
-// window.onload = () => {
-//   const user = localStorage.getItem('nickname');
-//   if (!user) localStorage.setItem('nickname', 'random-name00001');
-//   const user = `Usuário${userQuantity}`;
-//   users.value += user;
-//   userQuantity += 1;
-//   socket.emit('userConnect', user);
-// };
+socket.on('connection', () => {
+  mainUserName();
+});
 
 window.onbeforeunload = () => socket.disconnect();

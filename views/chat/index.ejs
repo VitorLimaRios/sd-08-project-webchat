@@ -10,13 +10,13 @@
 <body>
   <form>
     <label for="nicknameInput">Digite seu nome aqui</label>
-    <input type="text" id="nicknameInput" />
-    <button type="button" id="btn-salvar">Salvar</button>
-    <textarea id="message-area"></textarea>
-    <button type="button" id="btn-enviar">Enviar</button>
+    <input type="text" id="nicknameInput" data-testid="nickname-box" />
+    <button type="button" id="btn-salvar" data-testid="nickname-button">Salvar</button>
+    <textarea id="message-area" data-testid="message-box"></textarea>
+    <button type="button" id="btn-enviar" data-testid="send-button">Enviar</button>
   </form>
-  <textarea id="users" data-testid="online-user"></textarea>
-  <textarea id="chat" class="chatBox"></textarea>
+  <ul id="usersConnected"></ul>
+  <ul id="chat" class="chatBox"></ul>
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/scripts/chat.js"></script>
