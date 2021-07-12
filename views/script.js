@@ -6,7 +6,7 @@ const msg = document.querySelector('#mensagem');
 
 form.addEventListener('submit', (event) => {
     event.preventDefault();
-    socket.emit('message', { nickname: nome.value, chatMessage: msg.value }); 
+    socket.emit('message', { chatMessage: nome.value, nickname: msg.value }); 
     nome.value = '';
     msg.value = '';
     return false;
@@ -33,7 +33,7 @@ socket.on('userNew', (user) => createUser(user));
 
 socket.on('bye', (user) => createUser(user));
 
-socket.on('serverMessage', (user) => createMessage(user));
+socket.on('message', (user) => createMessage(user));
 
 // const saveLocalStorage = (name) => {
 //   localStorage.setItem('nome', JSON.stringify(name));    

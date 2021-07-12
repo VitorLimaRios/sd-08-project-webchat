@@ -30,12 +30,11 @@ app.get('/', chatController.getAll);
 io.on('connection', (socket) => {
   io.emit('userNew', `${userNew()}`);
 
-  socket.on('message', (msg) => {
+  socket.on('message', ({ chatMessage, nickname }) => {
     const data = new Date();
     const date = data.toLocaleString().replace('/', '-').replace('/', '-');
-    const { nickname, chatMessage } = msg;
-    const userResult = `${date} PM ${nickname} ${chatMessage}`;
-    io.emit('serverMessage', userResult);
+    const userResult = `${date} - ${nickname}: ${chatMessage}`;
+    io.emit('message', userResult);
   });
   
   socket.on('disconnect', () => {
