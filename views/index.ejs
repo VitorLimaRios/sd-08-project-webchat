@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+  </head>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+    <form id="nickname-form">
+      <input data-testid="nickname-box" type="text" id="nick-input">
+      <button data-testid="nickname-button" type="button" id="nick-button">Atualizar Nickname</button>
+    </form>
+    <div>
+      <ul id="chat-box"></ul>
+    </div>
+    <div>
+      <p> Online agora: </p>
+      <ul id="users-list"></ul>
+    </div>
+    <form id="message-form">
+      <input data-testid="message-box" type="text" id="message-input">
+      <button data-testid="send-button" type="button" id="send-button">Enviar</button>
+    </form>
+    <script>
+      const socket = window.io();
+
+      const sendButton = document.querySelector('#send-button');
+      const nickButton = document.querySelector('#nick-button');
+      const messageInput = document.querySelector('#message-input');
+      const customNick = document.querySelector('#nick-input');
+      let nickname = ''
+
+      const generateNickname = (length) => {
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        for (let i = 0; i < length; i += 1) {
+          result += characters.charAt(Math.floor(Math.random() 
+          * charactersLength));
+        }
+        return result;
+      };
+      // fonte: https://www.ti-enxame.com/pt/javascript/gere-stringcaracteres-aleatorios-em-javascript/967048592/
+      nickname = generateNickname(16);
+
+
+      nickButton.addEventListener('click', () => {
+        nickname = customNick.value;
+        socket.emit('newNickname', nickname);
+        nickname.value = '';
+        return false;
+      });
+
+      sendButton.addEventListener('click', () => {
+        nickname = customNick.value;
+        socket.emit('message', {
+          nickname: nickname,
+          chatMessage: messageInput.value,
+        });
+        nickname.value = '';
+        messageInput.value = '';
+        return false;
+      });
+
+      const createMessage = (message) => {
+        const messagesUl = document.querySelector('#chat-box');
+        const li = document.createElement('li');
+        li.dataset.testid = 'message';
+        li.innerText = message;
+        messagesUl.appendChild(li);
+      };
+
+      const newUser = (user) => {
+        const usersUl = document.querySelector('#users-list');
+        const li = document.createElement('li');
+        li.innerText = user;
+        li.dataset.testid = 'online-user';
+        usersUl.appendChild(li);
+      }
+
+      newUser(nickname);
+
+      socket.on('message', (message) => {
+        createMessage(message);
+      });
+      socket.on('newUser', (currentUsers) => {
+        const usersUl = document.querySelector('#users-list');
+        usersUl.innerHTML = '';
+        newUser(nickname);
+        currentUsers.forEach((user) => {
+          if (user !== nickname) newUser(user);
+        });
+      });
+    </script>
+  </body>
+</html>

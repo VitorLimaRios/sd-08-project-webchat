@@ -15,16 +15,20 @@ const io = require('socket.io')(http, {
   },
 });
 
+app.set('view engine', 'ejs');
+app.set('views', './views');
+
 app.use(cors());
 
 require('./sockets')(io);
+const chatController = require('./controllers/chatController');
 
-app.use(express.static(`${__dirname}/public`));
+// app.use(express.static(`${__dirname}/public`));
 
-app.get('/', (_req, res) => {
-  res.sendFile(`${__dirname}/public/index.html`);
-});
+app.get('/', chatController.getAllMessages);
 
 http.listen(PORT, () => {
   console.log(`Ouvindo na porta ${PORT}`);
 });
+
+module.exports = { io };
