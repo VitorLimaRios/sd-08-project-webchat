@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WebChat Trybe-Project</title>
+  </head>
+  <body>
+    <div>
+      <input
+        type="text"
+        class="nickname"
+        placeholder="nickname"
+        data-testid="nickname-box"
+      >
+      <button
+        type="submit"
+        class="save-nickname-button" 
+        data-testid="nickname-button"
+      >
+        Salvar
+      </button>
+    </div>
+    
+    <div>
+      Online Users:
+      <ul class="onlineUsers" ></ul>
+    </div>
+
+    <div>
+      Messages:
+      <ul class="chatMessages"></ul>
+    </div>
+
+    <div>
+      <form action="" class="form-send-message">
+        <div>
+          <input
+            type="text"
+            class="input-message"
+            placeholder="message"
+            data-testid="message-box"
+        >
+          <button
+            type="submit"
+            data-testid="send-button"
+          >
+            Enviar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./front/webchat.js"></script>
+  </body>
+
+</html>

@@ -11,7 +11,11 @@ const io = require('socket.io')(http, {
 
 require('./sockets/webchat')(io);
 
-app.get('/', (req, res) => res.end());
+app.use(express.static(`${__dirname}/public`));
+
+app.get('/', (_req, res) => {
+  res.sendFile(`${__dirname}/public/webchat.html`);
+});
 
 http.listen(3000, () => {
   console.log('Servidor ouvindo na porta 3000');
