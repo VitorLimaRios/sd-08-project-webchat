@@ -12,6 +12,8 @@ const nowDate = () => {
     return `${date} ${time}`;
 };
 
+const users = [];
+
 module.exports = (io) => {
   io.on('connection', (socket) => {
     socket.on('message', ({ nickname, chatMessage }) => {
@@ -26,9 +28,9 @@ module.exports = (io) => {
       socket.broadcast.emit('userConnect', userName);
     });
 
-    socket.on('disconnect', () => {
-      socket.broadcast.emit('serverMessage', `Xiii! ${socket.id} acabou de se desconectar! :( \n`);
-    });
+    // socket.on('disconnect', () => {
+    //   socket.broadcast.emit('serverMessage', `Xiii! ${socket.id} acabou de se desconectar! :( \n`);
+    // });
   });
 };
 
