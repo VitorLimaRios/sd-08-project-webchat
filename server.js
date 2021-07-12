@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const app = express();
 const http = require('http').createServer(app);
 
+app.get('/', (_req, res) => res.end());
+
 const io = require('socket.io')(http, {
   cors: {
     origin: 'http://localhost:3000', // url aceita pelo cors
@@ -21,15 +23,11 @@ const io = require('socket.io')(http, {
       const hours = now.getHours();
       const min = now.getMinutes();
       const sec = now.getSeconds();
-
-      console.log('dia', day);
-
       return `${day}-${month}-${year} ${hours}:${min}:${sec}`;
   };
 
   io.on('connection', (socket) => {
     console.log(`novo usuário conectado! ${socket.id}`);
-    console.log(generateDate);
     socket.on('message', ({ chatMessage, nickname }) => {
       io.emit('message',
       `${generateDate()} ${nickname} ${chatMessage}`);
