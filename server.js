@@ -23,28 +23,25 @@ const formatMessage = ({ time, nickname, message }) => (`${time} - ${nickname}: 
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use(express.static(path.join(`${__dirname}/public`)));
+app.use(express.static(path.join(__dirname, '/public')));
 
 io.on('connection', (socket) => {
   console.log('Client connected');
-  const userLogged = [];
 
   socket.on('user', (user) => {
-    userLogged.push(user);
     io.emit('user', user);
   });
 
-  socket.on('chat', (msg) => {
-    const array = userLogged.length;
-    const nickname = userLogged[array - 1];
+  socket.on('message', ({ chatMessage, nickname }) => {
     const timeNow = dateFormat(now, 'dd-mm-yyyy h:MM:ss TT');
-    const value = formatMessage({ time: timeNow, nickname, message: msg });
-    io.emit('chat', value);
+    const value = formatMessage({ time: timeNow, nickname, message: chatMessage });
+    io.emit('message', value);
   });
 });
 
-app.get('/', (_req, res) => {
-  res.sendFile(`${__dirname}/public/index.html`);
+app.get('/', async (_req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
+
 
 http.listen(PORT, () => console.log(`App listening ${PORT}`));

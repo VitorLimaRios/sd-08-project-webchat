@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Chat app</title>
+    <meta charset="UTF-8">
+    <title>Web Chat</title>
   </head>
   <body>
     <div id="container">
@@ -38,7 +39,10 @@
 
       chat.addEventListener('submit', (e) => {
         e.preventDefault();
-        socket.emit('chat', inputText.value);
+        let nickname = localStorage.getItem('nickname');
+        const chatMessage = inputText.value;
+        if (!nickname) nickname = 'SemNome';
+        socket.emit('message', { chatMessage, nickname });
         inputText.value = '';
         return false;
       });
@@ -48,6 +52,7 @@
 
       nickForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        localStorage.setItem('nickname', inputUser.value);
         socket.emit('user', inputUser.value);
         inputUser.value = '';
         return false;
@@ -75,7 +80,7 @@
         renderUsers(user)
       });
 
-      socket.on('chat', message => {  
+      socket.on('message', message => {  
         renderMessage(message)
       });
       
