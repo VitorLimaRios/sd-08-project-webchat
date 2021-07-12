@@ -6,8 +6,10 @@ module.exports = (io) => {
   io.on('connection', (socket) => {
     console.log('alguem conectou');
     socket.emit('hello', 'Seja Bem-Vindo ao NinjaWEBChat');
-    // allUser.push(socket.id);
-    // socket.emit('userList', `${allUser}`);
+    console.log('socket.id', typeof socket.id);
+    allUser.push(socket.id);
+    console.log('allUser', allUser);
+    socket.emit('userList', `${allUser}`);
 
     // socket.on('userConect', (user) => {
     //   allUser.push(user);

@@ -33,11 +33,13 @@ const createMessage = (message) => {
 };
 
 const createUserList = (users) => {
-  console.log('users', users);
-  const messagesUl = document.querySelector('#userList');
-  const li = document.createElement('li');
-  li.innerText = users;
-  messagesUl.appendChild(li);
+  console.log('users', typeof users);
+  users.map((user) => {
+    const messagesUl = document.querySelector('#userList');
+    const li = document.createElement('li');
+    li.innerText = user;
+    return messagesUl.appendChild(li);
+  });
 };
 
 // Quando nosso evento `ola` for emitido, vamos pegar a string mensagem enviada pelo nosso evento e passar para a função `createMessage`
