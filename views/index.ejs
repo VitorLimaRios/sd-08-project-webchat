@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+
+  <head>
+    <title>Projeto - WebChat</title>
+    <style>
+      .container {
+        display: flex;
+      }
+
+      .column {
+        flex-direction: column;
+        width: 400px;
+      }
+
+      .box {
+        border: 1px solid black;
+        width: 100%;
+      }
+
+      .chat,
+      .onlineusers {
+        overflow: scroll;
+        height: 500px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js "></script>
+    <script>
+      window.onload = function () {
+        const socket = io();
+        const list = document.querySelector('#user-list');
+
+        const createList = (userList) => {
+          userList.forEach((user) => {
+            const li = document.createElement('li');
+            li.innerHTML = `<li data-testid="online-user">${user}</li>`;
+            list.appendChild(li);
+          });
+        }
+
+        const removeUser = (user) => {
+          const allUsers = Array.from(list.querySelectorAll('li'));
+          let array = []
+          for (let i = 0; i < allUsers.length; i++) {
+            if (allUsers[i].innerText != allUsers[i].innerHTML) {
+              array.push(allUsers[i]);
+            }
+          }
+          for (let i = 0; i < array.length; i++) {
+            if (array[i].innerText === user) {
+              list.removeChild(list.childNodes[i]);
+            }
+          }
+        }
+
+        const nameBtn = document.querySelector('#submitName');
+        nameBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const input = document.querySelector('#nameText');
+          socket.emit('change-name', input.value);
+        })
+
+        const updateUser = (data) => {
+          const allUsers = Array.from(list.querySelectorAll('li'));
+          for (let i = 0; i < allUsers.length; i++) {
+            if (allUsers[i].innerText === data.oldName) {
+              allUsers[i].innerHTML = `<li data-testid="online-user">${data.name}</li>`;
+            }
+          }
+        }
+
+
+        socket.on('new-user', (data) => createList(data));
+        socket.on('user-left', (data) => removeUser(data));
+        socket.on('change-onlineUsers', (data) => updateUser(data))
+      }
+      window.onbeforeunload = () => {
+        socket.disconnect();
+      };
+    </script>
+    <div class="container">
+      <section class="column container">
+        <div class="nickname box">
+          <form action="">
+            <input type="text" data-testid="nickname-box" id='nameText' />
+            <button data-testid="nickname-button" id="submitName">Salvar</button>
+          </form>
+        </div>
+        <div class="onlineusers box">
+          <ul id="user-list">
+          </ul>
+        </div>
+      </section>
+      <section class="column container">
+        <div class="chat box"> mensagem </div>
+        <div class="message box">
+          <form action="">
+            <input type="text" data-testid="message-box-box" />
+            <button data-testid="send-button">Enviar</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </body>
+
+</html>
