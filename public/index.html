@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat app</title>
+  </head>
+  <body>
+    <div id="container">
+      <h1>
+        WebChat
+      </h1>
+      <div id="nickname">
+        <div class="userList"></div>
+        <form class="nick-form">
+          <label class="nick-label">           
+            <input type="text" class="nick-input" placeholder="Insira seu nickname"/>
+          </label>
+          <input type="submit" class="nick-submit" value="Salvar" />
+        </form>
+      </div>
+      <div id="chatSection">
+        <div class="chat-window"></div>
+        <form class="chat-form">
+          <label class="chat-label">
+            Enter a message:
+            <input type="text" class="chat-input" />
+          </label>
+          <input type="submit" class="chat-submit" value="Enviar" />
+        </form>
+      </div>
+    </div>
+
+    <script src="socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      const chat = document.querySelector('.chat-form');
+      const inputText = document.querySelector('.chat-input');
+
+      chat.addEventListener('submit', (e) => {
+        e.preventDefault();
+        socket.emit('chat', inputText.value);
+        inputText.value = '';
+        return false;
+      });
+
+      const nickForm = document.querySelector('.nick-form');
+      const inputUser = document.querySelector('.nick-input');
+
+      nickForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        socket.emit('user', inputUser.value);
+        inputUser.value = '';
+        return false;
+      });
+
+      const userList = document.querySelector('.userList');
+
+      const renderUsers = user => {
+        const divUsers = document.createElement('div');
+        divUsers.classList.add('render-user');
+        divUsers.innerText = user;
+        userList.appendChild(divUsers);
+      }
+
+      const chatWindow = document.querySelector('.chat-window');
+
+      const renderMessage = message => {
+        const div = document.createElement('div');
+        div.classList.add('render-message');
+        div.innerText = message;
+        chatWindow.appendChild(div);
+      }
+
+      socket.on('user', user => {  
+        renderUsers(user)
+      });
+
+      socket.on('chat', message => {  
+        renderMessage(message)
+      });
+      
+    </script>
+  </body>
+</html>
