@@ -7,8 +7,6 @@ const nicknameInput = document.querySelector('#nickname');
 const nicknameOnline = document.querySelector('#username');
 const buttonNickname = document.querySelector('#buttonNick');
 const users = document.querySelector('#users');
-const messageBox = document.querySelector('#message-box');
-const nicknameBox = document.querySelector('#nickname-box');
 
 function makeid(length) {
   let result = '';
@@ -29,12 +27,12 @@ buttonNickname.addEventListener('click', (e) => {
   e.preventDefault();
   localStorage.setItem('nickname', nicknameInput.value); 
   socket.emit('user', nicknameInput.value);
-  nickname.value = '';
+  nicknameInput.value = '';
   return false;
 });
 
 button.addEventListener('click', () => {
-  let nickname = localStorage.getItem('nickname');
+  const nickname = localStorage.getItem('nickname');
   const chatMessage = message.value;
   socket.emit('message', { chatMessage, nickname });
   message.value = '';
