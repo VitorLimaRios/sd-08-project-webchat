@@ -50,6 +50,6 @@ const createMessage = (message) => {
   messagesUl.insertBefore(newLi, messagesUl.lastChild);
 };
 
-socket.on('serverMessage', (message) => createMessage(message));
+socket.on('message', (message) => createMessage(message));
 
 window.onbeforeunload = () => socket.disconnect();
