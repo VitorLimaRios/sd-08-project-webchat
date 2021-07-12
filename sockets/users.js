@@ -18,8 +18,10 @@ module.exports = (io) => io.on('connection', (socket) => {
   socket.broadcast.emit('new-user', [String(socketGuest)]);
 
   socket.on('disconnect', () => {
-    onlineUsers.splice(onlineUsers.indexOf(socket.guest), 1);
-    socket.broadcast.emit('user-left', String(socket.guest));
+    console.log(socketGuest);
+    onlineUsers.splice(onlineUsers.indexOf(socketGuest), 1);
+    console.log(onlineUsers);
+    socket.broadcast.emit('user-left', String(socketGuest));
   });
 
   socket.on('change-name', (name) => {

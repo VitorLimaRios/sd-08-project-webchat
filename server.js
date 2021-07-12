@@ -1,9 +1,9 @@
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const express = require('express');
 
 const app = express();
 const http = require('http').createServer(app);
-const cors = require('cors');
-const bodyParser = require('body-parser');
 const io = require('socket.io')(http, {
   cors: {
     origin: 'http://localhost:3000',

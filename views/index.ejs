@@ -38,32 +38,29 @@
         const createList = (userList) => {
           userList.forEach((user) => {
             const li = document.createElement('li');
-            li.innerHTML = `<li data-testid="online-user">${user}</li>`;
+            li.innerText = user;
+            li.dataset.testid = 'online-user';
             list.appendChild(li);
           });
         }
 
         const removeUser = (user) => {
           const allUsers = Array.from(list.querySelectorAll('li'));
-          let array = []
           for (let i = 0; i < allUsers.length; i++) {
-            if (allUsers[i].innerText != allUsers[i].innerHTML) {
-              array.push(allUsers[i]);
-            }
-          }
-          for (let i = 0; i < array.length; i++) {
-            if (array[i].innerText === user) {
-              list.removeChild(list.childNodes[i]);
+            if (allUsers[i].innerText === user) {
+              console.log(user, i);
+              console.log(allUsers);
+              console.log(list.childNodes);
+              list.removeChild(allUsers[i]);
             }
           }
         }
 
         const updateUser = (data) => {
-          console.log(data);
           const allUsers = Array.from(list.querySelectorAll('li'));
           for (let i = 0; i < allUsers.length; i++) {
             if (allUsers[i].innerText === data.oldName) {
-              allUsers[i].innerHTML = `<li data-testid="online-user">${data.name}</li>`;
+              allUsers[i].innerText = data.name;
             }
           }
         }
@@ -84,7 +81,8 @@
 
         const createMessage = (data) => {
           const li = document.createElement('li');
-          li.innerHTML = `<li data-testid="message">${data}</li>`;
+          li.innerText = data;
+          li.dataset.testid = 'message';
           messages.appendChild(li);
         }
 
