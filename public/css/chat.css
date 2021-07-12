@@ -1,3 +1,71 @@
 * {
+  box-sizing: border-box;
   margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100vh;
+}
+
+header {
+  height: 10%;
+}
+
+main {
+  display: flex;
+  height: 80%;
+}
+
+li {
+  list-style: none;
+}
+
+.left-content , .right-content {
+  border: solid 1px rgb(39, 39, 39);
+  padding: 20px;
+}
+
+.left-content {
+  background-color: rgb(39, 39, 39);
+  border-radius: 20px 0 0 20px;
+  margin-left: 20px;
+  width: 35%;
+}
+
+.right-content {
+  border-radius: 0 20px 20px 0;
+  margin-right: 20px;
+  width: 65%;
+}
+
+.left-content .nickname {
+  border: none;
+  border-bottom: 1px solid black;
+  margin-bottom: 20px;
+  padding: 5px;
+  width: 79%;
+}
+
+.left-content .btn-save-nick {
+  padding: 5px;
+  width: 19%;
+}
+
+.username {
+  background-color: rgb(228, 228, 228);
+  border-radius: 10px;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.username:before {
+  background-color: green;
+  border-radius: 50%;
+  color: green;
+  content: '';
+  display: inline-block;
+  height: 10px;
+  margin: 0 5px;
+  width: 10px;
 }

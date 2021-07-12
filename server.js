@@ -1,8 +1,11 @@
-const app = require('express')();
+const express = require('express');
+
+const app = express();
 const http = require('http').createServer(app);
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
+app.use(express.static(`${__dirname}/public`));
 
 const io = require('socket.io')(http, {
   cors: {

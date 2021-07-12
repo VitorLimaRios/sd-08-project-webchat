@@ -5,30 +5,36 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Web chat</title>
+  <link rel="stylesheet" href="/css/chat.css">
 </head>
 <body>
-  <div class="left-content">
-    <input type="text" class="nickname" data-testid="nickname-box">
-    <button class="btn-save-nick" data-testid="nickname-button">save</button>
-    <div class="users">
-      <p class='username' data-testid="online-user">
-        <%= name %> 
-      </p>
-      <ul class="userlist"></ul>
+  <header>
+    <h1>Trybe - webchat</h1>
+  </header>
+  <main>
+    <div class="left-content">
+      <input type="text" class="nickname" data-testid="nickname-box">
+      <button class="btn-save-nick" data-testid="nickname-button">save</button>
+      <div class="users">
+        <p class='username' data-testid="online-user">
+          <%= name %> 
+        </p>
+        <ul class="userlist"></ul>
+      </div>
+      
     </div>
-    
-  </div>
-  <div class="right-content">
-    <ul class="web-chat">
-      <% messages.map(({nickname, chatMessage, timestamp}) => { %>
-        <li data-testid="message">
-          <%= `${timestamp} ${nickname}: ${chatMessage}` %>
-        </li>
-      <% }) %>
-    </ul>
-  </div>
-  <input class="write-message" data-testid="message-box" ></input>
-  <button class="send-message-btn" data-testid="send-button" >Enviar</button>
+    <div class="right-content">
+      <ul class="web-chat">
+        <% messages.map(({nickname, chatMessage, timestamp}) => { %>
+          <li data-testid="message">
+            <%= `${timestamp} ${nickname}: ${chatMessage}` %>
+          </li>
+        <% }) %>
+      </ul>
+      <input class="write-message" data-testid="message-box" ></input>
+      <button class="send-message-btn" data-testid="send-button" >Enviar</button>
+    </div>
+  </main>
 </body>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -99,6 +105,7 @@
       const li = document.createElement('li');
       li.innerText = user.nickname;
       li.setAttribute('data-testid', 'online-user')
+      li.classList.add('username')
 
       listOfUsers.appendChild(li)
     })
