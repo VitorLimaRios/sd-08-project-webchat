@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <section >
+    <header >
+      <div >
+        <i></i>
+        SimpleChat
+      </div>
+      <div >
+        <span><i></i></span>
+      </div>
+    </header>
+  
+    <main id='listMessages'>
+      
+    </main>
+  
+    <form id="formSendMessage">
+      <input id="messageInput" type="text" placeholder="Enter your message..." data-testid="message-box">
+      <button type="submit" data-testid="send-button">Send</button>
+    </form>
+
+    <form id="formSetNickName">
+      <input id="nickNameInput" type="text" placeholder="Change your nickname..." data-testid="nickname-box">
+      <button type="submit" data-testid="nickname-button">Change</button>
+    </form>
+  </section>
+  
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./js/client.js"></script>
+</body>
+</html>

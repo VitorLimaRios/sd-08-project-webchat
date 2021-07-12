@@ -5,8 +5,6 @@ const bodyParser = require('body-parser');
 const app = express();
 const http = require('http').createServer(app);
 
-app.get('/', (_req, res) => res.end());
-
 const io = require('socket.io')(http, {
   cors: {
     origin: 'http://localhost:3000', // url aceita pelo cors
@@ -28,6 +26,9 @@ const io = require('socket.io')(http, {
 
   io.on('connection', (socket) => {
     console.log(`novo usuário conectado! ${socket.id}`);
+
+    socket.emit('confirmConnection');
+
     socket.on('message', ({ chatMessage, nickname }) => {
       io.emit('message',
       `${generateDate()} ${nickname} ${chatMessage}`);
@@ -38,3 +39,5 @@ const io = require('socket.io')(http, {
 app.use(express.static(`${__dirname}/public`));
 
 http.listen(PORT, () => console.log('App listening on PORT %s', PORT));
+
+app.get('/', (_req, res) => res.end());
