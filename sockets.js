@@ -10,27 +10,26 @@ function nickAleatorio(tamanho) {
   return aleatorio;
 }
 
+const users = [];
+let guestId = 0;
+
 module.exports = (io) => io.on('connection', (socket) => {
   console.log('Alguém se conectou');
-  const sockets = [];
-  let guestId = 0;
   guestId += 1;
   const nick = nickAleatorio(16);
-
   const guest = `Guest ${guestId}`;
-  sockets.push({ guestId, user: guest, nick });
-  socket.write('Bem vindo ao chat!\n');
-
-  socket.emit('newConnection', { message: sockets[guestId - 1].nick });
-
+  users.push({ guestId, user: guest, nick });
+  // socket.write('Bem vindo ao chat!\n');
   socket.on('message', ({ nickname, chatMessage }) => {
     const dateHour = moment().format('DD-MM-YYYY h:mm:ss A');
     io.emit('message', `${dateHour} - ${nickname}: ${chatMessage}`);
   });
-
+  socket.on('saveNickName', ({ nickname }) => {
+    io.emit('saveNickName', `${nickname}`);
+  });
+  socket.emit('newConnection', { message: `${users[guestId - 1].nick}` });
+  socket.broadcast.emit('newConnection', { message: `${users[guestId - 1].nick}` });
   socket.on('disconnect', () => {
     console.log('Alguém saiu');
   });
-
-  socket.broadcast.emit('newConnection', { message: sockets[guestId - 1].nick });
 });

@@ -6,8 +6,9 @@ const inputTexto = document.querySelector('#messages');
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+  const nickName = document.querySelectorAll('#onlineUser')[0].textContent;
   socket.emit('message', {
-    nickname: inputNickName.value,
+    nickname: nickName,
     chatMessage: inputTexto.value,
   });
   inputTexto.value = '';
@@ -29,6 +30,7 @@ const createUser = (message) => {
   const messagesUl = document.querySelector('#online');
   const li = document.createElement('li');
   li.className = 'list-group-item';
+  li.id = 'onlineUser';
   li.innerText = message;
   li.dataset.testid = 'online-user';
   messagesUl.appendChild(li);
@@ -36,10 +38,20 @@ const createUser = (message) => {
 
 socket.on('newConnection', ({ message }) => createUser(message));
 
-inputNickName.addEventListener('submit', (e) => {
+const nickNameButton = document.querySelector('#saveNickName');
+
+const editUser = (nickname) => {
+  const user = document.querySelectorAll('#onlineUser')[0];
+  user.innerText = nickname;
+};
+
+socket.on('saveNickName', (nickname) => editUser(nickname));
+
+nickNameButton.addEventListener('click', (e) => {
   e.preventDefault();
   socket.emit('saveNickName', {
     nickname: inputNickName.value,
   });
+  inputNickName.value = '';
   return false;
 });
