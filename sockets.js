@@ -1,6 +1,6 @@
 const moment = require('moment');
+const messageModel = require('./models/messModel');
 
-const currentDateTime = moment().format('DD-MM-yyyy HH:mm:ss');
 let sockets = [];
 
 const addUser = (nickname, socket) => {
@@ -28,12 +28,21 @@ const disconnectUser = (io, socket) => {
   sockets = sockets.filter((user) => user.socket !== socket);
     online(io);
 };
-module.exports = (io) => io.on('connection', (socket) => {
+
+module.exports = (io) => io.on('connection', async (socket) => {
   const { nickname: userNickname } = socket.handshake.query;
   addUser(userNickname, socket);
-  socket.on('message', ({ chatMessage, nickname }) => {
+  socket.on('message', async ({ chatMessage, nickname }) => {
+    const currentDateTime = moment().format('DD-MM-yyyy HH:mm:ss');
+    await messageModel.createMessage(
+      { message: chatMessage, nickname, timestamp: currentDateTime },
+    );
     io.emit('message', `${currentDateTime} ${nickname} ${chatMessage}`);
   });
+  const history = (await messageModel.findAllMessages()).map(({ message, nickname, timestamp }) => (
+    `${timestamp} ${nickname} ${message}`
+  ));
+  socket.emit('history', history);
   socket.on('replaceUserNickname', (newNickname) => changeNickname(io, newNickname, socket));
   socket.on('disconnect', () => disconnectUser(io, socket));
   online(io);

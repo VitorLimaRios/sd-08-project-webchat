@@ -69,3 +69,4 @@ socket.on('onlineUser', (users) => {
     if (user !== userNickname) createUser(user);
 });
 });
+socket.on('history', (history) => history.forEach((curr) => createMessage(curr)));
