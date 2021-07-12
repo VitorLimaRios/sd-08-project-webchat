@@ -1,7 +1,7 @@
 const moment = require('moment');
 const model = require('./models/chatModel');
 
-const onlineUsers = [];
+let onlineUsers = [];
 
 const newUser = (nickname, socket) => {
   const user = { nickname, socket };
@@ -23,28 +23,29 @@ const customNickname = (io, nickname, socket) => {
   currentUsers(io);
 };
 
-module.exports = (io) => io.on('connection', async (socket) => {
-  const { nickname: nick } = socket.handshake.query;
-  newUser(nick, socket);
+const disconnectUser = (io, socket) => {
+  onlineUsers = onlineUsers.filter((user) => user.socket !== socket);
+  currentUsers(io);
+};
 
+module.exports = (io) => io.on('connection', async (socket) => {
+  const { nickname: currentNickname } = socket.handshake.query;
+  newUser(currentNickname, socket);
+
+  currentUsers(io);
   socket.on('message', async ({ chatMessage, nickname }) => {
     const date = moment().format('DD-MM-yyyy HH:mm:ss');
     await model.saveMessage({ message: chatMessage, nickname, timestamp: date });
     const message = `${date} - ${nickname}: ${chatMessage}`;
     io.emit('message', message);
   });
-  currentUsers(io);
+
   const allMessages = await model.getAll();
   const chatHistory = (allMessages).map(({ message, nickname, timestamp }) => (
     `${timestamp} ${nickname} ${message}`
-  ));
-  socket.emit('chatHistory', chatHistory);
-  socket.on('newNickname', ((nickname) => customNickname(io, nickname, socket)));
-  // socket.on('newUser', (user) => {
-  //   onlineUsers.push({ user, id: socket.id });
-  //   io.emit('newUser', onlineUsers);
-  // });
-  // socket.on('newNickname', (nickname) => {
+    ));
 
-  // })
+    socket.emit('chatHistory', chatHistory);
+    socket.on('newNickname', ((nickname) => customNickname(io, nickname, socket)));
+    socket.on('disconnect', () => disconnectUser(io, socket));
 });

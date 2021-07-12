@@ -21,14 +21,14 @@
       <button data-testid="send-button" type="button" id="send-button">Enviar</button>
     </form>
     <script>
-      const socket = window.io();
-
       const sendButton = document.querySelector('#send-button');
       const nickButton = document.querySelector('#nick-button');
       const messageInput = document.querySelector('#message-input');
       const customNick = document.querySelector('#nick-input');
-      let nickname = ''
-
+      const usersUl = document.querySelector('#users-list');
+      const messagesUl = document.querySelector('#chat-box');
+      let currentNickname = ''
+      
       const generateNickname = (length) => {
         let result = '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -40,54 +40,56 @@
         return result;
       };
       // fonte: https://www.ti-enxame.com/pt/javascript/gere-stringcaracteres-aleatorios-em-javascript/967048592/
-      nickname = generateNickname(16);
 
+      currentNickname = generateNickname(16);
 
-      nickButton.addEventListener('click', () => {
-        nickname = customNick.value;
-        socket.emit('newNickname', nickname);
-        nickname.value = '';
-        return false;
+      const socket = window.io('http://localhost:3000/', {
+        query: {
+          nickname: currentNickname,
+        },
       });
-
-      sendButton.addEventListener('click', () => {
-        nickname = customNick.value;
-        socket.emit('message', {
-          nickname: nickname,
-          chatMessage: messageInput.value,
-        });
-        nickname.value = '';
-        messageInput.value = '';
-        return false;
-      });
-
-      const createMessage = (message) => {
-        const messagesUl = document.querySelector('#chat-box');
-        const li = document.createElement('li');
-        li.dataset.testid = 'message';
-        li.innerText = message;
-        messagesUl.appendChild(li);
-      };
 
       const newUser = (user) => {
-        const usersUl = document.querySelector('#users-list');
         const li = document.createElement('li');
         li.innerText = user;
         li.dataset.testid = 'online-user';
         usersUl.appendChild(li);
       }
 
-      newUser(nickname);
+      const createMessage = (message) => {
+        const li = document.createElement('li');
+        li.dataset.testid = 'message';
+        li.innerText = message;
+        messagesUl.appendChild(li);
+      };
+
+      sendButton.addEventListener('click', () => {
+        socket.emit('message', {
+          nickname: currentNickname,
+          chatMessage: messageInput.value,
+        });
+        currentNickname = '';
+        messageInput.value = '';
+        return false;
+      });
+
+      nickButton.addEventListener('click', () => {
+        currentNickname = customNick.value;
+        socket.emit('newNickname', currentNickname);
+        customNick.value = '';
+        return false;
+      });
+
+      newUser(currentNickname);
 
       socket.on('message', (message) => {
         createMessage(message);
       });
       socket.on('currentUsers', (currentUsers) => {
-        const usersUl = document.querySelector('#users-list');
         usersUl.innerHTML = '';
-        newUser(nickname);
+        newUser(currentNickname);
         currentUsers.forEach((user) => {
-          if (user !== nickname) newUser(user);
+          if (user !== currentNickname) newUser(user);
         });
       });
       socket.on('chatHistory', (chatHistory) => chatHistory.forEach((message) => createMessage(message)));
