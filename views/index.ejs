@@ -33,6 +33,7 @@
       window.onload = function () {
         const socket = io();
         const list = document.querySelector('#user-list');
+        const messages = document.querySelector('#message-list');
 
         const createList = (userList) => {
           userList.forEach((user) => {
@@ -57,14 +58,8 @@
           }
         }
 
-        const nameBtn = document.querySelector('#submitName');
-        nameBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const input = document.querySelector('#nameText');
-          socket.emit('change-name', input.value);
-        })
-
         const updateUser = (data) => {
+          console.log(data);
           const allUsers = Array.from(list.querySelectorAll('li'));
           for (let i = 0; i < allUsers.length; i++) {
             if (allUsers[i].innerText === data.oldName) {
@@ -73,7 +68,27 @@
           }
         }
 
+        const nameBtn = document.querySelector('#submitName');
+        nameBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const input = document.querySelector('#nameText');
+          socket.emit('change-name', input.value);
+        });
+        const messageBtn = document.querySelector('#submitMessage');
+        messageBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const { value } = document.querySelector('#messageText');
+          const nickname = list.firstElementChild.innerText;
+          socket.emit('message', { chatMessage: value, nickname });
+        });
 
+        const createMessage = (data) => {
+          const li = document.createElement('li');
+          li.innerText = data;
+          messages.appendChild(li);
+        }
+
+        socket.on('message', (data) => createMessage(data));
         socket.on('new-user', (data) => createList(data));
         socket.on('user-left', (data) => removeUser(data));
         socket.on('change-onlineUsers', (data) => updateUser(data))
@@ -96,11 +111,14 @@
         </div>
       </section>
       <section class="column container">
-        <div class="chat box"> mensagem </div>
-        <div class="message box">
+        <div class="chat box">
+          <ul id="message-list">
+          </ul>
+        </div>
+        <div class="box">
           <form action="">
-            <input type="text" data-testid="message-box-box" />
-            <button data-testid="send-button">Enviar</button>
+            <input type="text" data-testid="message-box-box" id="messageText" />
+            <button data-testid="send-button" id="submitMessage">Enviar</button>
           </form>
         </div>
       </section>

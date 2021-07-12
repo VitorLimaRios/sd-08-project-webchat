@@ -17,6 +17,7 @@ app.set('views', './views');
 app.use(bodyParser.json());
 app.use(cors());
 
+require('./sockets/users')(io);
 require('./sockets/chat')(io);
 
 io.on('connection', (socket) => {
