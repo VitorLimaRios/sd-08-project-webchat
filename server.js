@@ -10,7 +10,7 @@ app.use(cors());
 
 const io = require('socket.io')(http, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:3000/',
     methods: ['GET', 'POST'],
   },
 });
@@ -27,5 +27,9 @@ const PORT = 3000;
 app.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, '/index.html'));
 });
+
+// app.get('/', (_req, res) => {
+//   res.end();
+// });
 
 http.listen(PORT, () => console.log(`Servidor aberto na porta ${PORT}.`));

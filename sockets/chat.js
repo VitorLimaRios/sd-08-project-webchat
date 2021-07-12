@@ -13,7 +13,7 @@ module.exports = (io) => {
         .getMinutes())}:${addZero(today.getSeconds())}`;
       const timestamp = `${date} ${time}`;
       const postMessage = `${timestamp} - ${nickname}: ${chatMessage} \n`;
-      io.emit('postMessage', postMessage);
+      io.emit('message', postMessage);
     });
 
     socket.on('disconnect', () => {

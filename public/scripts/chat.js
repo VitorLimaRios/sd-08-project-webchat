@@ -19,7 +19,7 @@ btnEnviar.addEventListener('click', () => {
   return false;
 });
 
-socket.on('postMessage', (message) => {
+socket.on('message', (message) => {
   chat.value += message;
 });
 
