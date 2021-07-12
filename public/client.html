@@ -12,14 +12,27 @@
       <div class="mw-50">
         <div class="d-flex justify-content-center row g-2">
           <div class="col-8">
-            <input type="text" class="form-control" id="nickName" placeholder="Insira seu nickName"/>
+            <input
+              type="text"
+              class="form-control"
+              id="nickName"
+              placeholder="Insira seu nickName"
+              data-testid="nickname-box"
+            />
           </div>
           <div class="col-auto">
-            <button type="submit" class="btn btn-success mb-2" id="saveButton">Salvar</button>
+            <button
+              type="submit"
+              class="btn btn-success mb-2"
+              id="saveNickName"
+              data-testid="nickname-button"
+            >
+              Salvar
+            </button>
           </div>
         </div>
         <h1>Usuários</h1>
-        <ul class="list-users" id="list-users"></ul>
+        <ul class="list-users" id="online"></ul>
       </div>
       <div class="mw-50">
         <h1>Menssagens</h1>
@@ -29,10 +42,22 @@
     <form class="d-flex justify-content-center row g-2 fixed-bottom">
       <div class="col-8">
         <label for="messages" class="visually-hidden">Mensagem</label>
-        <input type="text" class="form-control" id="messages" placeholder="Digite sua mensagem"/>
+        <input
+          type="text"
+          class="form-control"
+          id="messages"
+          placeholder="Digite sua mensagem"
+          data-testid="message-box"
+        />
       </div>
       <div class="col-auto">
-        <button type="submit" class="btn btn-primary mb-2">Enviar</button>
+        <button
+          type="submit"
+          class="btn btn-primary mb-2"
+          data-testid="send-button"
+        >
+          Enviar
+        </button>
       </div>
     </form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
