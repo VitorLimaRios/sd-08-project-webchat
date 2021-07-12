@@ -1,20 +1,24 @@
-let users = [];
+const users = [];
 
 function userJoin(id, nickname) {
   const user = { id, nickname };
-  if (users) {
-    users = users.filter((use) => use.id !== user.id);
-  }
-  users.push(user);
-  return users;
-}
 
+  users.push(user);
+
+  return user;
+}
 function getCurrentUser(id) {
   return users.find((user) => user.id === id);
 }
-
 function userLeave(id) {
-  users = users.filter((use) => use.id !== id);
+  const index = users.findIndex((user) => user.id === id);
+
+  if (index !== -1) {
+    return users.splice(index, 1)[0].nickname;
+  }
+}
+
+function getOnlineUsers() {
   return users;
 }
 
@@ -22,4 +26,5 @@ module.exports = {
   userJoin,
   getCurrentUser,
   userLeave,
+  getOnlineUsers,
 };

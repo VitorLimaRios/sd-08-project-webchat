@@ -14,18 +14,15 @@ const io = require('socket.io')(http, {
     methods: ['GET', 'POST'],
   },
 });
-
 const router = require('./src/routes');
 
 app.set('view engine', 'ejs');
 app.set('views', './src/views');
-
 app.use(cors());
-
 app.use(router);
 
 http.listen(PORT, () => {
   console.log(`Servidor ouvindo na porta ${PORT}`);
 });
 
-require('./sockets/server')(io);
+require('./src/sockets/server')(io);
