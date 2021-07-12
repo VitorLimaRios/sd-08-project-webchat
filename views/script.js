@@ -12,28 +12,28 @@ form.addEventListener('submit', (event) => {
     return false;
 }); 
 
-const createMessage = async (nickname, chatMessage, data) => {
+const createMessage = (user) => {
     const chat = document.querySelector('#chat');
     const li = document.createElement('li');
-    li.innerText = `${data} PM - ${nickname}: ${chatMessage}`;
+    li.innerText = user;
+    li.dataset.testid = 'message';
     chat.appendChild(li);
 };
 
-socket.on('entrar', async (message) => createMessage(message)); // aguardando o evento 'message' do server.js
+const createUser = (name) => {
+    const chat = document.querySelector('#user');
+    const li = document.createElement('li');
+    li.innerText = name;
+    li.dataset.testid = 'online-user';
+    chat.appendChild(li);
+};
 
-socket.on('serverMessage', async ({ nickname, chatMessage, data }) => (
-    createMessage(nickname, chatMessage, data)
-));
+// newUser
+socket.on('userNew', (user) => createUser(user));
 
-// const nameRandom = () => {
-//     var result           = '';
-//     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-//     var charactersLength = characters.length;
-//     for ( var i = 0; i < 16; i++ ) {
-//         result += characters.charAt(Math.floor(Math.random() * charactersLength));
-//     }
-//     return result;
-// }
+socket.on('bye', (user) => createUser(user));
+
+socket.on('serverMessage', (user) => createMessage(user));
 
 // const saveLocalStorage = (name) => {
 //   localStorage.setItem('nome', JSON.stringify(name));    

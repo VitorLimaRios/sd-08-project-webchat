@@ -5,6 +5,7 @@ const cors = require('cors');
 const app = express();
 const http = require('http').createServer(app);
 const sockets = require('socket.io');
+const userNew = require('./utils/nameRandom');
 
 const chatController = require('./controllers/chatController');
 
@@ -26,14 +27,20 @@ app.use(express.static(`${__dirname}/views`));
 
 app.get('/', chatController.getAll);
 
-io.on('connection', async (socket) => {
-  socket.on('message', async (msg) => {
-    // io.emit('entrar', `${msg.nome} acabou de entrar.`)
+io.on('connection', (socket) => {
+  io.emit('userNew', `${userNew()}`);
+
+  socket.on('message', (msg) => {
     const data = new Date();
     const date = data.toLocaleString().replace('/', '-').replace('/', '-');
-    io.emit('serverMessage', { data: date, nickname: msg.nickname, chatMessage: msg.chatMessage });
+    const { nickname, chatMessage } = msg;
+    const userResult = `${date} PM ${nickname} ${chatMessage}`;
+    io.emit('serverMessage', userResult);
   });
-
+  
+  socket.on('disconnect', () => {
+    io.emit('bye', `${userNew()}`);
+  });
   // socket.on('nome', (msg) => {
   //   io.emit('message', `${msg.nome} acabou de entrar.`)   
   // });

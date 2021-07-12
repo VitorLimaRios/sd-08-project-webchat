@@ -1,5 +1,5 @@
-const getAll = async (_req, res) => {
-    await res.render('chat');
+const getAll = (_req, res) => {
+    res.render('chat');
 };
 
 module.exports = {
