@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+    <div class="Container">
+      <div class="upchat">
+        <div class="leftPart">
+          <div class="leftContent">
+            <!-- <div class="nicknameBox"> -->
+            <form class="nicknameBox">
+              <input class="username" data-testid="nickname-box" type="text" />
+              <button data-testid="nickname-button" class="saveuser">SALVAR</button>
+              <!-- <div class="username"> USER </div>
+              <div class="saveuser"> SALVAR </div> -->
+            </form>
+            <!--  </div> -->
+            <div class="usuariosOnline">
+              <ul class="listausuarios">
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="rightPart">
+          <div class="messagesContainer">
+          </div>
+        </div>
+      </div>
+      <div class="botchat">
+        <form class="messageForm" action="">
+          <input class="textinput" data-testid="message-box" type="text" />
+          <button data-testid="send-button" class="sendmessage"> Enviar </button>
+        </form>
+      </div>
+    </div>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./script.js"></script>
+
+</html>
