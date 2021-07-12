@@ -13,6 +13,7 @@
   <div class="left-content">
     <input type="text" class="nickname" data-testid="nickname-box">
     <button class="btn-save-nick" data-testid="nickname-button">save</button>
+    <ul class="userlist"></ul>
   </div>
   <div class="right-content">
     <ul class="web-chat">
@@ -37,6 +38,18 @@
   const userName = document.querySelector('.username')
   const btnSetUsername = document.querySelector('.btn-save-nick')
 
+  const sendMember = () => {
+    const nickname = userName.innerText
+
+    const userData = {
+      nickname,
+    }
+
+    socket.emit('userConnected', userData)
+  }
+
+  sendMember();
+
   const sendMessage = () => {
     const nickname = userName.innerText
     const chatMessage = inputMessage.value;
@@ -50,6 +63,8 @@
     userName.innerText = nicknameInput.value;
 
     nicknameInput.value = ''
+
+    sendMember();
   }
 
   btnSendMessage.addEventListener('click', sendMessage);
@@ -67,6 +82,35 @@
     
     inputMessage.value = ''
   })
+
+  socket.on('userList', (userList) => {
+    console.log(userList)
+    const listOfUsers = document.querySelector('.userlist')
+    listOfUsers.innerHTML = '';
+    
+    const nickname = userName.innerText
+    const thisUser = userList.find(elem => elem.nickname === nickname)
+    const everyBodyElse = userList.filter(elem => elem.nickname !== nickname)
+
+    const me = document.createElement('li')
+    me.innerText = thisUser.nickname;
+    me.setAttribute('data-testid', 'online-user')
+
+    listOfUsers.appendChild(me);
+
+    everyBodyElse.forEach(user => {
+
+      const li = document.createElement('li');
+      li.innerText = user.nickname;
+      li.setAttribute('data-testid', 'online-user')
+
+      listOfUsers.appendChild(li)
+    })
+  })
+
+  window.onbeforeunload = (_event) => {
+    socket.disconnect();
+  };
 
 </script>
 </html>

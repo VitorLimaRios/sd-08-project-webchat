@@ -23,9 +23,37 @@ const getFinalMessage = (nickname, chatMessage) => {
       };
 };
 
+const userList = [];
+
+const addUser = (user) => {
+  const userExists = userList.find(({ id }) => id === user.id);
+
+  if (userExists) {
+    userExists.nickname = user.nickname;
+  } else {
+    userList.push(user);
+  }
+};
+
+const removeUser = (id) => {
+  const index = userList.findIndex((e) => e.id === id);
+
+  userList.splice(index, 1);
+};
+
 module.exports = (io) => {
   io.on('connection', (socket) => {
-    console.log(`${socket.id} se conectou`);
+    socket.on('userConnected', (userData) => {
+      const user = { ...userData, id: socket.id };
+      addUser(user);
+      io.emit('userList', userList);
+    });
+
+    socket.on('disconnect', () => {
+      const { id } = socket;
+      removeUser(id);
+      io.emit('userList', userList);
+    });
 
     socket.on('message', async ({ nickname, chatMessage }) => {
       const { finalMessage, timestamp } = getFinalMessage(nickname, chatMessage);
