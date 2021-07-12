@@ -11,31 +11,32 @@
 <body>
   <div id="hero" class="container border border-primary rounded">
 
-    <div id="up-side" class="container-fluid row">      
-      <div id="user-area" class="container-fluid col-sm-6 col-md-4 border border-primary w-25">
-        <div id="nick-name" class="form-group">
-          <div class="form-row">
-            <div id="nick-input">
-              <input
-                type="text"
-                name="nick"
-                id="nick"
-                class="form-control"
-                data-testid="nickname-box"
-                data-testid="nickname-box"
-                placeholder="Insert your nick name"
-              >
+    <div id="up-side" class="container-fluid row p-4">      
+      <div id="user-area" class="container-fluid col-sm-6 col-md-5 border border-primary w-25">
+        <div class="form-container">
+          <form id="chat-form" class="form-group">
+            <div class="form-row input-group mb-3">
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  name="nick"
+                  id="nick"
+                  class="form-control col-sm-9"
+                  data-testid="nickname-box"
+                  placeholder="Insert your nickname"
+                >
+                <div class="input-group-append">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    data-testid="nickname-button"
+                  >
+                    <i class="fas fa-save"> </i> Save
+                  </button>
+                </div>
+              </div>
             </div>
-            <div id="nick-button">
-              <button
-                type="submit"
-                class="btn btn-primary"
-                data-testid="nickname-button"
-              >
-              <i class="fas fa-save"> </i> Save
-              </button>
-            </div>
-          </div>
+          </form>
         </div>
 
         <div id="logged-uers">
@@ -45,22 +46,21 @@
           </div>
 
           <div id="users-list">
-            <ol id="users-list-nick"></ol>
+            <ul id="users-list-nick"></ul>
           </div>
 
         </div>
       </div>
-    <div id="message-area" class="container col-sm-6 border border-primary w-75">
-      <ol id="message-list"></ol>
-    </div>
+      <div id="message-area" class="container col-sm-7 border border-primary w-75 chat-messages">
+        <ol id="message-list"></ol>
+      </div>
     </div>
 
-    <div id="down-side" class="container">
+    <div id="down-side" class="container py-3">
       <div class="container-fluid">
-        <div id="form-container">
+        <div class="form-container">
           <form id="chat-form" class="form-group">
             <div class="form-row input-group mb-3">
-              </div>
               <div class="input-group mb-3">
                 <input
                   type="text"
@@ -69,11 +69,10 @@
                   placeholder="Type your message here"
                 >
                 <div class="input-group-append">
-                  <button 
-                  type="submit"
-                  data-testid="send-button"
-                  class="btn btn-primary"
-                >
+                  <button
+                    data-testid="send-button"
+                    class="btn btn-primary"
+                  >
                   <i class="fas fa-paper-plane"> </i> Send
                 </button>
                 </div>
@@ -85,12 +84,66 @@
     </div>
 
   </div>
-  <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
-      integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4="
-      crossorigin="anonymous"
-    ></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="../sockets/server.js"></script>
+    <script>
+      const messageList = document.getElementById('message-list')
+      const usersListNick = document.getElementById('users-list-nick')
+      const chatForm = document.getElementById('chat-form')
+      
+
+      const client = io();
+
+      client.on('connect', () => {
+        const user = `${client.id}`
+        client.emit('newUser', user);
+      });
+
+      const sendMessage = (message) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span data-testid="message">${message}<span>`
+        messageList.appendChild(li)
+      }
+
+      const connectList = (users) => {
+        users.map(user => {
+          const li = document.createElement('li');
+          li.innerHTML = `<span data-testid="online-user">${user.nickname}<span>`
+          usersListNick.appendChild(li)
+        })
+      }
+
+      function outputUsers(users) {
+        usersListNick.innerHTML = '';
+        users.map((user) => {
+          const li = document.createElement('li');
+          li.innerHTML = `<span data-testid="online-user">${user.nickname}<span>`
+          usersListNick.appendChild(li);
+        });
+      }
+
+      client.on('newUser', users => {
+        connectList(users)
+      })
+
+      client.on('message', message => {
+        sendMessage(message)
+        messageList.scrollTop = messageList.scrollHeight;
+      })
+
+      chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let msg = e.target.elements.msg.value;
+        msg = msg.trim();
+
+        if (!msg) {
+          return false;
+        }
+        client.emit('message', msg);
+        e.target.elements.msg.value = '';
+        e.target.elements.msg.focus();
+      });
+
+      
+    </script>
 </body>
 </html>

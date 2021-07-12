@@ -1,27 +1,31 @@
-const app = require('express')();
-const http = require('http').createServer(app);
-const bodyParser = require('body-parser');
+const express = require('express');
+const cors = require('cors');
 
-app.use(bodyParser.urlencoded({ extended: true }));
+const app = express();
+const path = require('path');
+const http = require('http').createServer(app);
+
+app.use(express.static(path.join(__dirname, './src/views')));
+const PORT = process.env.PORT || 3000;
 
 const io = require('socket.io')(http, {
   cors: {
     origin: 'http://localhost:3000',
-    methods: ['POST', 'GET'],
+    methods: ['GET', 'POST'],
   },
 });
 
-const routes = require('./src/routes');
+const router = require('./src/routes');
 
 app.set('view engine', 'ejs');
 app.set('views', './src/views');
 
-const PORT = process.env.PORT || 3000;
+app.use(cors());
 
-require('./src/sockets/server')(io);
-
-app.use(routes);
+app.use(router);
 
 http.listen(PORT, () => {
-  console.log(`Rodando na porta ${PORT}`);
+  console.log(`Servidor ouvindo na porta ${PORT}`);
 });
+
+require('./sockets/server')(io);
