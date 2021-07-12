@@ -82,7 +82,7 @@
       socket.on('message', (message) => {
         createMessage(message);
       });
-      socket.on('newUser', (currentUsers) => {
+      socket.on('currentUsers', (currentUsers) => {
         const usersUl = document.querySelector('#users-list');
         usersUl.innerHTML = '';
         newUser(nickname);
@@ -90,6 +90,7 @@
           if (user !== nickname) newUser(user);
         });
       });
+      socket.on('chatHistory', (chatHistory) => chatHistory.forEach((message) => createMessage(message)));
     </script>
   </body>
 </html>

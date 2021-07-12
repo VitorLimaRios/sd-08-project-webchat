@@ -9,14 +9,37 @@ const newUser = (nickname, socket) => {
   return user;
 };
 
-module.exports = (io) => io.on('connection', (socket) => {
+const currentUsers = (io) => {
+  io.emit('currentUsers', onlineUsers.map(({ nickname }) => nickname));
+};
+
+const customNickname = (io, nickname, socket) => {
+  onlineUsers.forEach((user) => {
+    const currUser = user;
+    if (user.socket === socket) {
+      currUser.nickname = nickname;
+    }
+  });
+  currentUsers(io);
+};
+
+module.exports = (io) => io.on('connection', async (socket) => {
+  const { nickname: nick } = socket.handshake.query;
+  newUser(nick, socket);
+
   socket.on('message', async ({ chatMessage, nickname }) => {
     const date = moment().format('DD-MM-yyyy HH:mm:ss');
-    await model.saveMessage({ chatMessage, nickname, date });
+    await model.saveMessage({ message: chatMessage, nickname, timestamp: date });
     const message = `${date} - ${nickname}: ${chatMessage}`;
     io.emit('message', message);
-    console.log(message);
   });
+  currentUsers(io);
+  const allMessages = await model.getAll();
+  const chatHistory = (allMessages).map(({ message, nickname, timestamp }) => (
+    `${timestamp} ${nickname} ${message}`
+  ));
+  socket.emit('chatHistory', chatHistory);
+  socket.on('newNickname', ((nickname) => customNickname(io, nickname, socket)));
   // socket.on('newUser', (user) => {
   //   onlineUsers.push({ user, id: socket.id });
   //   io.emit('newUser', onlineUsers);
