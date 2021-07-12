@@ -7,13 +7,16 @@
   <title>Web chat</title>
 </head>
 <body>
-  <p class='username' data-testid="online-user">
-    <%= name %> 
-  </p>
   <div class="left-content">
     <input type="text" class="nickname" data-testid="nickname-box">
     <button class="btn-save-nick" data-testid="nickname-button">save</button>
-    <ul class="userlist"></ul>
+    <div class="users">
+      <p class='username' data-testid="online-user">
+        <%= name %> 
+      </p>
+      <ul class="userlist"></ul>
+    </div>
+    
   </div>
   <div class="right-content">
     <ul class="web-chat">
@@ -89,14 +92,7 @@
     listOfUsers.innerHTML = '';
     
     const nickname = userName.innerText
-    const thisUser = userList.find(elem => elem.nickname === nickname)
     const everyBodyElse = userList.filter(elem => elem.nickname !== nickname)
-
-    const me = document.createElement('li')
-    me.innerText = thisUser.nickname;
-    me.setAttribute('data-testid', 'online-user')
-
-    listOfUsers.appendChild(me);
 
     everyBodyElse.forEach(user => {
 
