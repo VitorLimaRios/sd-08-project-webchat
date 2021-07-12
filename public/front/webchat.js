@@ -51,7 +51,7 @@ btnSaveNickName.addEventListener('click', (e) => {
   socket.emit('changeNickName', { nickname, id: socket.id.slice(0, 16) });
 });
 
-socket.on('chatMessage', (message) => setMessage(message));
+socket.on('message', (message) => setMessage(message));
 socket.on('onlineUsers', (users) => addNewUsers(users));
 
 window.onload = () => {

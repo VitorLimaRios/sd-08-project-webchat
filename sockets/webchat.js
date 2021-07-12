@@ -12,7 +12,7 @@ const users = [];
 
 const addNewMessage = (chatMessage, nickname, socket, io) => {
   const message = `${formattedDate()} - ${nickname || socket.id.slice(0, 16)}: ${chatMessage}`;
-    io.emit('chatMessage', message);
+    io.emit('message', message);
 };
 
 const setOnlineUser = (socket, io) => {
@@ -29,7 +29,7 @@ const changeNickName = (nickname, id, io) => {
 module.exports = (io) => io.on('connection', (socket) => {
   // console.log(`Usuário conectado com sucesso! SocketId: ${socket.id} `);
 
-  socket.on('chatMessage', ({
+  socket.on('message', ({
     chatMessage,
     nickname,
   }) => addNewMessage(chatMessage, nickname, socket, io));
