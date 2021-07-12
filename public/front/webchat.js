@@ -35,7 +35,7 @@ formSendMessage.addEventListener('submit', (e) => {
     nickname,
   };
 
-  socket.emit('chatMessage', formData);
+  socket.emit('message', formData);
   txtMessage.value = '';
 
   return false;
