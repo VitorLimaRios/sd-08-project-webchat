@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebChat</title>
+  </head>
+
+  <body>
+    <div>
+      <div> Users:
+        <ul id="users"></ul>
+      </div>
+      <div> WebChat:
+        <ul id="chat"></ul>
+      </div>
+      <input data-testid="nickname-box" type="text" id="nickname" placeholder="nickname">
+      <button data-testid="nickname-button" id="buttonNick">Enviar nickname</button>
+      <input data-testid="message-box" id="message" type="text" placeholder="mensagem" />
+      <button data-testid="send-button" type="button" id="button">Enviar Mensagem</button>
+      <span data-testid="online-user" id="username"></span>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/chat.js"></script>
+  </body>
+
+</html>
+
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Web Chat</title>
+  </head>
+  <body>
+    <div id="container">
+      <h1>
+        WebChat
+      </h1>
+      <div id="nickname">
+        <div class="userList">
+          <p>Usuarios online: </p>
+          <ul id="users" class="users"></ul>
+        </div>
+        <form class="nick-form">
+          <label class="nick-label">           
+            <input type="text" class="nick-input" data-testid="nickname-box" placeholder="Insira seu nickname"/>
+          </label>
+          <input type="submit" class="nick-submit" value="Salvar" />
+        </form>
+      </div>
+      <div id="chatSection">
+        <div class="chat-window">
+          <ul id="messages" class="messages"></ul>
+        </div>
+        <form class="chat-form">
+          <label class="chat-label">
+            Enter a message:
+            <input type="text" class="chat-input" />
+          </label>
+          <input type="submit" class="chat-submit" value="Enviar" />
+        </form>
+      </div>
+    </div>
+
+    <script src="socket.io/socket.io.js"></script>
+    <script>
+      const socket = window.io();
+
+      const chat = document.querySelector('.chat-form');
+      const inputText = document.querySelector('.chat-input');
+
+      chat.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let nickname = localStorage.getItem('nickname');
+        const chatMessage = inputText.value;
+        socket.emit('message', { chatMessage, nickname });
+        inputText.value = '';
+        return false;
+      });
+
+      const nickForm = document.querySelector('.nick-form');
+      const inputUser = document.querySelector('.nick-input');
+
+      function makeid(length) {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+          for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+      } // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+
+      const nickname = document.querySelector('.nick-input');
+
+      window.onload = () => {
+        nickname.innerHTML = randomNameGenerator(16);
+      };
+
+      nickForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (inputUser.value === '') {
+          const result = makeid(16);
+          localStorage.setItem('nickname', result);
+          socket.emit('user', result);
+        }
+
+        localStorage.setItem('nickname', inputUser.value);        
+        socket.emit('user', inputUser.value);
+        inputUser.value = '';
+        return false;
+      });
+
+      // const userList = document.querySelector('.userList');
+
+      const users = document.querySelector('#users');
+
+      const renderUsers = user => {
+        const li = document.createElement('li');
+        li.textContent = user;
+        li.dataset.testid = 'online-user';
+        users.appendChild(li);
+      }
+
+      // const chatWindow = document.querySelector('.chat-window');
+
+      const messages = document.querySelector('#messages');
+
+      const renderMessage = message => {
+        const li = document.createElement('li');
+        li.textContent = message;
+        li.dataset.testid = 'message';
+        messages.appendChild(li);
+      }
+
+      socket.on('user', user => {  
+        renderUsers(user)
+      });
+
+      socket.on('message', message => {  
+        renderMessage(message)
+      });
+      
+    </script>
+  </body>
+</html> -->

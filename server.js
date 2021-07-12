@@ -23,6 +23,8 @@ const formatMessage = ({ time, nickname, message }) => (`${time} - ${nickname}: 
 app.use(bodyParser.json());
 app.use(cors());
 
+app.set('view engine', 'ejs');
+app.set('views', './views');
 app.use(express.static(path.join(__dirname, '/public')));
 
 io.on('connection', (socket) => {
@@ -40,7 +42,8 @@ io.on('connection', (socket) => {
 });
 
 app.get('/', async (_req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  // res.sendFile(path.join(__dirname, 'index.html'));
+  res.status(200).render('../views/chat.ejs');
 });
 
 http.listen(PORT, () => console.log(`App listening ${PORT}`));
