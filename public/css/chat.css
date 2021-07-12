@@ -33,12 +33,6 @@ li {
   width: 35%;
 }
 
-.right-content {
-  border-radius: 0 20px 20px 0;
-  margin-right: 20px;
-  width: 65%;
-}
-
 .left-content .nickname {
   border: none;
   border-bottom: 1px solid black;
@@ -50,6 +44,46 @@ li {
 .left-content .btn-save-nick {
   padding: 5px;
   width: 19%;
+}
+
+.right-content {
+  border-radius: 0 20px 20px 0;
+  margin-right: 20px;
+  width: 65%;
+}
+
+.right-content .web-chat {
+  background-color: rgb(209, 209, 209);
+  border: 10px solid rgb(209, 209, 209);
+  height: 90%;
+  margin-bottom: 10px;
+  overflow-y: scroll;
+  padding: 20px;
+}
+
+.right-content .write-message {
+  padding: 5px;
+  resize: none;
+  width: 88%;
+}
+
+.right-content .send-message-btn {
+  border: none;
+  padding: 5px;
+  width: 11%;
+}
+
+.right-content .send-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.right-content .web-chat .message {
+  background-color: rgb(255, 255, 255);
+  border-radius: 0 10px 10px;
+  color: rgb(0, 0, 0);
+  margin: 10px 5px;
+  padding: 5px 10px;
 }
 
 .username {

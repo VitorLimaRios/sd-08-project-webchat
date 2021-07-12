@@ -26,13 +26,15 @@
     <div class="right-content">
       <ul class="web-chat">
         <% messages.map(({nickname, chatMessage, timestamp}) => { %>
-          <li data-testid="message">
+          <li data-testid="message" class="message">
             <%= `${timestamp} ${nickname}: ${chatMessage}` %>
           </li>
         <% }) %>
       </ul>
-      <input class="write-message" data-testid="message-box" ></input>
-      <button class="send-message-btn" data-testid="send-button" >Enviar</button>
+      <div class="send-container"> 
+        <textarea class="write-message" data-testid="message-box" ></textarea>
+        <button class="send-message-btn" data-testid="send-button" >Enviar</button>
+      </div>
     </div>
   </main>
 </body>
