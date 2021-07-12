@@ -43,5 +43,4 @@ app.get('/', async (_req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-
 http.listen(PORT, () => console.log(`App listening ${PORT}`));
