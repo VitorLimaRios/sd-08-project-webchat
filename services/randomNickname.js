@@ -1,23 +1,32 @@
-function getRandomIntInclusive(min, max) {
-  return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + Math.ceil(min);
-}
+const getRandomIntInclusive = (min, max) =>
+  Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + Math.ceil(min);
 
-function getRandomCharacter() {
+const getRandomCharacter = () => {
   const characterList = 'abcdefghijklmnopqrstuvywz';
   const randomNumber = getRandomIntInclusive(0, 25);
 
   return characterList.substring(randomNumber, randomNumber + 1);
-}
+};
 
-function getRandomNickname() {
+const compliteRandomName = (nickname) => {
+  let result = nickname;
+  for (let i = nickname.length; i <= 16; i += 1) {
+    result += getRandomCharacter();
+  }
+  return result;
+};
+
+const getRandomNickname = (socketId) => {
   let nickname = '';
+  if (socketId && socketId.length > 16) {
+    nickname = socketId.substring(0, 16);
+  }
 
-  for (let i = 1; i <= 16; i += 1) {
-    if (i === 1) { nickname = getRandomCharacter(); }
-    nickname += getRandomCharacter();
+  if (socketId && socketId.length < 16) {
+    nickname = compliteRandomName(socketId);
   }
 
   return nickname;
-}
+};
 
 module.exports = { getRandomNickname };

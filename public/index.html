@@ -5,15 +5,9 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css"> -->
-  <!-- <link rel="stylesheet" href="./css/feed.css"> -->
   <title>WebChat</title>
   <script src="/socket.io/socket.io.js"></script>
-  <!-- <script>
-    const socketLoad = io();
-    window.onload = () => socketLoad.emit('getPosts');
-  </script> -->
+
 </head>
 
 <body>
@@ -27,7 +21,7 @@
   <div id="userContainer">
     <h3>Users online</h3>
     <span>Your nickname:</span>
-    <h5 id="userNickname" data-testid="online-user"></h5>
+    <h5 id="userNickname"></h5>
     <span>Other users:</span>
     <ul id="usersList">
     </ul>
@@ -35,9 +29,6 @@
   <div id="messagesContainer">
     <h3>Messages</h3>
     <ul id="messagesList">
-      <div style="display: none;">
-        <li data-testid="message" id="messageItem"></li>
-      </div>
     </ul>
   </div>
   <div id="editorContainer">

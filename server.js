@@ -18,7 +18,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, '/public')));
 
-require('./sockets/index')(io);
+require('./sockets/usersConnection')(io);
+require('./sockets/usersLogout')(io);
+require('./sockets/messages')(io);
 
 app.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, '/public/index.html'));

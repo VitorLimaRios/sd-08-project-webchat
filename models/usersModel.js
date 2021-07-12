@@ -11,17 +11,9 @@ const getUsers = async () => {
   return result;
 };
 
-const getUserById = async (id) => {
-  const result = await connection().then((db) => db.collection('users').findOne({ _id: id }));
-
-  return result;
-};
-
-const updateUser = async (id, name) => {
+const updateUser = async (id, nickname) => {
   await connection()
-    .then((db) => db.collection('users').updateOne({ _id: id }, { $set: { name } }));
-
-  return name;
+    .then((db) => db.collection('users').updateOne({ socketId: id }, { $set: { nickname } }));
 };
 
 const removeUser = async (id) => {
@@ -32,7 +24,6 @@ const removeUser = async (id) => {
 module.exports = {
   createUser,
   getUsers,
-  getUserById,
   updateUser,
   removeUser,
 };
