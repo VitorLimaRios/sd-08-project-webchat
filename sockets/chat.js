@@ -16,6 +16,10 @@ module.exports = (io) => {
       io.emit('message', postMessage);
     });
 
+    // io.emit('connection', () => {
+
+    // });
+
     socket.on('disconnect', () => {
       socket.broadcast.emit('serverMessage', `Xiii! ${socket.id} acabou de se desconectar! :( \n`);
     });
