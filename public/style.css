@@ -1,0 +1,32 @@
+.users-and-messages {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+section {
+  border: 1px solid black;
+  width: 50%;
+}
+
+.nicknames-list {
+  padding: 10px;
+}
+
+.users-list {
+  border: 1px solid black;
+
+}
+
+.send-message-form {
+  display: flex;
+  justify-content: space-between;
+}
+
+.message-input {
+  width: 350px;
+}
+
+.chat {
+  width: 550px;
+}

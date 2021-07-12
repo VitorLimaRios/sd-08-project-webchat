@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trybe Webchat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section class="chat">
+    <div class="users-and-messages">
+      <section class="nicknames-list">
+        <form class="change-nickname" action="">
+          <input type="text" id="nickname-input" placeholder="Insira seu nickname">
+          <button type="submit" id="save-nickname-btn">Salvar</button>
+        </form>
+        <ol class="users-list">
+          <li class="user-li">Usuário 1</li>
+          <li class="user-li">Usuário 2</li>
+          <li class="user-li">Usuário 3</li>
+        </ol>
+      </section>
+      <section class="messages-section">
+        <ol id="messages">
+          <li class="message-li">Mesagem 1</li>
+          <li class="message-li">Mesagem 2</li>
+          <li class="message-li">Mesagem 3</li>
+        </ol>
+      </section>
+    </div>
+    <form class="send-message-form" action="">
+      <input class="message-input" id="message-input" type="text" placeholder="Digite uma nova mensagem aqui">
+      <button type="submit" id="send-message">Enviar</button>
+    </form>
+  </section>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./js/chat.js"></script>
+</body>
+</html>
