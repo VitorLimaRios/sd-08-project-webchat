@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/socket.io/socket.io.js"></script>
+  <title>Rodrigo's Chat</title>
+</head>
+<body>
+  Entrei aqui
+  <div class="messages">
+    <ul id="listMessages">
+    </ul>
+    <form id="chat" action="">
+      <input placeholder="Digite a mensagem." id="messageInput" data-testid="message-box" autocomplete="off">
+      <button id="messageButton" data-testid="send-button">Send</button>
+    </form>
+  </div>
+  <script>
+    const socket = io();
+   
+    const inputMessage = document.querySelector('#messageInput');
+    const buttonMessage = document.querySelector('#messageButton');
+
+    buttonMessage.addEventListener('click', (e) => {
+      e.preventDefault();
+      socket.emit('message', { chatMessage: inputMessage.value });
+      inputMessage.value = '';
+      return false;
+    })
+    socket.on('message', (message) => {
+      console.log(message);
+      const ulMessages = document.querySelector('#listMessages');
+      const newLi = document.createElement('li');
+      newLi.innerText = message;
+      ulMessages.appendChild(newLi);
+    })
+  </script>
+</body>
+</html>
