@@ -22,6 +22,7 @@ const onNotification = (socket) => {
 const onWelcome = (socket) => {
   socket.emit('welcome', {
     db,
+    message: `Seja Bem Vindo!! Cliente ${socket.id}`,
   });
 };
 
