@@ -4,7 +4,6 @@ const chat = document.querySelector('#chat');
 const message = document.querySelector('#message');
 const button = document.querySelector('#button');
 const nicknameInput = document.querySelector('#nickname');
-const nickname = document.querySelector('#username');
 const buttonNickname = document.querySelector('#buttonNick');
 const userList = document.querySelector('#usersOn');
 
@@ -30,12 +29,13 @@ buttonNickname.addEventListener('click', () => {
 
 button.addEventListener('click', () => {
   const newMessage = message.value;
-  const newNickName = nickname.innerHTML;
+  const newNickName = userNameRandom.innerHTML;
   socket.emit('message', { chatMessage: newMessage, nickname: newNickName });
   message.value = '';
 });
 
 const datatestid = 'data-testid';
+
 socket.on('message', (messageChat) => {
   const li = document.createElement('li');
   li.setAttribute(datatestid, 'message');
