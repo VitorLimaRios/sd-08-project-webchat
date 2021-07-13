@@ -6,12 +6,14 @@ const http = require('http').createServer(app);
 
 const PORT = process.env.PORT || 3000;
 
-// const io = require('socket.io')(http, {
-//   cors: {
-//     origin: 'http://localhost:3000',
-//     methods: ['GET', 'POST'],
-//   },
-// });
+const io = require('socket.io')(http, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+  },
+});
+
+require('./sockets/chat')(io);
 
 const chatRouter = require('./routes/chatRouter');
 
