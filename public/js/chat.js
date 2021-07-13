@@ -10,7 +10,6 @@ class Chat {
     this.getMessage = this.getMessage.bind(this);
     this.setNickName = this.setNickName.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
-    this.formatMessage = this.formatMessage.bind(this);
     this.addEventBtnGetMessage = this.addEventBtnGetMessage.bind(this);
     this.addEventBtnSaveMyName = this.addEventBtnSaveMyName.bind(this);
     this.onMessage = this.onMessage.bind(this);
@@ -54,23 +53,10 @@ class Chat {
     getName.addEventListener('click', this.setNickName);
   }
 
-  static fomartDate() {
-    const now = new Date();
-    const date = now.toLocaleDateString('pt-BR',
-      { hour: 'numeric', minute: 'numeric', hour12: true });
-    return date.replaceAll('/', '-');
-  }
-
-  formatMessage() {
-    this.contentMessage = `${Chat.fomartDate()} - ${this.nickName}: `;
-    this.contentMessage += this.message;
-  }
-
   sendMessage() {
     this.getMessage();
-    this.formatMessage();
     this.socket.emit('message', {
-      chatMessage: this.contentMessage,
+      chatMessage: this.message,
       nickname: this.nickName });
   }
     
@@ -81,11 +67,15 @@ class Chat {
     const cutHoursRegex = new RegExp(/\d{1,2}:\d{1,2}(:\d{0,2})?\s(PM|AM)?/gm);
     const cutHours = message.match(cutHoursRegex);
     
+    const cutNameRegex = new RegExp(/(^.*\s-)+(\s\w*:)/);
+    const cutName = message.match(cutNameRegex);
+    const replacerName = cutName[2].replace(cutName[2][0], '').replace(':', '');
+
     const cutMessageRegex = new RegExp(/((^.*-\s\w*?:)[\s\S.]*?)$/);
     const cutMessage = message.match(cutMessageRegex);
     const replCutMessage = message.replace(`${cutMessage[2]} `, '');
     
-    return { date: `${cutDate} ${cutHours}`, message: replCutMessage };
+    return { date: `${cutDate} ${cutHours}`, message: replCutMessage, nickname: replacerName };
   }
 
   addEventBtnGetMessage() {
@@ -105,9 +95,8 @@ class Chat {
   onMessage() {
     console.log(this.nickName);
     this.socket.on('message', (message) => {
-      const { chatMessage, nickname } = message;
-      const data = Chat.splitMessage(chatMessage);
-      Chat.setMessageChat(data.date, nickname, data.message);
+      const data = Chat.splitMessage(message);
+      Chat.setMessageChat(data.date, data.nickname, data.message);
       Chat.eventScrolled();
     });
   }
