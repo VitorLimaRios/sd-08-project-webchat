@@ -5,7 +5,8 @@ const cors = require('cors');
 const app = express();
 const http = require('http').createServer(app);
 
-const { DEFAULT_PORT } = require('./src/shared/defs');
+// const { DEFAULT_PORT } = require('./src/shared/defs');
+const DEFAULT_PORT = process.env.PORT || 3000; // triste ter que fazer assim por puro bug
 
 const io = require('socket.io')(http, {
   cors: {
