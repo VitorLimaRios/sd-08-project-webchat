@@ -1,12 +1,12 @@
-html, body {
+html , body {
   font-family: Arial, Tahoma, sans-serif;
   margin: 0;
   padding: 0;
 }
 
 body {
-  background: #302F31;
-  color: #2ae6dc;
+  background: rgb(48, 47, 49);
+  color: rgb(42, 230, 220);
   padding: 10px;
 }
 
@@ -14,26 +14,25 @@ form {
   margin: 15px 0;
 }
 
-form input[type='text'] {
-  border: 2px solid #45C5BF;
+form input [ type = 'text' ] {
+  border: 2px solid rgb(69, 197, 191);
   border-radius: 5px;
   padding: 5px;
   width: 75%;
 }
 
-form input[type='submit'] {
-  background: #45C5BF;
+form input [ type = 'submit' ] {
+  background: rgb(69, 197, 191);
   border: none;
   border-radius: 5px;
-  color: #FFF;
+  color: white;
   cursor: pointer;
-  font-weight: bold;
   padding: 7px 5px;
   width: 19%;
 }
 
-#historico_mensagens {
-  background: #FFF;
-  border: 2px solid #45C5BF;
+.historico {
+  background: white;
+  border: 2px solid rgb(69, 197, 191);
   height: 550px;
 }
