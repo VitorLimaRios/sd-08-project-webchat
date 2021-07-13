@@ -64,9 +64,6 @@ socket.on('user', (users) => {
   const index = users.map((user) => user.newNick).indexOf(nick.innerHTML);
   users.splice(index, 1);
 
-  // const index = users.indexOf(nick.innerHTML);
-  // users.splice(index, 1);
-
   users.forEach((user) => {
     createUsers(user.newNick);
   });
