@@ -7,7 +7,7 @@
         "node": true,
         "jest": true
     },
-    // "extends": "trybe-backend",
+    "extends": "trybe-backend",
     "parserOptions": { "ecmaVersion": 11 }
   }
   
