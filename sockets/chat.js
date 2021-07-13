@@ -12,8 +12,6 @@ const nowDate = () => {
     return `${date} ${time}`;
 };
 
-const users = [];
-
 module.exports = (io) => {
   io.on('connection', (socket) => {
     socket.on('message', ({ nickname, chatMessage }) => {
