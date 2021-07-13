@@ -6,12 +6,12 @@
   </head>
   <body>
     <header><h1 id="nickname" data-testid="online-user">NOME AQUI</h1></header>
-    <div id="box">
-      <div id="online-user">
+    <div class="box">
+      <div class="online-user">
         <ul id="users"></ul>
       </div>
-      <div id="message-box">
-        <ul id="messages">
+      <div class="message-box">
+        <ul class="messages">
           <% if (chatHistory) { %>
             <% chatHistory.forEach((message) => { %>
               <li> <%= `${message.timestamp} ${message.nickname} ${message.message}` %> </li>
@@ -21,8 +21,8 @@
       </div>
     </div>
     <form>
-      <input id="nickNameInput" autocomplete="off" placeholder="Insira seu nick" data-testid="nickname-box" /><button id="buttonSave" data-testid="nickname-button">Salvar</button>
-      <input id="messageInput" autocomplete="off" placeholder="Digite a mensagem" data-testid="message-box" /><button button="submit" data-testid="send-button">Enviar</button>
+      <input class="nickNameInput" autocomplete="off" placeholder="Insira seu nick" data-testid="nickname-box" /><button class="buttonSave" data-testid="nickname-button">Salvar</button>
+      <input class="messageInput" autocomplete="off" placeholder="Digite a mensagem" data-testid="message-box" /><button button="submit" data-testid="send-button">Enviar</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script src='./js/chat.js'></script>

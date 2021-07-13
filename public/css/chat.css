@@ -1,21 +1,21 @@
-#message-box {
+.message-box {
   border: 1px solid black;
   height: 500px;
-  width: 70%;
   margin-left: 25px;
+  width: 70%;
 }
 
-#messages {
+.messages {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
-#messages li {
+.messages li {
   padding: 5px 10px;
 }
 
-#messages li:nth-child(odd) {
+.messages li:nth-child( odd ) {
   background: #eee;
 }
 
@@ -25,29 +25,29 @@ form {
   width: 100%;
 }
 
-#messageInput {
+.messageInput {
+  margin-right: 0.5%;
   padding: 10px;
   width: 70%;
-  margin-right: 0.5%;
 }
 
-#nickNameInput {
-  width: 30%;
+.nickNameInput {
+  margin-right: 0.5%;
   padding: 10px;
+  width: 30%;
+}
+
+.buttonSave {
   margin-right: 0.5%;
 }
 
-#buttonSave {
-  margin-right: 0.5%;
-}
-
-#box {
+.box {
   display: flex;
 }
 
-#online-user {
+.online-user {
   border: 1px solid black;
   height: 500px;
-  width: 30%;
   margin-right: 30px;
+  width: 30%;
 }
