@@ -27,6 +27,10 @@ const addNewUsers = (users = []) => {
   });
 };
 
+const getAllChatMessages = (messages = []) => {
+  messages.forEach((message) => setMessage(message));
+};
+
 formSendMessage.addEventListener('submit', (e) => {
   e.preventDefault();
 
@@ -53,7 +57,9 @@ btnSaveNickName.addEventListener('click', (e) => {
 
 socket.on('message', (message) => setMessage(message));
 socket.on('onlineUsers', (users) => addNewUsers(users));
+socket.on('getAllChatMessages', (messages) => getAllChatMessages(messages));
 
 window.onload = () => {
   socket.emit('onlineUsers');
+  socket.emit('getAllChatMessages');
 };
