@@ -35,6 +35,8 @@ socket.on('bye', (user) => createUser(user));
 
 socket.on('message', (user) => createMessage(user));
 
+socket.on('historyMsg', (e) => createMessage(e));
+
 // const saveLocalStorage = (name) => {
 //   localStorage.setItem('nome', JSON.stringify(name));    
 // } 
