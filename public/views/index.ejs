@@ -47,8 +47,14 @@
         <ul id="users" class="col"></ul>
       </div>
       <div class="chat-messages">
-					<div class="message"></div>
-					<div class="message"></div>
+        <% allMessages.map((message) => { %>
+					<div class="message">
+            <img class="avatar" src="https://i.pravatar.cc/50"/>
+            <p class="meta" data-testid="message">
+              <%= `${message.timestamp} - ${message.nickname}: ${message.message}` %>
+            </p>
+          </div>
+        <% }) %>
       </div>
     </main>
     <div class="chat-form-container">

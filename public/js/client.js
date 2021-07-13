@@ -43,8 +43,8 @@ const client = window.io();
 message.addEventListener('change', (e) => {
 e.preventDefault();
 const chatMessage = e.target.value;
-const user = `${randName()}_${String(client.id)}`;
-client.emit('message', { chatMessage, nickname: user, });
+const nickname = localStorage.getItem('nickname');
+client.emit('message', { chatMessage, nickname });
 e.target.value = '';
 e.target.focus();
 });
@@ -73,6 +73,8 @@ document.querySelector('.chat-messages').appendChild(div);
 
 function outputUsers(users) {
 userList.innerHTML = '';
+const userFound = users.find((user) => user.id === client.id);
+localStorage.setItem('nickname', userFound.nickname);
 users.forEach((user) => {
 const li = document.createElement('li');
 li.innerText = user.nickname;
