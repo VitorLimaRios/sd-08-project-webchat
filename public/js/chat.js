@@ -27,10 +27,10 @@ const createMessage = (message) => {
 const changeNick = () => {
   const nickName = document.querySelector('#nickNameInput');
   const oldNick = nick.innerHTML;
-  nick.innerHTML = nickName.value;
+  nick.innerText = nickName.value;
   nickName.value = '';
   socket.emit('user', {
-    newNick: nick.innerHTML,
+    newNick: nick.innerText,
     oldNick,
   });
 };
@@ -39,6 +39,7 @@ const createUsers = (user) => {
   const userUl = document.querySelector('#users');
   const li = document.createElement('li');
   li.innerText = user;
+  li.setAttribute('data-testid', 'online-user');
   userUl.appendChild(li);
 };
 
