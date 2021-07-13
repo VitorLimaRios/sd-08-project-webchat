@@ -1,7 +1,5 @@
 const socket = window.io();
 
-// const { nickname, chatMessage } = Qs.parse(location.search, {
-//   ignoreQueryPrefix: true });
 function randomString(length) {
   const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
   let result = '';
@@ -9,7 +7,7 @@ function randomString(length) {
   return result;
 }
 
-const random = randomString(16);
+let random = randomString(16);
 socket.emit('online', random);
 socket.on('list', (list) => {
   list.map((item) => {
@@ -22,10 +20,15 @@ socket.on('list', (list) => {
       li.setAttribute('id', `${random}`);
     } else {
       ul.appendChild(li);
+      li.setAttribute('id', `${item}`);
     }
-    socket.on('removeName', (name) => ul.removeChild(document.getElementById(`${name}`)));
     return false;
   });
+});
+
+socket.on('removeName', (name) => {
+  const ul = document.querySelector('.online');
+  ul.removeChild(document.getElementById(`${name}`));
 });
 
 socket.on('updatelist', (name) => {
@@ -36,19 +39,31 @@ socket.on('updatelist', (name) => {
   ul.appendChild(li);
 });
 
-const form = document.querySelectorAll('form')[1];
-const input = document.querySelectorAll('input');
-const online = document.querySelector('.online').childNodes[1];
-form.addEventListener('submit', (event) => {
+const form = document.querySelectorAll('form');
+
+form[1].addEventListener('submit', (event) => {
+  const input = document.querySelector('[data-testid="message-box"]');
+  const online = document.querySelector('.online').childNodes[0];
   event.preventDefault();
-  if (!input[1].value) {
-    window.alert('Nickname ou mensagem em branco.');
+  if (!input.value) {
+    window.alert('Mensagem em branco.');
     return;
   }
   socket.emit('message', { 
-    chatMessage: input[1].value,
+    chatMessage: input.value,
     nickname: online.innerText,
   });
+});
+
+form[0].addEventListener('submit', (event) => {
+  const nickInput = document.querySelector('[data-testid="nickname-box"]').value;
+  const nickname = document.querySelector('.online').childNodes[0];
+  event.preventDefault();
+  random = nickInput;
+  socket.emit('updateName', random);
+  nickname.innerText = random;
+  nickname.setAttribute('id', `${random}`);
+  // document.querySelector('.online').childNodes[0].innerText = random;
 });
 
 const createMessage = (message) => {
