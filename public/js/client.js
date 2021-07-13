@@ -33,7 +33,7 @@ const randName = () => {
   return nickName;
 };
 
-const messagesList = document.getElementById('messages-list')
+const messagesList = document.getElementById('messages-list');
 const chatMessages = document.querySelector('.chat-messages');
 const userList = document.getElementById('users');
 
@@ -42,16 +42,16 @@ const client = window.io();
 document.getElementById('send-burtton').addEventListener('click', (e) => {
   e.preventDefault();
   const chatMessage = document.getElementById('message').value;
-  console.log('chatMessage: ', chatMessage)
+  console.log('chatMessage: ', chatMessage);
   const nickname = localStorage.getItem('nickname');
   client.emit('message', { chatMessage, nickname });
-  document.getElementById('message').value = ''
+  document.getElementById('message').value = '';
   document.getElementById('message').focus();
 });
 
 document.getElementById('nick-btn').addEventListener('click', (e) => {
   e.preventDefault();
-  const nickname = document.getElementById('nick').value
+  const nickname = document.getElementById('nick').value;
   client.emit('changNickname', nickname);
   document.getElementById('nick').value = '';
   document.getElementById('nick').value.focus();
@@ -60,7 +60,7 @@ document.getElementById('nick-btn').addEventListener('click', (e) => {
 function outputMessage(message2) {
   const li = document.createElement('li');
   li.classList.add('meta');
-  li.innerText = message2
+  li.innerText = message2;
   li.setAttribute('data-testid', 'message');
   messagesList.appendChild(li);
 }
@@ -72,7 +72,7 @@ function outputUsers(users) {
   const userFoundRemoved = users.splice(userFound, 1);
   users.unshift(userFoundRemoved[0]);
   //
-  const activeUser = users.filter((user) => user.id === client.id)
+  const activeUser = users.filter((user) => user.id === client.id);
   localStorage.setItem('nickname', activeUser[0].nickname);
   users.forEach((user) => {
     const li = document.createElement('li');
