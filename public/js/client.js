@@ -36,15 +36,15 @@ const randName = () => {
 const message = document.getElementById('message');
 const chatMessages = document.querySelector('.chat-messages');
 const userList = document.getElementById('users');
-const nick = document.getElementById('nick')
+const nick = document.getElementById('nick');
 
 const client = window.io();
 
 message.addEventListener('change', (e) => {
 e.preventDefault();
 const chatMessage = e.target.value;
-const userId = client.id
-client.emit('message', { userId, chatMessage });
+const user = `${randName()}_${String(client.id)}`;
+client.emit('message', { chatMessage, nickname: user, });
 e.target.value = '';
 e.target.focus();
 });
@@ -55,7 +55,7 @@ nick.addEventListener('change', (e) => {
   client.emit('changNickname', nickname);
   e.target.value = '';
   e.target.focus();
-  });
+});
 
 function outputMessage(message2) {
 const div = document.createElement('div');
