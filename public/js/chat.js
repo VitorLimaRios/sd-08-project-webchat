@@ -1,10 +1,9 @@
 const socket = window.io();
 
 const form = document.querySelector('form');
-const inputMessage = document.querySelector('#messageInput');
-// const nickName = document.querySelector('#nickNameInput');
+const inputMessage = document.querySelector('.messageInput');
 const nick = document.querySelector('#nickname');
-const button = document.querySelector('#buttonSave');
+const button = document.querySelector('.buttonSave');
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -17,7 +16,7 @@ form.addEventListener('submit', (e) => {
 });
 
 const createMessage = (message) => {
-  const messagesUl = document.querySelector('#messages');
+  const messagesUl = document.querySelector('.messages');
   const li = document.createElement('li');
   li.innerText = message;
   li.setAttribute('data-testid', 'message');
@@ -25,7 +24,7 @@ const createMessage = (message) => {
 };
 
 const changeNick = () => {
-  const nickName = document.querySelector('#nickNameInput');
+  const nickName = document.querySelector('.nickNameInput');
   const oldNick = nick.innerHTML;
   nick.innerText = nickName.value;
   nickName.value = '';
