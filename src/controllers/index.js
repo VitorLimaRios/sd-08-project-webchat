@@ -1,9 +1,5 @@
-const chatRoon = (req, res, next) => {
-  try {
+const chatRoon = (__req, res, __next) => {
     return res.status(200).render('index');
-  } catch (error) {
-    return next(error);
-  }
 };
 
 module.exports = {

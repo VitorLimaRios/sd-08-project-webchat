@@ -8,7 +8,7 @@ function userJoin(id, nickname) {
   return user;
 }
 function getCurrentUser(id) {
-  return users.find((user) => user.id === id);
+  return users.find((user) => user.id == id);
 }
 function userLeave(id) {
   const index = users.findIndex((user) => user.id === id);

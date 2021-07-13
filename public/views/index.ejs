@@ -27,6 +27,7 @@
               >
               <div class="input-group-append">
                 <button
+                  id="nick-btn"
                   type="submit"
                   class="btn btn-primary"
                   data-testid="nickname-button"
@@ -79,57 +80,6 @@
   >
   </script>
   <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const message = document.getElementById('message');
-    const chatMessages = document.querySelector('.chat-messages');
-    const roomName = document.getElementById('room-name');
-    const userList = document.getElementById('users');
-
-    const client = io();
-
-client.on('connect', () => {
-  const user = `${client.id}`
-  client.emit('joinRoom', user);
-});
-client.on('onlineUsers', (users) => {
-  outputUsers(users);
-});
-client.on('message', (message) => {
-  outputMessage(message);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-});
-
-message.addEventListener('change', (e) => {
-  e.preventDefault();
-  let messages = e.target.value;
-  client.emit('chatMessage', messages);
-  e.target.value = '';
-  e.target.focus();
-});
-
-function outputMessage(message) {
-  const div = document.createElement('div');
-  div.classList.add('message');
-  const p = document.createElement('p');
-  p.classList.add('meta');
-  p.innerHTML = `<span data-testid="message">${message}<span>`;
-  div.appendChild(p);
-  const img = document.createElement('img');
-  img.setAttribute("src","https://i.pravatar.cc/50")
-  img.setAttribute("class","avatar")
-  div.appendChild(img);
-  document.querySelector('.chat-messages').appendChild(div);
-}
-
-function outputUsers(users) {
-  userList.innerHTML = '';
-  users.forEach((user) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<span data-testid="online-user">${user.nickname}<span>`
-    userList.appendChild(li);
-  });
-}
-
-  </script>
+  <script src="../js/client.js"></script>
 </body>
 </html>

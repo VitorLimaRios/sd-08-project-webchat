@@ -5,7 +5,7 @@ const app = express();
 const path = require('path');
 const http = require('http').createServer(app);
 
-app.use(express.static(path.join(__dirname, './src/views')));
+app.use(express.static(path.join(__dirname, './public')));
 const PORT = process.env.PORT || 3000;
 
 const io = require('socket.io')(http, {
@@ -17,7 +17,7 @@ const io = require('socket.io')(http, {
 const router = require('./src/routes');
 
 app.set('view engine', 'ejs');
-app.set('views', './src/views');
+app.set('views', './public/views');
 app.use(cors());
 app.use(router);
 
