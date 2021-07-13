@@ -1,6 +1,7 @@
 // Faça seu código aqui
 const express = require('express');
 const cors = require('cors');
+const randomstring = require('randomstring');
 
 const app = express();
 const http = require('http').createServer(app);
@@ -28,13 +29,31 @@ const timestamp = () => {
   return `${day}-${month}-${year} ${hour}:${min}:${sec}`;
 };
 
+const randomNickname = () => {
+  const nickname = randomstring.generate(16);
+  return nickname;
+};
+
+const allUsers = {};
 io.on('connection', (socket) => {
-  socket.on('welcome', () => {
-    socket.emit('welcomeReposta', 'Vc chegou aqui.');
-  });
-  socket.on('message', ({ chatMessage, nickname }) => {
+  let currentUser = randomNickname();
+  allUsers[socket.id] = currentUser;
+
+  socket.emit('userLocal', allUsers[socket.id]);
+
+  io.emit('userList', Object.values(allUsers));
+
+  socket.on('message', ({ chatMessage, nickname = currentUser }) => {
     io.emit('message', `${timestamp()} ${nickname}: ${chatMessage}`);
     // chatModel.sendMessage(chatMessage);
+  });
+  socket.on('changeUser', (nickname) => {
+    // Dica da Van: usar o filter para fazer um novo array respeitando o teste
+    Object.values(allUsers).filter((e) => e !== allUsers[socket.id]);
+    allUsers[socket.id] = nickname;
+    currentUser = nickname;
+    socket.emit('userLocal', allUsers[socket.id]);
+    io.emit('userList', Object.values(allUsers));
   });
 });
 

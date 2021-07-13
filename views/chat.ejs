@@ -8,7 +8,19 @@
   <title>Rodrigo's Chat</title>
 </head>
 <body>
-  Entrei aqui
+  <div class="nickname-form">
+    <form id='nicknameForm'>
+      <input 
+        type="text" id="nicknameBox" maxlength="16" data-testid="nickname-box" placeholder="Change your nickname"
+      >
+      <button type="submit" id="nicknameButton" data-testid="nickname-button">Change</button>
+    </form>
+  </div>
+  <div class="users">
+    <h3>Usuários conectados: </h3>
+    <ul id="users">
+    </ul>
+  </div>
   <div class="messages">
     <ul id="listMessages">
     </ul>
@@ -22,20 +34,46 @@
    
     const inputMessage = document.querySelector('#messageInput');
     const buttonMessage = document.querySelector('#messageButton');
+    const newUser = document.querySelector('#nicknameBox');
+    const buttonNickname = document.querySelector('#nicknameButton');
 
     buttonMessage.addEventListener('click', (e) => {
       e.preventDefault();
       socket.emit('message', { chatMessage: inputMessage.value });
       inputMessage.value = '';
       return false;
-    })
+    });
     socket.on('message', (message) => {
-      console.log(message);
       const ulMessages = document.querySelector('#listMessages');
       const newLi = document.createElement('li');
+      newLi.setAttribute('data-testid', 'message');
       newLi.innerText = message;
       ulMessages.appendChild(newLi);
-    })
+    });
+    socket.on('userList', (user) => {
+      const onlineUser = document.querySelectorAll('.online-user');
+      if (onlineUser) onlineUser.forEach((element) => element.remove());
+      const nicknameLocal = sessionStorage.getItem('user');
+      user.forEach((element) => {
+        const ulUsers = document.querySelector('#users');
+        const newLi = document.createElement('li');
+        newLi.setAttribute('data-testid', 'online-user');
+        newLi.className = 'online-user';
+        newLi.innerText = element;
+        if (nicknameLocal === element) {
+          ulUsers.prepend(newLi);
+        } else {
+          ulUsers.appendChild(newLi);
+        };
+      });
+    });
+    buttonNickname.addEventListener('click', (e) => {
+        e.preventDefault();
+        socket.emit('changeUser', newUser.value);
+        newUser.value = '';
+        return false;
+    });
+    socket.on('userLocal', (user) => sessionStorage.setItem('user', user));
   </script>
 </body>
 </html>
