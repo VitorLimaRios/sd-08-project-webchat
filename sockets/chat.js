@@ -1,13 +1,26 @@
 const db = {};
 
+const getDateTime = () => {
+  const changeToDash = (char) => (char === '/' ? '-' : char);
+  const getDate = new Intl.DateTimeFormat('pt-BR')
+    .format(Date.now())
+    .split('')
+    .map(changeToDash)
+    .join('', ',');
+
+  const getTime = new Intl.DateTimeFormat('en', {
+    timeStyle: 'short',
+  }).format(Date.now());
+
+  return `${getDate} ${getTime}`;
+};
+
 const onDisconnect = (socket) => {
   delete db[socket.id];
   socket.on('disconnect', () => {
     const messageChannel = `cliente: ${socket.id} foi desconectado`;
     console.log(messageChannel);
-  socket.broadcast.emit(
-    'logout', { db, messageChannel },
-  );
+    socket.broadcast.emit('logout', { db, messageChannel });
   });
 };
 
@@ -28,8 +41,9 @@ const onWelcome = (socket) => {
 };
 
 const onMessage = (io, socket) => {
-  socket.on('message', ({ nickname, message }) => {
-    const messageChannel = `${nickname}: ${message}`;
+  socket.on('message', ({ nickname, chatMessage }) => {
+    const date = getDateTime();
+    const messageChannel = `${date} - ${nickname}: ${chatMessage}`;
     io.emit('message', messageChannel);
   });
 };

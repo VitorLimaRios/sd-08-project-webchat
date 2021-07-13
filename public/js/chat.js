@@ -10,12 +10,12 @@ const createElement = ({ tag, className, message }) => {
 const sendMessage = () => {
   const form = document.getElementById('form_send');
   form.addEventListener('submit', (e) => {
-  const message = e.target.children.message.value;
+  const chatMessage = e.target.children.message.value;
   e.preventDefault();
 
   socket.emit('message', {
-    message,
     nickname: socket.id,
+    chatMessage,
   });
 
   document.getElementById('message').value = '';
