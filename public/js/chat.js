@@ -9,22 +9,32 @@ function randomString(length) {
   return result;
 }
 
-const onlineUser = () => {
-  const random = randomString(16);
-  const li = document.createElement('li');
-  const ul = document.querySelectorAll('ul')[0];
-  const button = document.querySelectorAll('form')[0].childNodes[3];
-  const input = document.querySelectorAll('form')[0].childNodes[1];
-  li.innerText = random;
-  ul.appendChild(li);
-  button.addEventListener('click', () => {
-    if (input.value.length > 0) {
-      li.innerText = input.value;
+const random = randomString(16);
+socket.emit('online', random);
+socket.on('list', (list) => {
+  list.map((item) => {
+    const li = document.createElement('li');
+    const ul = document.querySelector('.online');
+    li.innerText = item;
+    if (item === random) {
+      ul.insertBefore(li, ul.firstChild);
+      li.style.borderBottom = '1px solid red';
+      li.setAttribute('id', `${random}`);
+    } else {
+      ul.appendChild(li);
     }
+    socket.on('removeName', (name) => ul.removeChild(document.getElementById(`${name}`)));
+    return false;
   });
-};
+});
 
-onlineUser();
+socket.on('updatelist', (name) => {
+  const li = document.createElement('li');
+  const ul = document.querySelector('.online');
+  li.innerText = name;
+  li.setAttribute('id', `${name}`);
+  ul.appendChild(li);
+});
 
 const form = document.querySelectorAll('form')[1];
 const input = document.querySelectorAll('input');
