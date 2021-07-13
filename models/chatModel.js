@@ -4,7 +4,7 @@ const getAll = async () => {
   try {
     const db = await connection();
     const response = await db.collection('messages').find().toArray();
-    let array = [];
+    const array = [];
     response.forEach((e) => {
       array.push(`${e.timestamp} - ${e.nickname}: ${e.message}`);
     });

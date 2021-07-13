@@ -11,7 +11,7 @@ const getMessage = (data) => {
     timestamp: `${dateFormat} ${hourFormat}`,
   };
   return [dbReturn, ioReturn];
-}
+};
 
 module.exports = (io) => io.on('connection', async (socket) => {
   const chat = await chatModel.getAll();
@@ -19,7 +19,7 @@ module.exports = (io) => io.on('connection', async (socket) => {
 
   socket.on('message', async (data) => {
     const message = getMessage(data);
-    const response = await chatModel.newMessage(message[0]);
+    await chatModel.newMessage(message[0]);
     io.emit('message', [message[1]]);
   });
 });
