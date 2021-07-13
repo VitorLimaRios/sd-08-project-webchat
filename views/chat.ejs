@@ -26,7 +26,6 @@
       <% messages.forEach((msg) => { %>
       <li data-testid="message">
         <%= msg %>
-        <% console.log(msg) %>
       </li>
       <% }) %>
     </ul>
@@ -51,7 +50,6 @@
     });
     socket.on('message', (message) => {
       const ulMessages = document.querySelector('#listMessages');
-      console.log("entrei na 54 ", message);
       const newLi = document.createElement('li');
       newLi.setAttribute('data-testid', 'message');
       newLi.innerText = message;
@@ -59,7 +57,7 @@
     });
     socket.on('userList', (user) => {
       const onlineUser = document.querySelectorAll('.online-user');
-      if (onlineUser) onlineUser.forEach((element) => element.remove());
+      if (onlineUser !== null) onlineUser.forEach((element) => element.remove());
       const nicknameLocal = sessionStorage.getItem('user');
       user.forEach((element) => {
         const ulUsers = document.querySelector('#users');

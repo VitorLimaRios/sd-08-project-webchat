@@ -36,16 +36,22 @@ const randomNickname = () => {
 };
 
 const allUsers = {};
+const disconnectEvent = (socket, ioSkt) => {
+  socket.on('disconnect', () => {
+    const nickname = allUsers[socket.id];
+    delete allUsers[socket.id];
+    ioSkt.emit('userList', Object.values(allUsers));
+    socket.broadcast.emit('message', `${timestamp()} - ${nickname} Se desconectou.`);
+  });
+};
+
 io.on('connection', (socket) => {
   let currentUser = randomNickname();
   allUsers[socket.id] = currentUser;
-
   socket.emit('userLocal', allUsers[socket.id]);
-
   io.emit('userList', Object.values(allUsers));
-
-  socket.on('message', async ({ chatMessage, nickname = currentUser }) => {
-    await chatModel.sendMessage({ chatMessage, nickname, timestamp: timestamp() });
+  socket.on('message', ({ chatMessage, nickname = currentUser }) => {
+    chatModel.sendMessage({ chatMessage, nickname, timestamp: timestamp() });
     io.emit('message', `${timestamp()} ${nickname}: ${chatMessage}`);
   });
   socket.on('changeUser', (nickname) => {
@@ -56,6 +62,7 @@ io.on('connection', (socket) => {
     socket.emit('userLocal', allUsers[socket.id]);
     io.emit('userList', Object.values(allUsers));
   });
+  disconnectEvent(socket, io);
 });
 
 app.use(express.json());
