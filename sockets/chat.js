@@ -16,8 +16,8 @@ const getDateTime = () => {
 };
 
 const onDisconnect = (socket) => {
-  delete db[socket.id];
   socket.on('disconnect', () => {
+    delete db[socket.id];
     const messageChannel = `cliente: ${socket.id} foi desconectado`;
     console.log(messageChannel);
     socket.broadcast.emit('logout', { db, messageChannel });
@@ -25,7 +25,7 @@ const onDisconnect = (socket) => {
 };
 
 const onNotification = (socket) => {
-  const messageChannel = `cliente: ${socket.id} foi desconectado`;
+  const messageChannel = `cliente: ${socket.id} foi conectado`;
   socket.broadcast.emit('notification', {
     db,
     messageChannel,
