@@ -33,53 +33,53 @@ const randName = () => {
   return nickName;
 };
 
-const message = document.getElementById('message');
+const messagesList = document.getElementById('messages-list')
 const chatMessages = document.querySelector('.chat-messages');
 const userList = document.getElementById('users');
-const nick = document.getElementById('nick');
 
 const client = window.io();
 
-message.addEventListener('change', (e) => {
-e.preventDefault();
-const chatMessage = e.target.value;
-const nickname = localStorage.getItem('nickname');
-client.emit('message', { chatMessage, nickname });
-e.target.value = '';
-e.target.focus();
+document.getElementById('send-burtton').addEventListener('click', (e) => {
+  e.preventDefault();
+  const chatMessage = document.getElementById('message').value;
+  console.log('chatMessage: ', chatMessage)
+  const nickname = localStorage.getItem('nickname');
+  client.emit('message', { chatMessage, nickname });
+  document.getElementById('message').value = ''
+  document.getElementById('message').focus();
 });
 
-nick.addEventListener('change', (e) => {
+document.getElementById('nick-btn').addEventListener('click', (e) => {
   e.preventDefault();
-  const nickname = e.target.value;
+  const nickname = document.getElementById('nick').value
   client.emit('changNickname', nickname);
-  e.target.value = '';
-  e.target.focus();
+  document.getElementById('nick').value = '';
+  document.getElementById('nick').value.focus();
 });
 
 function outputMessage(message2) {
-const div = document.createElement('div');
-div.classList.add('message');
-const img = document.createElement('img');
-img.setAttribute('src', 'https://i.pravatar.cc/50');
-img.setAttribute('class', 'avatar');
-div.appendChild(img);
-const p = document.createElement('p');
-p.classList.add('meta');
-p.innerHTML = `<span data-testid="message">${message2}<span>`;
-div.appendChild(p);
-document.querySelector('.chat-messages').appendChild(div);
+  const li = document.createElement('li');
+  li.classList.add('meta');
+  li.innerText = message2
+  li.setAttribute('data-testid', 'message');
+  messagesList.appendChild(li);
 }
 
 function outputUsers(users) {
-userList.innerHTML = '';
-const userFound = users.find((user) => user.id === client.id);
-localStorage.setItem('nickname', userFound.nickname);
-users.forEach((user) => {
-const p = document.createElement('p');
-p.innerHTML = `<span data-testid="online-user">${user.nickname}<span>`;
-userList.appendChild(p);
-});
+  userList.innerHTML = '';
+  // Solução para ordem de exibição - Rapahael Caputo - T07
+  const userFound = users.findIndex((user) => user.id === client.id);
+  const userFoundRemoved = users.splice(userFound, 1);
+  users.unshift(userFoundRemoved[0]);
+  //
+  const activeUser = users.filter((user) => user.id === client.id)
+  localStorage.setItem('nickname', activeUser[0].nickname);
+  users.forEach((user) => {
+    const li = document.createElement('li');
+    li.innerText = user.nickname;
+    li.setAttribute('data-testid', 'online-user');
+    userList.appendChild(li);
+  });
 }
 
 client.on('connect', () => {
