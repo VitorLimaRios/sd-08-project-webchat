@@ -67,12 +67,15 @@ class Chat {
     const cutHoursRegex = new RegExp(/\d{1,2}:\d{1,2}(:\d{0,2})?\s(PM|AM)?/gm);
     const cutHours = message.match(cutHoursRegex);
     
-    const cutNameRegex = new RegExp(/(^.*\s-)+(\s\w*:)/);
+    const cutNameRegex = new RegExp(/(^.*\s-)+([\w\s]*:)/);
     const cutName = message.match(cutNameRegex);
+    console.log(cutName);
     const replacerName = cutName[2].replace(cutName[2][0], '').replace(':', '');
+    console.log(replacerName);
 
-    const cutMessageRegex = new RegExp(/((^.*-\s\w*?:)[\s\S.]*?)$/);
+    const cutMessageRegex = new RegExp(/((^.*-\s[\w\s\S]*?:)[\s\S.]*?)$/);
     const cutMessage = message.match(cutMessageRegex);
+    console.log(cutMessage);
     const replCutMessage = message.replace(`${cutMessage[2]} `, '');
     
     return { date: `${cutDate} ${cutHours}`, message: replCutMessage, nickname: replacerName };
