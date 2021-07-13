@@ -8,23 +8,6 @@ const nicknames = {};
 
 socket.on('socketId', (id) => {
   mySocket.id = id;
-  // console.log(id);
-});
-
-socket.on('allNicknames', (allNicks) => {
-  const socketIds = Object.keys(allNicks);
-  // console.log(socketIds);
-  socketIds.forEach((socketId) => {
-    nicknames[socketId] = allNicks[socketId];
-  });
-  console.log(nicknames);
-  updateNicksOnScreen();
-});
-
-socket.on('updateNickname', ({ userId, newNick }) => {
-  nicknames[userId] = newNick;
-  console.log('UPDATED_NICKNAMES', nicknames);
-  updateNicksOnScreen();
 });
 
 const createUserNicknameLi = (username) => {
@@ -43,6 +26,21 @@ Object.values(otherNicks).forEach((nick) => {
 nicknamesList.appendChild(createUserNicknameLi(nick));
 });
 };
+
+socket.on('allNicknames', (allNicks) => {
+  const socketIds = Object.keys(allNicks);
+  socketIds.forEach((socketId) => {
+    nicknames[socketId] = allNicks[socketId];
+  });
+  console.log(nicknames);
+  updateNicksOnScreen();
+});
+
+socket.on('updateNickname', ({ userId, newNick }) => {
+  nicknames[userId] = newNick;
+  console.log('UPDATED_NICKNAMES', nicknames);
+  updateNicksOnScreen();
+});
 
 const createMessageLi = (message) => {
   const li = document.createElement('li');
