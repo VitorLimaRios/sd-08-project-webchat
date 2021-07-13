@@ -6,10 +6,11 @@ const cors = require('cors');
 const app = express();
 const http = require('http').createServer(app);
 
+const OK = 200;
+const PORT = 3000;
+
 app.set('view engine', 'ejs');
-
 app.set('views', './views');
-
 app.use(cors());
 
 const io = require('socket.io')(http, {
@@ -19,20 +20,24 @@ const io = require('socket.io')(http, {
   },
 });
 
-io.on('connection', (socket) => {
+const chatModels = require('./models/chatModels');
+const chatControllers = require('./controllers/chatControllers');
+
+io.on('connection', async (socket) => {
   console.log(`Usuário conectado. ID: ${socket.id}`);
+  const messages = await chatModels.getMessages();
+  socket.emit('oldMessages', messages);
 });
 
 app.use(express.static(path.join(__dirname, '/public')));
 
 require('./sockets/chat')(io);
 
-const OK = 200;
-const PORT = 3000;
-
 app.get('/', (_req, res) => {
   // res.sendFile(path.join(__dirname, '/index.html'));
   res.status(OK).render('chat/index');
 });
+
+app.use('/', chatControllers);
 
 http.listen(PORT, () => console.log(`Servidor aberto na porta ${PORT}.`));

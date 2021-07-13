@@ -1,3 +1,5 @@
+const chatModels = require('../models/chatModels');
+
 const addZero = (date) => {
   if (date <= 9) return `0${date}`;
   return date;
@@ -14,9 +16,10 @@ const nowDate = () => {
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
-    socket.on('message', ({ nickname, chatMessage }) => {
+    socket.on('message', async ({ nickname, chatMessage }) => {
       const timestamp = nowDate();
-      const postMessage = `${timestamp} - ${nickname}: ${chatMessage} \n`;
+      const postMessage = `${timestamp} - ${nickname}: ${chatMessage}`;
+      await chatModels.writeMessage(chatMessage, nickname, timestamp);
       io.emit('message', postMessage);
     });
 

@@ -5,9 +5,9 @@ const btnSalvar = document.getElementById('btn-salvar');
 const btnEnviar = document.getElementById('btn-enviar');
 const messageArea = document.getElementById('message-area');
 const usersList = document.getElementById('usersConnected');
+const chatBox = document.getElementById('chat');
 
 const createMessage = (message) => {
-  const chatBox = document.getElementById('chat');
   const li = document.createElement('li');
   li.id = 'message';
   li.setAttribute('data-testid', 'message');
@@ -44,7 +44,6 @@ const mainUserName = () => {
   if (!users) {
     localStorage.setItem('users', JSON.stringify([randomUserName]));
   } else {
-    console.log(localUsers);
     localStorage.setItem('users', JSON.stringify([randomUserName, ...users]));
   }
   createUser(randomUserName, 'mainUser', 'online-user');
@@ -61,13 +60,29 @@ const getAllUsers = () => {
   users.map((user) => createUser(user, 'otherUser'));
 };
 
+btnEnviar.addEventListener('click', (e) => {
+  e.preventDefault();
+  const message = messageArea.value;
+  const nickname = usersList.firstChild.textContent;
+  const url = 'http://localhost:3000/';
+
+  const body = { message, nickname };
+
+  const request = new XMLHttpRequest();
+  request.open('POST', url, true);
+  request.setRequestHeader('Content-type', 'application/json');
+  request.send(JSON.stringify(body));
+
+  // fetch('http://localhost:3000/', {
+  //   method: 'post',
+  //   body: JSON.stringify(body),
+  // }).then((response) => console.log(response))
+  // .catch((err) => console.log(err));
+});
+
 socket.on('message', (message) => {
   createMessage(message);
 });
-
-// socket.on('serverMessage', (message) => {
-//   chat.value += message;
-// });
 
 socket.on('userConnect', (userName) => {
   createUser(userName, 'otherUser');
@@ -76,6 +91,14 @@ socket.on('userConnect', (userName) => {
 
 socket.on('connection', () => {
   mainUserName();
+});
+
+socket.on('oldMessages', (messages) => {
+  messages.map(({ message, nickname, timestamp }) => {
+    const structureMessage = `${timestamp} - ${nickname}: ${message}`;
+    createMessage(structureMessage);
+    return false;
+  });
 });
 
 window.onbeforeunload = () => {
