@@ -16,22 +16,27 @@ const createMessage = (message) => {
 };
 
 btnSalvar.addEventListener('click', () => {
-  localStorage.setItem('nickname', nicknameInput.value);
+  const changeUser = { oldUser: usersList.firstChild.textContent, newUser: nicknameInput.value };
+  const localUsers = JSON.parse(localStorage.getItem('users'));
+  localUsers[0] = nicknameInput.value;
+  localStorage.setItem('users', JSON.stringify(localUsers));
   usersList.firstChild.textContent = nicknameInput.value;
+  socket.emit('updateUsers', changeUser);
   return false;
 });
 
-btnEnviar.addEventListener('click', () => {
-  const nickname = localStorage.getItem('nickname');
+btnEnviar.addEventListener('click', (e) => {
+  e.preventDefault();
+  const [nickname] = JSON.parse(localStorage.getItem('users'));
   const chatMessage = messageArea.value;
   socket.emit('message', { chatMessage, nickname });
   return false;
 });
 
-const createUser = (name, id = '', test = '') => {
+const createUser = (name, id = '') => {
   const li = document.createElement('li');
   li.id = id;
-  li.setAttribute('data-testid', test);
+  li.setAttribute('data-testid', 'online-user');
   li.innerText = name;
   usersList.appendChild(li);
 };
@@ -46,7 +51,7 @@ const mainUserName = () => {
   } else {
     localStorage.setItem('users', JSON.stringify([randomUserName, ...users]));
   }
-  createUser(randomUserName, 'mainUser', 'online-user');
+  createUser(randomUserName, 'mainUser');
   socket.emit('userConnect', randomUserName);
   return false;
 };
@@ -58,27 +63,36 @@ const getAllUsers = () => {
   const index = users.indexOf(mainUser);
   users.splice(index, 1);
   users.map((user) => createUser(user, 'otherUser'));
+  return false;
 };
 
-btnEnviar.addEventListener('click', (e) => {
-  e.preventDefault();
-  const message = messageArea.value;
-  const nickname = usersList.firstChild.textContent;
-  const url = 'http://localhost:3000/';
+const refreshUsers = () => {
+  const mainUser = usersList.firstChild.textContent;
+  usersList.innerText = '';
+  createUser(mainUser, 'mainUser');
+  getAllUsers();
+};
 
-  const body = { message, nickname };
+// btnEnviar.addEventListener('click', (e) => {
+//   e.preventDefault();
+//   const message = messageArea.value;
+//   const nickname = usersList.firstChild.textContent;
+//   // const url = 'http://localhost:3000/';
 
-  const request = new XMLHttpRequest();
-  request.open('POST', url, true);
-  request.setRequestHeader('Content-type', 'application/json');
-  request.send(JSON.stringify(body));
+//   // const body = { message, nickname };
 
-  // fetch('http://localhost:3000/', {
-  //   method: 'post',
-  //   body: JSON.stringify(body),
-  // }).then((response) => console.log(response))
-  // .catch((err) => console.log(err));
-});
+//   // const request = new XMLHttpRequest();
+//   // request.open('POST', url, true);
+//   // request.setRequestHeader('Content-type', 'application/json');
+//   // request.send(JSON.stringify(body));
+
+//   // fetch('http://localhost:3000/', {
+//   //   method: 'post',
+//   //   body: JSON.stringify(body),
+//   // }).then((response) => console.log(response))
+//   // .catch((err) => console.log(err));
+//   return false;
+// });
 
 socket.on('message', (message) => {
   createMessage(message);
@@ -86,11 +100,21 @@ socket.on('message', (message) => {
 
 socket.on('userConnect', (userName) => {
   createUser(userName, 'otherUser');
-  getAllUsers();
+  // getAllUsers();
+});
+
+socket.on('updateUsers', (_users) => {
+  refreshUsers();
 });
 
 socket.on('connection', () => {
   mainUserName();
+  getAllUsers();
+  // const localUsers = JSON.parse(localStorage.getItem('users'));
+  // socket.emit('users', localUsers);
+  // socket.on('users', (users) => {
+
+  // });
 });
 
 socket.on('oldMessages', (messages) => {
@@ -108,5 +132,6 @@ window.onbeforeunload = () => {
   const index = users.indexOf(mainUser);
   users.splice(index, 1);
   localStorage.setItem('users', JSON.stringify(users));
+  // socket.emit('updateUsers');
   socket.disconnect();
 };

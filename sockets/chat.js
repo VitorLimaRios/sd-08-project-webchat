@@ -22,16 +22,14 @@ module.exports = (io) => {
       await chatModels.writeMessage(chatMessage, nickname, timestamp);
       io.emit('message', postMessage);
     });
-
     socket.emit('connection', socket.id);
-
-    socket.on('userConnect', (userName) => {
-      socket.broadcast.emit('userConnect', userName);
+    socket.on('users', (users) => io.emit('users', users));
+    socket.on('updateUsers', (users) => socket.broadcast.emit('updateUsers', users));
+    socket.on('userConnect', (userName) => socket.broadcast.emit('userConnect', userName));
+    socket.on('disconnect', () => {
+      socket.broadcast.emit('updateUsers');
+      // socket.broadcast.emit('serverMessage', `Xiii! ${socket.id} acabou de se desconectar! :( \n`);
     });
-
-    // socket.on('disconnect', () => {
-    //   socket.broadcast.emit('serverMessage', `Xiii! ${socket.id} acabou de se desconectar! :( \n`);
-    // });
   });
 };
 
