@@ -1,6 +1,8 @@
 require('dotenv/config');
+const express = require('express');
+const cors = require('cors');
 
-const app = require('./src/app');
+const app = express();
 const http = require('http').createServer(app);
 
 const { DEFAULT_PORT } = require('./src/shared/defs');
@@ -20,8 +22,15 @@ io.on('connection', (socket) => {
   });
 });
 
+app.use(cors());
+app.use(express.static('public'));
+
 require('./sockets')(io);
 
-http.listen(DEFAULT_PORT, () => {
-  console.log(`App Listen Post: ${DEFAULT_PORT}`);
+app.get('/', (_req, res) => {
+  res.sendFile(`${__dirname}/public/chat.html`);
+});
+
+http.listen(PORT, () => {
+  console.log(`App ouvindo na porta ${DEFAULT_PORT}`);
 });
