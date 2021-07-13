@@ -20,9 +20,10 @@ const onNotification = (socket) => {
 };
 
 const onWelcome = (socket) => {
+  const messageChannel = `Seja Bem Vindo!! Cliente ${socket.id}`;
   socket.emit('welcome', {
     db,
-    message: `Seja Bem Vindo!! Cliente ${socket.id}`,
+    messageChannel,
   });
 };
 
@@ -30,6 +31,12 @@ const onMessage = (io, socket) => {
   socket.on('message', ({ nickname, message }) => {
     const messageChannel = `${nickname}: ${message}`;
     io.emit('message', messageChannel);
+  });
+};
+
+const onUsers = (io, socket) => {
+  socket.on('users', () => {
+    io.emit('users', db);
   });
 };
 
@@ -42,4 +49,5 @@ module.exports = (io) =>
     onNotification(socket);
     onWelcome(socket);
     onMessage(io, socket);
+    onUsers(io, socket);
   });
