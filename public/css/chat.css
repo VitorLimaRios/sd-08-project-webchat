@@ -1,34 +1,8 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font: 13px Helvetica, Arial;
-}
-
-form {
-  background: #000;
-  padding: 3px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
-
-form input {
-  border: 0;
-  padding: 10px;
-  width: 90%;
-  margin-right: 0.5%;
-}
-
-form button {
-  width: 9%;
-  background: rgb(130, 224, 255);
-  border: none;
-  padding: 10px;
-  cursor: pointer;
+#message-box {
+  border: 1px solid black;
+  height: 500px;
+  width: 70%;
+  margin-left: 25px;
 }
 
 #messages {
@@ -43,4 +17,37 @@ form button {
 
 #messages li:nth-child(odd) {
   background: #eee;
+}
+
+form {
+  display: flex;
+  margin-top: 50px;
+  width: 100%;
+}
+
+#messageInput {
+  padding: 10px;
+  width: 70%;
+  margin-right: 0.5%;
+}
+
+#nickNameInput {
+  width: 30%;
+  padding: 10px;
+  margin-right: 0.5%;
+}
+
+#buttonSave {
+  margin-right: 0.5%;
+}
+
+#box {
+  display: flex;
+}
+
+#online-user {
+  border: 1px solid black;
+  height: 500px;
+  width: 30%;
+  margin-right: 30px;
 }
