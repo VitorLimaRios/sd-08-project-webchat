@@ -8,13 +8,15 @@
   <link rel="stylesheet" href="/css/chat.css">
 </head>
 <body>
-  <header>
-    <h1>Trybe - webchat</h1>
-  </header>
+  <label class="menu-icon" for="toggle-menu">&#9776; Menu</label>
+  <input type="checkbox" id="toggle-menu" class="toogle">
   <main>
     <div class="left-content">
-      <input type="text" class="nickname" data-testid="nickname-box">
-      <button class="btn-save-nick" data-testid="nickname-button">save</button>
+      <label class="nickname-label">
+        <input type="text" class="nickname" data-testid="nickname-box" 
+        placeholder="Change your nickname">
+        <button class="btn-save-nick" data-testid="nickname-button">save</button>
+      </label>
       <div class="users">
         <p class='username' data-testid="online-user">
           <%= name %> 
@@ -111,9 +113,7 @@
     socket.emit('message', { nickname, chatMessage });
   };
 
-  const setUserName = () => {
-    console.log(`${userName.innerText} mudou o nome para ${nicknameInput.value}`);
-    
+  const setUserName = () => {    
     userName.innerText = nicknameInput.value;
 
     nicknameInput.value = '';
@@ -151,7 +151,6 @@
   });
 
   socket.on('userList', (userList) => {
-    console.log(userList);
     const listOfUsers = document.querySelector('.userlist');
     listOfUsers.innerHTML = '';
     

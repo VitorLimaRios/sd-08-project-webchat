@@ -5,16 +5,17 @@
 }
 
 body {
+  align-items: center;
+  background: linear-gradient(black, rgb(10, 10, 10));
+  display: flex;
   height: 100vh;
-}
-
-header {
-  height: 10%;
+  justify-content: center;
+  position: relative;
 }
 
 main {
   display: flex;
-  height: 80%;
+  height: 90%;
 }
 
 li {
@@ -36,17 +37,38 @@ li {
 .left-content .nickname {
   border: none;
   border-bottom: 1px solid black;
-  margin-bottom: 20px;
+  outline: none;
   padding: 5px;
-  width: 79%;
+  width: 100%;
+}
+
+.nickname-label {
+  align-items: center;
+  box-sizing: border-box;
+  color: #616161;
+  cursor: text;
+  display: flex;
+  font-size: 1rem;
+  left: 0;
+  margin: 20px 0 40px;
+  right: 0;
+  top: 0;
+  transition: 0.2s ease-in-out;
 }
 
 .left-content .btn-save-nick {
+  background-color: teal;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  color: white;
+  font-weight: 600;
+  height: 26px;
   padding: 5px;
-  width: 19%;
+  width: 25%;
 }
 
 .right-content {
+  background: linear-gradient(blue, black);
   border-radius: 0 20px 20px 0;
   margin-right: 20px;
   width: 65%;
@@ -66,13 +88,28 @@ li {
 .right-content .write-message {
   padding: 5px;
   resize: none;
-  width: 88%;
+  width: 80%;
 }
 
 .right-content .send-message-btn {
-  border: none;
+  background-color: teal;
+  border: 0;
+  border-radius: 0 0 10px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
   padding: 5px;
-  width: 11%;
+  transition: 0.5s;
+  width: 20%;
+}
+
+.right-content .send-message-btn:hover {
+  filter: brightness(1.2);
+  font-weight: 700;
+}
+
+p:hover , li:hover {
+  filter: brightness(0.9);
 }
 
 .right-content .send-container {
@@ -133,4 +170,81 @@ li {
   height: 10px;
   margin: 0 5px;
   width: 10px;
+}
+
+.menu-icon {
+  display: none;
+}
+
+.toogle {
+  display: none;
+}
+
+@media screen and ( max-width : 800px ) {
+
+  body {
+    font-size: 15px;
+  }
+
+  main {
+    height: 100%;
+    position: relative;
+  }
+
+  .left-content {
+    border-radius: 0;
+    display: none;
+    height: 100%;
+    margin: 0;
+    position: absolute;
+    width: 50%;
+  }
+
+  .nickname-label {
+    margin: 50px 0 25px;
+  }
+
+  .right-content {
+    border-radius: 0;
+    margin: 0;
+    padding-left: 30px;
+    padding-top: 50px;
+    width: 100%;
+  }
+
+  .menu-icon {
+    color: white;
+    display: initial;
+    font-size: 25px;
+    left: 0;
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    z-index: 10;
+  }
+
+  .toogle:checked + main .left-content {
+    display: initial;
+  }
+
+}
+
+@media screen and ( max-width : 450px ) {
+
+  .right-content {
+    padding: 50px 1px 1px;
+  }
+
+  .left-content {
+    width: 100%;
+  }
+
+  .right-content .web-chat {
+    margin: 0;
+    padding: 5px;
+  }
+
+  .right-content .web-chat .message {
+    width: 80%;
+  }
 }
