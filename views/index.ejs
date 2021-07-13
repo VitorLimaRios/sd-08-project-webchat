@@ -18,24 +18,26 @@
             placeholder="Insira seu nickname"
             data-testid="nickname-box"
           />
-          <button type='button' class="nickButton" data-testid="nickname-button">
+          <button
+            type="button"
+            class="nickButton"
+            data-testid="nickname-button"
+          >
             Salvar
           </button>
         </section>
         <section class="user">
           <h3>Usuários</h3>
-          <ul class="usersOn">
-          </ul>
+          <ul class="usersOn"></ul>
         </section>
       </div>
       <div class="container-two">
         <section class="chat">
           <h2>Mensagens</h2>
           <ul class="messageHistory">
-            <% messages.forEach((message) => { %>
+            <% messages.forEach(( post ) => { %>
             <li data-testid="message">
-              <%= `${message.timestamp} ${message.nickname} ${message.message}`
-              %>
+              <%= post.timestamp %> - <%= post.nickname %>: <%= post.message %>
             </li>
             <% }) %>
           </ul>
@@ -50,7 +52,9 @@
           placeholder="Digite uma nova mensagem aqui"
           data-testid="message-box"
         />
-        <button type='button' class="sendButton" data-testid="send-button">Enviar</button>
+        <button type="button" class="sendButton" data-testid="send-button">
+          Enviar
+        </button>
       </section>
     </div>
   </body>

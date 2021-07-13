@@ -16,18 +16,18 @@ app.use(express.static(path.join(__dirname, 'views')));
 
 const io = require('socket.io')(http, {
   cors: {
-    origin: 'http://localhost:3000', // url aceita pelo cors
-    methods: ['GET', 'POST'], // Métodos aceitos pela url
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
   },
 });
-    
-const ChatModel = require('./models/chatModel');
 
-let clients = [];
+const chatModel = require('./models/chatModel');
 
-const inputMessage = (chatMessage, nickname) => {
+const clients = [];
+
+const handleMessage = (chatMessage, nickname) => {
   const timestampMessage = moment(Date.now()).format('DD-MM-yyyy HH:mm:ss');
-  ChatModel.create({ message: chatMessage, nickname, timestamp: timestampMessage });
+  chatModel.postMessage({ message: chatMessage, nickname, timestamp: timestampMessage });
   io.emit('message', `${timestampMessage} - ${nickname}: ${chatMessage}`);
 };
 
@@ -41,30 +41,24 @@ io.on('connection', (socket) => {
 
   socket.on('onlineUsers', () => io.emit('onlineUsers', clients));
 
+  /* Envio de mensagens */
+  socket.on('message', ({ chatMessage, nickname }) => {
+    handleMessage(chatMessage, nickname);
+  });
+
   /* Atualização de nickname */
   socket.on('updateUser', (nickname) => {
-    clients = clients.map((client) => {
-      if (client.userId === socket.id) { 
-        return { userId: socket.id, nickname };
-      }
-      return client;
-    });
-  io.emit('onlineUsers', clients);
-  });
-
-  /* Nova mensagem */
-  socket.on('message', ({ chatMessage, nickname }) => {
-    inputMessage(chatMessage, nickname);
+    const userIndex = clients.findIndex((client) => client.userId === socket.id);
+    clients[userIndex].nickname = nickname;
+    io.emit('onlineUsers', clients);
   });
 });
 
-app.get('/', async (_req, res) => { 
-  const messages = await ChatModel.getAll();
-  res.render('index.ejs', { messages });
+const PORT = process.env.PORT || 3000;
+
+app.get('/', async (_request, response) => {
+  const messages = await chatModel.findAllMessages();
+  response.render('index', { messages });
 });
 
-const PORT = process.env.PORT || 3000;  
-
-http.listen(PORT, () => {
-  console.log(`Running server on port ${PORT}`);
-});
+http.listen(PORT, () => console.log(`App listening on PORT ${PORT}`));

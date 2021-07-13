@@ -1,14 +1,11 @@
 const client = window.io();
 
+const inputNick = document.querySelector('.nickBox');
+const upNickButton = document.querySelector('.nickButton');
+const inputMessage = document.querySelector('.msgBox');
+const sendMessageButton = document.querySelector('.sendButton');
 const activeUsers = document.querySelector('.usersOn');
-
-// const inputNick = document.querySelector('.nickBox');
-// const upNickButton = document.querySelector('.nickButton');
-
 const chatMessages = document.querySelector('.messageHistory');
-
-// const imputMessage = document.querySelector('msgBox');
-// const sendMessageButton = document.querySelector('sendButton');
 
 // https://www.webtutorial.com.br/funcao-para-gerar-uma-string-aleatoria-random-com-caracteres-especificos-em-javascript/
 function randomStringGenerator(size) {
@@ -29,29 +26,20 @@ window.onload = () => {
   client.emit('onlineUsers', '');
 };
 
-/* Atualização de nickname */
-// upNickButton.addEventListener('click', () => {
-//   localStorage.setItem('user', JSON.stringify(inputNick.value));
-//   nickname = inputNick.value;
-//   client.emit('updateUser', nickname);
-//   inputNick.value = '';
-// });
+client.on('newUser', (nickname) => {
+  const element = document.createElement('li');
+  element.innerText = `${nickname} entrou`;
+  chatMessages.appendChild(element);
+});
 
 client.on('onlineUsers', (clients) => {
   activeUsers.innerText = '';
-  // https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
-  clients.sort((a, b) => {
-    if (a.nickname > b.nickname) {
-      return 1;
-    }
-    if (a.nickname < b.nickname) {
-      return -1;
-    }
-    return 0;
-  });
-  // console.log(clients, "ordered clients");
 
-  clients.forEach((cli) => {
+  const newClient = clients.find((c) => c.userId === client.id);
+  const allClients = clients.filter((c) => c.userId !== client.id);
+  allClients.unshift(newClient); // novo cliente no topo da lista
+
+  allClients.forEach((cli) => {
     const userElement = document.createElement('li');
     userElement.setAttribute('data-testid', 'online-user');
     userElement.innerText = cli.nickname;
@@ -59,27 +47,25 @@ client.on('onlineUsers', (clients) => {
   });
 });
 
-// upNickButton.addEventListener('click', () => {
-//   localStorage.setItem('user', JSON.stringify(inputNick.value));
-//   nickname = inputNick.value;
-//   client.emit('updateUser', nickname);
-//   inputNick.value = '';
-// });
+/* Envio de mensagens */
+sendMessageButton.addEventListener('click', () => {
+  client.emit('message', {
+    chatMessage: inputMessage.value,
+    nickname: JSON.parse(localStorage.getItem('user')),
+  });
+  inputMessage.value = '';
+});
 
-client.on('newUser', (nickname) => {
+client.on('message', (message) => {
   const element = document.createElement('li');
-  element.innerText = `${nickname} entrou`;
+  element.innerText = message;
+  element.setAttribute('data-testid', 'message');
   chatMessages.appendChild(element);
 });
 
-// const createMessage = (message) => {
-//   const messageElement = document.createElement('li');
-//   messageElement.setAttribute('data-testid', 'message');
-//   messageElement.innerHTML = message;
-//   return messageElement;
-// };
-
-// client.on('message', ({ message }) => {
-//   const newMessageUser = createMessage(message);
-//   document.querySelector('.messageHistory').append(newMessageUser);
-// });
+/* Atualização de nickname */
+upNickButton.addEventListener('click', () => {
+  localStorage.setItem('user', JSON.stringify(inputNick.value));
+  client.emit('updateUser', inputNick.value);
+  inputNick.value = '';
+});
