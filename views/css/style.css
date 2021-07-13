@@ -42,7 +42,7 @@ body {
 
 .user {
   background-color: rgb(221, 222, 243);
-  border-color:rgb(80, 78, 78);
+  border-color: rgb(80, 78, 78);
   border-radius: 5px;
   border-style: solid;
   margin-right: 20px;
@@ -52,7 +52,7 @@ body {
 
 .chat {
   background-color: rgb(220, 223, 217);
-  border-color:rgb(80, 78, 78);
+  border-color: rgb(80, 78, 78);
   border-radius: 5px;
   border-style: solid;
   padding: 10px;
@@ -63,7 +63,7 @@ body {
 }
 
 .nickBox {
-  background: #FFFFFF;
+  background: white;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
   margin: 10px;
   padding: 10px;
@@ -71,7 +71,7 @@ body {
 }
 
 .msgBox {
-  background: #FFFFFF;
+  background: white;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
   margin: 10px;
   padding: 10px;
@@ -82,9 +82,8 @@ body {
 .nickButton {
   background: #4c82af;
   border: 0;
-  color: #FFFFFF;
+  color: white;
   cursor: pointer;
-  font-family: "Roboto", sans-serif;
   font-size: 14px;
   outline: 0;
   padding: 8px;
@@ -93,9 +92,8 @@ body {
 .sendButton {
   background: #2b662d;
   border: 0;
-  color: #FFFFFF;
+  color: white;
   cursor: pointer;
-  font-family: "Roboto", sans-serif;
   font-size: 14px;
   outline: 0;
   padding: 10px;
