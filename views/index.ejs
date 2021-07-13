@@ -79,17 +79,25 @@
           socket.emit('message', { chatMessage: value, nickname });
         });
 
-        const createMessage = (messageList) => {
-          messageList.forEach((message) => {
-            const li = document.createElement('li');
-            li.innerText = message;
-            li.dataset.testid = 'message';
-            messages.appendChild(li);
-          })
+        const createMessage = (message) => {
+          const li = document.createElement('li');
+          li.innerText = message;
+          li.dataset.testid = 'message';
+          messages.appendChild(li);
         }
 
-        socket.on('message', (data) => createMessage(data));
-        socket.on('history', (data) => createMessage(data));
+        const displayMessage = (data) => {
+          if (typeof data === 'array') {
+            message.forEach((index) => {
+              createMessage(index);
+            })
+          } else {
+            createMessage(data);
+          }
+        }
+
+        socket.on('message', (data) => displayMessage(data));
+        socket.on('history', (data) => displayMessage(data));
         socket.on('new-user', (data) => createList(data));
         socket.on('user-left', (data) => removeUser(data));
         socket.on('change-onlineUsers', (data) => updateUser(data))

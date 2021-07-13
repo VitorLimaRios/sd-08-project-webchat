@@ -20,6 +20,6 @@ module.exports = (io) => io.on('connection', async (socket) => {
   socket.on('message', async (data) => {
     const message = getMessage(data);
     await chatModel.newMessage(message[0]);
-    io.emit('message', [message[1]]);
+    io.emit('message', message[1]);
   });
 });
