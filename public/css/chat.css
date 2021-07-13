@@ -55,6 +55,8 @@ li {
 .right-content .web-chat {
   background-color: rgb(209, 209, 209);
   border: 10px solid rgb(209, 209, 209);
+  display: flex;
+  flex-direction: column;
   height: 90%;
   margin-bottom: 10px;
   overflow-y: scroll;
@@ -79,11 +81,40 @@ li {
 }
 
 .right-content .web-chat .message {
-  background-color: rgb(255, 255, 255);
+  background-color: white;
   border-radius: 0 10px 10px;
-  color: rgb(0, 0, 0);
+  box-shadow: 3px 3px 5px rgb(167, 167, 167);
+  color: black;
   margin: 10px 5px;
   padding: 5px 10px;
+  width: 70%;
+}
+
+.right-content .web-chat .message.right {
+  align-self: flex-end;
+  background-color: rgb(39, 39, 39);
+  border-radius: 10px 0 10px 10px;
+  color: white;
+}
+
+.right-content .web-chat .message .message-nickname {
+  font-weight: 700;
+  margin: 5px 0;
+}
+
+.right-content .web-chat .message .message-timestamp {
+  color: rgb(160, 160, 160);
+  text-align: end;
+}
+
+.right-content .web-chat .users-status-message {
+  background: none;
+  color: rgb(138, 138, 138);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
 }
 
 .username {

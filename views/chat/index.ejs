@@ -27,7 +27,9 @@
       <ul class="web-chat">
         <% messages.map(({nickname, chatMessage, timestamp}) => { %>
           <li data-testid="message" class="message">
-            <%= `${timestamp} ${nickname}: ${chatMessage}` %>
+            <p class="message-nickname"> <%= nickname %> </p>
+            <p> <%= chatMessage %> </p>
+            <p class="message-timestamp"> <%= timestamp %> </p>
           </li>
         <% }) %>
       </ul>
@@ -41,42 +43,83 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  const socket = io()
+  const socket = io();
+  const getDate = () => {
+      const date = new Date();
+      const day = date.getDate();
+      const month = (date.getMonth() + 1);
+      const year = date.getFullYear();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const seconds = date.getSeconds();
+      
+      const incZero = (n) => (n < 10 ? `0${n}` : n); 
+
+      const dateNow = `${incZero(day)}-${incZero(month)}-${year}`;
+      const timeNow = `${hours}:${incZero(minutes)}:${incZero(seconds)}`;
+
+      const timestamp = `${dateNow} ${timeNow}`;
+
+      return timestamp;
+  };
 
   const inputMessage = document.querySelector('.write-message');
   const btnSendMessage = document.querySelector('.send-message-btn');
   const nicknameInput = document.querySelector('.nickname');
-  const userName = document.querySelector('.username')
-  const btnSetUsername = document.querySelector('.btn-save-nick')
+  const userName = document.querySelector('.username');
+  const btnSetUsername = document.querySelector('.btn-save-nick');
 
   const sendMember = () => {
-    const nickname = userName.innerText
+    const nickname = userName.innerText;
 
     const userData = {
       nickname,
-    }
+    };
 
-    socket.emit('userConnected', userData)
-  }
+    socket.emit('userConnected', userData);
+  };
 
   sendMember();
 
   const sendMessage = () => {
-    const nickname = userName.innerText
+    const nickname = userName.innerText;
     const chatMessage = inputMessage.value;
 
-    socket.emit('message', { nickname, chatMessage })
-  }
+    inputMessage.value = '';
+
+    const ulChat = document.querySelector('.web-chat');
+    
+    const li = document.createElement('li');
+
+    // const nicknameSpan = document.createElement('p');
+    const messageParagraph = document.createElement('p');
+    const timestampSpan = document.createElement('p');
+
+    messageParagraph.innerText = chatMessage;
+    timestampSpan.innerText = getDate();
+
+    timestampSpan.classList.add('message-timestamp');
+
+    li.appendChild(messageParagraph);
+    li.appendChild(timestampSpan);
+
+    li.setAttribute('data-testid', 'message');
+    li.classList.add('message', 'right');
+    
+    ulChat.appendChild(li);
+
+    socket.emit('message', { nickname, chatMessage });
+  };
 
   const setUserName = () => {
-    console.log(`${userName.innerText} mudou o nome para ${nicknameInput.value}`)
+    console.log(`${userName.innerText} mudou o nome para ${nicknameInput.value}`);
     
     userName.innerText = nicknameInput.value;
 
-    nicknameInput.value = ''
+    nicknameInput.value = '';
 
     sendMember();
-  }
+  };
 
   btnSendMessage.addEventListener('click', sendMessage);
   btnSetUsername.addEventListener('click', setUserName);
@@ -84,34 +127,60 @@
   socket.on('message', (message) => {
     const ulChat = document.querySelector('.web-chat');
     
-    const li = document.createElement('li')
+    const li = document.createElement('li');
 
-    li.innerText = message;
-    li.setAttribute('data-testid', 'message')
+    const nicknameSpan = document.createElement('p');
+    const messageParagraph = document.createElement('p');
+    const timestampSpan = document.createElement('p');
+
+    nicknameSpan.innerText = message.nickname;
+    messageParagraph.innerText = message.chatMessage;
+    timestampSpan.innerText = message.timestamp;
+
+    nicknameSpan.classList.add('message-nickname');
+    timestampSpan.classList.add('message-timestamp');
+
+    li.appendChild(nicknameSpan);
+    li.appendChild(messageParagraph);
+    li.appendChild(timestampSpan);
+
+    li.setAttribute('data-testid', 'message');
+    li.classList.add('message');
     
     ulChat.appendChild(li);
-    
-    inputMessage.value = ''
-  })
+  });
 
   socket.on('userList', (userList) => {
-    console.log(userList)
-    const listOfUsers = document.querySelector('.userlist')
+    console.log(userList);
+    const listOfUsers = document.querySelector('.userlist');
     listOfUsers.innerHTML = '';
     
-    const nickname = userName.innerText
-    const everyBodyElse = userList.filter(elem => elem.nickname !== nickname)
+    const nickname = userName.innerText;
+    const everyBodyElse = userList.filter((elem) => elem.nickname !== nickname);
 
-    everyBodyElse.forEach(user => {
-
+    everyBodyElse.forEach((user) => {
       const li = document.createElement('li');
       li.innerText = user.nickname;
-      li.setAttribute('data-testid', 'online-user')
-      li.classList.add('username')
+      li.setAttribute('data-testid', 'online-user');
+      li.classList.add('username');
 
-      listOfUsers.appendChild(li)
-    })
-  })
+      listOfUsers.appendChild(li);
+    });
+  });
+
+  const statusMessage = (message) => {
+    const ulChat = document.querySelector('.web-chat');
+    const li = document.createElement('li');
+    li.innerText = message
+
+    li.classList.add('users-status-message')
+
+    ulChat.appendChild(li)
+  }
+
+  socket.on('userChangedNickname', statusMessage)
+  socket.on('newUserIn', statusMessage)
+  socket.on('userJustDisconnect', statusMessage)
 
   window.onbeforeunload = (_event) => {
     socket.disconnect();

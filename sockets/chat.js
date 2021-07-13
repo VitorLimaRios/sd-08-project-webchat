@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 const chatModel = require('../models/chat');
 
 const getFinalMessage = (nickname, chatMessage) => {
@@ -14,8 +15,8 @@ const getFinalMessage = (nickname, chatMessage) => {
       const dateNow = `${incZero(day)}-${incZero(month)}-${year}`;
       const timeNow = `${hours}:${incZero(minutes)}:${incZero(seconds)}`;
 
-      const finalMessage = `${dateNow} ${timeNow} ${nickname}: ${chatMessage}`;
       const timestamp = `${dateNow} ${timeNow}`;
+      const finalMessage = { timestamp, nickname, chatMessage };
 
       return {
         finalMessage,
@@ -28,31 +29,49 @@ const userList = [];
 const addUser = (user) => {
   const userExists = userList.find(({ id }) => id === user.id);
 
-  if (userExists) {
+    if (userExists) {
+    const oldNickname = userExists.nickname;
     userExists.nickname = user.nickname;
-  } else {
+    return {
+      oldNickname,
+      nickname: userExists.nickname,
+    };
+  } 
     userList.push(user);
-  }
+    return false;
 };
 
+const findNickname = (id) => userList.find((e) => e.id === id);
 const removeUser = (id) => {
   const index = userList.findIndex((e) => e.id === id);
-
-  userList.splice(index, 1);
+  return userList.splice(index, 1);
 };
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
     socket.on('userConnected', (userData) => {
       const user = { ...userData, id: socket.id };
-      addUser(user);
+      const newUser = addUser(user);
+      if (newUser) {
+        const { nickname, oldNickname } = newUser;
+        const nickMessage = `User ${oldNickname} changed nickname to ${nickname}`;
+        socket.broadcast.emit('userChangedNickname', nickMessage);
+      } else {
+        const userInMessage = `User ${userData.nickname} just connected to chat`;
+        socket.broadcast.emit('newUserIn', userInMessage);
+      }
       io.emit('userList', userList);
     });
 
     socket.on('disconnect', () => {
       const { id } = socket;
+      const usrNickname = findNickname(id);
       removeUser(id);
       io.emit('userList', userList);
+      if (usrNickname) {
+        const usrDisconectMessage = `${usrNickname.nickname} is disconnected`;
+        socket.broadcast.emit('userJustDisconnect', usrDisconectMessage);
+      }
     });
 
     socket.on('message', async ({ nickname, chatMessage }) => {
@@ -60,7 +79,7 @@ module.exports = (io) => {
 
       await chatModel.create({ nickname, chatMessage, timestamp });
 
-      io.emit('message', finalMessage);
+      socket.broadcast.emit('message', finalMessage);
     });
   });
 };
