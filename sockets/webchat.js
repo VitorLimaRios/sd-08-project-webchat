@@ -19,13 +19,16 @@ const addNewMessage = async (chatMessage, nickname, socket, io) => {
 };
 
 const setOnlineUser = (socket, io) => {
-  users.push(socket.id.slice(0, 16));
+  const id = socket.id.slice(0, 16);
+  users.push({ id, nickname: '' });
+
   io.emit('onlineUsers', users);
 };
 
 const changeNickName = (nickname, id, io) => {
-  const index = users.indexOf(id);
-  users[index] = nickname;
+  const index = users.findIndex(((user) => user.id === id));
+
+  users[index].nickname = nickname;
   io.emit('onlineUsers', users);
 };
 
@@ -35,6 +38,15 @@ const getAllChatMessages = async (socket) => {
     .map(({ message, nickname }) => `${formattedDate()} - ${nickname}: ${message}`);
 
   socket.emit('getAllChatMessages', formattedMessages);
+};
+
+const disconnect = (socket, io) => {
+  const index = users
+    .findIndex(((user) => user.id === socket.id.slice(0, 16)));
+
+  users.splice(index, 1);
+  
+  io.emit('onlineUsers', users);
 };
 
 module.exports = (io) => io.on('connection', (socket) => {
@@ -48,4 +60,5 @@ module.exports = (io) => io.on('connection', (socket) => {
   socket.on('onlineUsers', () => setOnlineUser(socket, io));
   socket.on('changeNickName', ({ nickname, id }) => changeNickName(nickname, id, io));
   socket.on('getAllChatMessages', () => getAllChatMessages(socket));
+  socket.on('disconnect', () => disconnect(socket, io));
 });

@@ -17,11 +17,18 @@ const setMessage = (chatMessage) => {
   ulChatMessages.appendChild(li);
 };
 
-const addNewUsers = (users = []) => {
+const addNewUsers = (users) => {
   ulOnlineUsers.innerHTML = '';
-  users.forEach((user) => {
+  
+  const socketUser = users
+    .find((user) => user.id === socket.id.slice(0, 16));
+
+  const usersFilteredSocketUser = users
+    .filter((user) => user.id !== socket.id.slice(0, 16));
+  
+  [socketUser, ...usersFilteredSocketUser].forEach((user) => {
     const li = document.createElement('li');
-    li.innerText = user;
+    li.innerText = user.nickname || user.id;
     li.setAttribute('data-testid', 'online-user');
     ulOnlineUsers.appendChild(li); 
   });
@@ -62,4 +69,8 @@ socket.on('getAllChatMessages', (messages) => getAllChatMessages(messages));
 window.onload = () => {
   socket.emit('onlineUsers');
   socket.emit('getAllChatMessages');
+};
+
+window.onbeforeunload = () => {
+  socket.disconnect();
 };
