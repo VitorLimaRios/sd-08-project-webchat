@@ -24,14 +24,31 @@ const io = require('socket.io')(http, {
       return `${day}-${month}-${year} ${hours}:${min}:${sec}`;
   };
 
+  let onlineUsers = [];
+
+  const capureNickNameEvent = (socket) => {
+    socket.on('nickName', (nickName) => {
+      onlineUsers = [...onlineUsers, { socketId: socket.id, nickName }];
+      io.emit('onlineUsers', onlineUsers);
+    console.log('Conectou um cliente', onlineUsers);
+    });
+  };
+
   io.on('connection', (socket) => {
     console.log(`novo usuário conectado! ${socket.id}`);
-
     socket.emit('confirmConnection');
+
+    capureNickNameEvent(socket);
 
     socket.on('message', ({ chatMessage, nickname }) => {
       io.emit('message',
       `${generateDate()} ${nickname} ${chatMessage}`);
+    });
+
+    socket.on('disconnect', () => {
+      onlineUsers = onlineUsers.filter((onlineUser) => onlineUser.socketId !== socket.id);
+      console.log('Um cliente desconectou', onlineUsers);
+      io.emit('clientExit', onlineUsers);
     });
   });
 
