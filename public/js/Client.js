@@ -69,8 +69,7 @@ nicknameForm.addEventListener('submit', (e) => {
 // MESSAGES SOCKETS
 
 socket.on('messageHistory', (messages) => {
-  messages.forEach((msg) => {
-    const message = `${msg.timestamp} - ${msg.nickname}: ${msg.chatMessage}`;
+  messages.forEach((message) => {
     createMessage(message);
   });
 });
@@ -91,3 +90,7 @@ form.addEventListener('submit', (e) => {
     document.getElementById('messageInput').value = '';
   }
 });
+
+window.onbeforeunload = (_event) => {
+  socket.disconnect();
+};

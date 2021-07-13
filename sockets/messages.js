@@ -5,15 +5,15 @@ module.exports = (io) => {
   io.on('connection', (socket) => {
     socket.on('message', async ({ chatMessage, nickname }) => {
       const timestamp = formatDate(new Date(Date.now()));
-      await messageModel.createMessage(timestamp, nickname, chatMessage);
       const message = `${timestamp} - ${nickname}: ${chatMessage}`;
-      console.log(message, 'message');
       io.emit('message', message);
+      await messageModel.createMessage(timestamp, nickname, chatMessage);
     });
 
     socket.on('getMessagesHistory', async () => {
-      const messages = await messageModel.getMessage();
-      console.log(messages, 'messagesArray');
+      const messagesData = await messageModel.getMessage();
+      const messages = messagesData.map((msg) =>
+        (`${msg.timestamp} - ${msg.nickname}: ${msg.chatMessage}`));
       socket.emit('messageHistory', messages);
     });
   });

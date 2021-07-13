@@ -21,8 +21,13 @@ app.use(express.static(path.join(__dirname, '/public')));
 require('./sockets/users')(io);
 require('./sockets/messages')(io);
 
-app.get('/', (_req, res) => {
-  res.sendFile(path.join(__dirname, '/public/index.html'));
+app.engine('html', require('ejs').renderFile);
+
+app.set('view engine', 'html');
+app.set('views', './public');
+
+app.get('/', async (_req, res) => {
+  res.render(path.join(__dirname, '/public/index.html'));
 });
 
 const PORT = 3000;
