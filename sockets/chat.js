@@ -19,6 +19,12 @@ const onNotification = (socket) => {
   });
 };
 
+const onWelcome = async (socket) => {
+  socket.emit('welcome', {
+    db,
+  });
+};
+
 module.exports = (io) =>
   io.on('connection', (socket) => {
     db[socket.id] = { nickname: null };
@@ -26,4 +32,5 @@ module.exports = (io) =>
 
     onDisconnect(socket);
     onNotification(socket);
+    onWelcome(socket);
   });
