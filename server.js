@@ -21,6 +21,7 @@ app.set('views', './views');
 app.use(express.static(`${__dirname}/public`));
 app.use(cors());
 require('./sockets/chat')(io);
+require('./sockets/users')(io);
 
 app.get('/', chatController);
 

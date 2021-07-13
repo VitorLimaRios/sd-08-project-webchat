@@ -6,6 +6,7 @@ const button = document.querySelector('#button');
 const nicknameInput = document.querySelector('#nickname');
 const nickname = document.querySelector('#username');
 const buttonNickname = document.querySelector('#buttonNick');
+const userList = document.querySelector('#usersOn');
 
 function randomNameGenerator(length) {
   let result = '';
@@ -16,13 +17,15 @@ function randomNameGenerator(length) {
   }
   return result;
 } // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
-
-nickname.innerHTML = randomNameGenerator(16);
+const userNameRandom = document.createElement('li');
+userNameRandom.innerText = randomNameGenerator(16);
+userList.appendChild(userNameRandom);
+socket.emit('newUser', userNameRandom.innerHTML);
 
 buttonNickname.addEventListener('click', () => {
   const newNickName = nicknameInput.value;
-  nickname.innerHTML = newNickName;
-  socket.emit('nickname', newNickName);
+  userNameRandom.innerHTML = newNickName;
+  socket.emit('newUser', newNickName);
 });
 
 button.addEventListener('click', () => {
@@ -32,9 +35,10 @@ button.addEventListener('click', () => {
   message.value = '';
 });
 
+const datatestid = 'data-testid';
 socket.on('message', (messageChat) => {
   const li = document.createElement('li');
-  li.setAttribute('data-testid', 'message');
+  li.setAttribute(datatestid, 'message');
   li.innerText = messageChat;
   chat.appendChild(li);
 });
@@ -42,8 +46,18 @@ socket.on('message', (messageChat) => {
 socket.on('userConnected', (data) => {
   data.forEach((element) => {
     const li = document.createElement('li');
-    li.setAttribute('data-testid', 'message');
+    li.setAttribute(datatestid, 'message');
     li.innerText = element;
     chat.appendChild(li);
+  });
+});
+
+socket.on('updateNickName', (data) => {
+  userList.innerHTML = '';
+  data.map((element) => element.nickname).forEach((value) => {
+    const li = document.createElement('li');
+    li.setAttribute(datatestid, 'online-user');
+    li.innerText = value;
+    userList.appendChild(li);
   });
 });
