@@ -1,20 +1,20 @@
-body {
-  height: 100%;
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-.chat {
+body {
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  justify-content: center;
-  padding: 2vw;
+  height: 100vh;
+  margin: 0 auto;
+  width: 60%;
+}
+
+header {
+  padding: 1rem;
 }
 
 input {
@@ -22,42 +22,55 @@ input {
   font-size: 1.5vw;
   height: 5vw;
   padding: 0 2vw;
-  width: 60vw;
+  width: 100%;
 }
 
 button {
   background: #069;
   border: none;
-  color: whi;
   font-size: 1.5vw;
   font-weight: 700;
   height: 5vw;
-  line-height: 5vw;
-  margin-top: 1vw;
+  padding: 1vw;
   text-align: center;
-  width: 60vw;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.form-nickname , .form-send {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.chat {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
 }
 
 .messages {
   border: 1px solid #ddd;
-  height: 40vw;
-  margin: 2vw 0;
-  padding: 2vw;
-  width: 60vw;
+  height: 100%;
+  padding: 1rem;
+  width: 80%;
+}
+
+.list-users {
+  height: 100%;
+  padding: 1rem;
+  width: 20%;
 }
 
 @media ( max-width : 990px ) {
 
-  input , button , .messages {
+  body {
+    height: 100%;
     width: 90%;
-  }
-
-  input , button {
-    font-size: 1rem;
-    height: 2rem;
-  }
-
-  .messages {
-    height: 60%;
   }
 }
