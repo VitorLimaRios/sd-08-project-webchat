@@ -23,6 +23,12 @@
   </div>
   <div class="messages">
     <ul id="listMessages">
+      <% messages.forEach((msg) => { %>
+      <li data-testid="message">
+        <%= msg %>
+        <% console.log(msg) %>
+      </li>
+      <% }) %>
     </ul>
     <form id="chat" action="">
       <input placeholder="Digite a mensagem." id="messageInput" data-testid="message-box" autocomplete="off">
@@ -45,6 +51,7 @@
     });
     socket.on('message', (message) => {
       const ulMessages = document.querySelector('#listMessages');
+      console.log("entrei na 54 ", message);
       const newLi = document.createElement('li');
       newLi.setAttribute('data-testid', 'message');
       newLi.innerText = message;

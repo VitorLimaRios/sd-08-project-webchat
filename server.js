@@ -17,7 +17,8 @@ const io = require('socket.io')(http, {
   },
 });
 
-// const chatModel = require('./models/chat');
+const chatModel = require('./models/chat');
+
 const timestamp = () => {
   const date = new Date();
   const day = date.getDay();
@@ -43,9 +44,9 @@ io.on('connection', (socket) => {
 
   io.emit('userList', Object.values(allUsers));
 
-  socket.on('message', ({ chatMessage, nickname = currentUser }) => {
+  socket.on('message', async ({ chatMessage, nickname = currentUser }) => {
+    await chatModel.sendMessage({ chatMessage, nickname, timestamp: timestamp() });
     io.emit('message', `${timestamp()} ${nickname}: ${chatMessage}`);
-    // chatModel.sendMessage(chatMessage);
   });
   socket.on('changeUser', (nickname) => {
     // Dica da Van: usar o filter para fazer um novo array respeitando o teste
