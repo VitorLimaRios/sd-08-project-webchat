@@ -35,4 +35,30 @@ form input [ type = 'submit' ] {
   background: white;
   border: 2px solid rgb(69, 197, 191);
   height: 550px;
+  margin-top: 10px;
+}
+
+.nickname-box {
+  background: white;
+  border: 2px solid rgb(69, 197, 191);
+}
+
+.nickname-button {
+  background: rgb(69, 197, 191);
+  border-radius: 10%;
+  color: white;
+}
+
+.msn-box {
+  background: white;
+  border: 2px solid rgb(69, 197, 191);
+  height: 22px;
+  width: 95%;
+}
+
+.send {
+  background: rgb(69, 197, 191);
+  border-radius: 10%;
+  color: white;
+  padding: 5px 10px;
 }

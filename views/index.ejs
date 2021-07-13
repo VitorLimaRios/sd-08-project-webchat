@@ -8,15 +8,17 @@
 </head>
 
 <body>
+  <header>
+    <h1>What's Up!</h1>
+  </header>
   <div id="user-wrapper">
     <span>
-      <h1>What's Up!</h1>
       <ul id="users"></ul>
     </span>
-    <form>
-      <input data-testid="nickname-box" id="nickname-box" autocomplete="off" placeholder="Insert your Nickname" />
-      <button data-testid="nickname-button" id="nickname-button">Create</button>
-      </span>
+    <span>
+      <input data-testid="nickname-box" id="nickname-box" class="nickname-box" autocomplete="off" placeholder="Insert your Nickname" />
+      <button data-testid="nickname-button" id="nickname-button" class="nickname-button">Create</button>
+    </span>
   </div>
   <div class="historico">
     <ul id="mensagens">
@@ -28,8 +30,8 @@
     </ul>
   </div>
   <form action="">
-    <input data-testid="message-box" id="message-box" autocomplete="off" placeholder="Insert your message" />
-    <button data-testid="send-button">Send</button>
+    <input data-testid="message-box" id="message-box" class="msn-box" autocomplete="off" placeholder="Insert your message" />
+    <button data-testid="send-button" id="send-button" class="send">Send</button>
   </form>
   <script>
     const socket = io();
