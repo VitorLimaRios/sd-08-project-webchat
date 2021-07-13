@@ -19,9 +19,16 @@ const onNotification = (socket) => {
   });
 };
 
-const onWelcome = async (socket) => {
+const onWelcome = (socket) => {
   socket.emit('welcome', {
     db,
+  });
+};
+
+const onMessage = (io, socket) => {
+  socket.on('message', ({ nickname, message }) => {
+    const messageChannel = `${nickname}: ${message}`;
+    io.emit('message', messageChannel);
   });
 };
 
@@ -33,4 +40,5 @@ module.exports = (io) =>
     onDisconnect(socket);
     onNotification(socket);
     onWelcome(socket);
+    onMessage(io, socket);
   });
