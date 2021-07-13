@@ -2,13 +2,15 @@ const socket = window.io();
 
 const form = document.querySelector('form');
 const inputMessage = document.querySelector('#messageInput');
-const nickName = document.querySelector('#nickNameInput');
+// const nickName = document.querySelector('#nickNameInput');
+const nick = document.querySelector('#nickname');
+const button = document.querySelector('#buttonSave');
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   socket.emit('message', {
     chatMessage: inputMessage.value,
-    nickname: nickName.value,
+    nickname: nick.innerHTML,
   });
   inputMessage.value = '';
   return false;
@@ -18,7 +20,54 @@ const createMessage = (message) => {
   const messagesUl = document.querySelector('#messages');
   const li = document.createElement('li');
   li.innerText = message;
+  li.setAttribute('data-testid', 'message');
   messagesUl.appendChild(li);
 };
 
-socket.on('serverMessage', (message) => createMessage(message));
+const changeNick = () => {
+  const nickName = document.querySelector('#nickNameInput');
+  const oldNick = nick.innerHTML;
+  nick.innerHTML = nickName.value;
+  nickName.value = '';
+  socket.emit('user', {
+    newNick: nick.innerHTML,
+    oldNick,
+  });
+};
+
+const createUsers = (user) => {
+  const userUl = document.querySelector('#users');
+  const li = document.createElement('li');
+  li.innerText = user;
+  userUl.appendChild(li);
+};
+
+button.addEventListener('click', (e) => {
+  e.preventDefault();
+  changeNick();
+});
+
+nick.innerHTML = Math.random().toString(6).substring(2, 18);
+
+socket.emit('user', {
+  newNick: nick.innerHTML,
+  oldNick: null,
+});
+
+socket.on('message', (message) => createMessage(message));
+socket.on('user', (users) => {
+  const myUsers = document.querySelector('#users');
+  myUsers.innerHTML = '';
+
+  createUsers(nick.innerHTML);
+
+  const index = users.map((user) => user.newNick).indexOf(nick.innerHTML);
+  users.splice(index, 1);
+
+  // const index = users.indexOf(nick.innerHTML);
+  // users.splice(index, 1);
+
+  users.forEach((user) => {
+    createUsers(user.newNick);
+  });
+});
