@@ -46,6 +46,14 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   const socket = io();
+
+  const rollScrollDown = () => {
+    const objScrDiv = document.querySelector('.web-chat');
+    objScrDiv.scrollTop = objScrDiv.scrollHeight;
+  }
+  
+  rollScrollDown();
+
   const getDate = () => {
       const date = new Date();
       const day = date.getDate();
@@ -111,6 +119,8 @@
     ulChat.appendChild(li);
 
     socket.emit('message', { nickname, chatMessage });
+
+    rollScrollDown();
   };
 
   const setUserName = () => {    
@@ -148,6 +158,8 @@
     li.classList.add('message');
     
     ulChat.appendChild(li);
+
+    rollScrollDown();
   });
 
   socket.on('userList', (userList) => {
