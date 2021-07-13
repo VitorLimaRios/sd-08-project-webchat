@@ -75,7 +75,8 @@ function outputUsers(users) {
 userList.innerHTML = '';
 users.forEach((user) => {
 const li = document.createElement('li');
-li.innerHTML = `<span data-testid="online-user">${user.nickname}<span>`;
+li.innerText = user.nickname;
+li.setAttribute('data-testid', 'online-user');
 userList.appendChild(li);
 });
 }
