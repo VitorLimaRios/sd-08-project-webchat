@@ -76,10 +76,9 @@ userList.innerHTML = '';
 const userFound = users.find((user) => user.id === client.id);
 localStorage.setItem('nickname', userFound.nickname);
 users.forEach((user) => {
-const li = document.createElement('li');
-li.innerText = user.nickname;
-li.setAttribute('data-testid', 'online-user');
-userList.appendChild(li);
+const p = document.createElement('p');
+p.innerHTML = `<span data-testid="online-user">${user.nickname}<span>`;
+userList.appendChild(p);
 });
 }
 
