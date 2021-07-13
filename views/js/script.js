@@ -17,7 +17,7 @@ function randomStringGenerator(size) {
   return randomString;
 }
 
-/* Conexão de novo cliente */
+/* cliente se conecta */
 window.onload = () => {
   const randomNickname = randomStringGenerator(16);
   client.emit('newUser', randomNickname);
@@ -47,7 +47,7 @@ client.on('onlineUsers', (clients) => {
   });
 });
 
-/* Envio de mensagens */
+/* mensagens enviadas */
 sendMessageButton.addEventListener('click', () => {
   client.emit('message', {
     chatMessage: inputMessage.value,
@@ -63,9 +63,14 @@ client.on('message', (message) => {
   chatMessages.appendChild(element);
 });
 
-/* Atualização de nickname */
+/* cliente atualiza seu _nickname_ */
 upNickButton.addEventListener('click', () => {
   localStorage.setItem('user', JSON.stringify(inputNick.value));
   client.emit('updateUser', inputNick.value);
   inputNick.value = '';
+}); 
+
+/* cliente se desconecta */
+client.on('disconnectUser', () => {
+  localStorage.clear();
 });
