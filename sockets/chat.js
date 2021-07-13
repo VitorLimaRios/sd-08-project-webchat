@@ -11,10 +11,19 @@ const onDisconnect = (socket) => {
   });
 };
 
+const onNotification = (socket) => {
+  const messageChannel = `cliente: ${socket.id} foi desconectado`;
+  socket.broadcast.emit('notification', {
+    db,
+    messageChannel,
+  });
+};
+
 module.exports = (io) =>
   io.on('connection', (socket) => {
     db[socket.id] = { nickname: null };
     console.log(`cliente: conectado com id: ${socket.id}`);
 
     onDisconnect(socket);
+    onNotification(socket);
   });
