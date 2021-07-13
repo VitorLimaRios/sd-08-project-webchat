@@ -79,14 +79,17 @@
           socket.emit('message', { chatMessage: value, nickname });
         });
 
-        const createMessage = (data) => {
-          const li = document.createElement('li');
-          li.innerText = data;
-          li.dataset.testid = 'message';
-          messages.appendChild(li);
+        const createMessage = (messageList) => {
+          messageList.forEach((message) => {
+            const li = document.createElement('li');
+            li.innerText = message;
+            li.dataset.testid = 'message';
+            messages.appendChild(li);
+          })
         }
 
         socket.on('message', (data) => createMessage(data));
+        socket.on('history', (data) => createMessage(data));
         socket.on('new-user', (data) => createList(data));
         socket.on('user-left', (data) => removeUser(data));
         socket.on('change-onlineUsers', (data) => updateUser(data))

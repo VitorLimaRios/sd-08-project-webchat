@@ -1,3 +1,6 @@
+const chatModel = require('../models/chatModel');
+
 module.exports = async (_req, res) => {
-  res.status(200).render('./index');
+  const chat = await chatModel.getAll();
+  res.status(200).render('./index', { chat });
 };
