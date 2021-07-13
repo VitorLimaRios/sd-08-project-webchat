@@ -14,7 +14,7 @@
         <ul class="messages">
           <% if (chatHistory) { %>
             <% chatHistory.forEach((message) => { %>
-              <li> <%= `${message.timestamp} ${message.nickname} ${message.message}` %> </li>
+              <li data-testid="message"> <%= `${message.timestamp} ${message.nickname} ${message.message}` %> </li>
             <% }) %>
           <% } %>
         </ul>
