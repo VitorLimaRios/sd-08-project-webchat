@@ -87,8 +87,8 @@
         }
 
         const displayMessage = (data) => {
-          if (typeof data === 'array') {
-            message.forEach((index) => {
+          if (typeof data === 'object') {
+            data.forEach((index) => {
               createMessage(index);
             })
           } else {
