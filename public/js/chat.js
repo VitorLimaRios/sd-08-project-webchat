@@ -19,9 +19,9 @@ const createUserNicknameLi = (username) => {
 };
 const updateNicksOnScreen = () => {
   nicknamesList.innerHTML = '';
-const { [mySocket.id]: myId, ...otherNicks } = nicknames;
+const { [mySocket.id]: myNick, ...otherNicks } = nicknames;
 const myNickOnScreen = document.querySelector('.my-nickname');
-myNickOnScreen.innerHTML = myId;
+myNickOnScreen.innerHTML = myNick;
 Object.values(otherNicks).forEach((nick) => {
 nicknamesList.appendChild(createUserNicknameLi(nick));
 });
@@ -54,7 +54,10 @@ socket.on('message', (message) => {
   messagesList.appendChild(createMessageLi(message));
 });
 
-socket.on('removeUser', (socketId) => { delete nicknames[socketId]; });
+socket.on('removeUser', (socketId) => { 
+  delete nicknames[socketId];
+  updateNicksOnScreen();
+});
 
 const changeNicknameBtn = document.getElementById('save-nickname-btn');
 const updateNickname = (event) => {
