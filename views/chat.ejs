@@ -16,26 +16,26 @@
     </header>
     <main class="form-nickname">
       <input type="text" name="nickname" id="nickname" placeholder="Insira seu nickname" />
-      <button type="button" id="btn_nickname">Salvar</button>
+      <button type="submit" id="btn_nickname">Salvar</button>
     </main>
     <section class="chat">
       <div class="list-users">
-        <ul id="list-users">
+        <ul id="list_users">
           <li>beto</li>
           <li>fernanda</li>
           <li>bruno</li>
         </ul>
       </div>
-      <div class="messages">
+      <div class="messages" id="chat_message">
         <p class="user">beto: Oi</p>
         <p class="other user">fernanda: Oi</p>
         <p class="other user">bruno: Oi</p>
         <p class="user">beto: vamos programar?</p>
       </div>
     </section>
-    <form class="form-send">
+    <form class="form-send" id="form_send">
       <input type="text" name="message" id="message" placeholder="Digite uma nova mensagem aqui" autocomplete="off" />
-      <button type="submit" id="btn_send">Enviar</button>
+      <button type="submit">Enviar</button>
     </form>
   </body>
   <script src="/socket.io/socket.io.js"></script>
