@@ -26,21 +26,25 @@ const io = require('socket.io')(http, {
 
   let onlineUsers = [];
 
-  const capureNickNameEvent = (socket) => {
-    socket.on('nickName', (nickName) => {
-      onlineUsers = [...onlineUsers, { socketId: socket.id, nickName }];
-      io.emit('onlineUsers', onlineUsers);
-    console.log('Conectou um cliente', onlineUsers);
-    });
-  };
+  // const capureNickNameEvent = (socket) => {
+    
+  // };
 
   io.on('connection', (socket) => {
     console.log(`novo usuário conectado! ${socket.id}`);
     socket.emit('confirmConnection');
+   
+    // capureNickNameEvent(socket);
 
-    capureNickNameEvent(socket);
+    socket.on('nickName', (nickName) => {
+      onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
+      onlineUsers = [...onlineUsers, { socketId: socket.id, nickname: nickName }];
+      console.log('Conectou um cliente', onlineUsers);
+      io.emit('onlineUsers', onlineUsers);
+    });
 
     socket.on('message', ({ chatMessage, nickname }) => {
+      console.log('Mensagem recebida pelo servidor', nickname);
       io.emit('message',
       `${generateDate()} ${nickname} ${chatMessage}`);
     });
