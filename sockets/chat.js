@@ -1,12 +1,9 @@
 const db = {};
 
 const getDateTime = () => {
-  const changeToDash = (char) => (char === '/' ? '-' : char);
   const getDate = new Intl.DateTimeFormat('pt-BR')
     .format(Date.now())
-    .split('')
-    .map(changeToDash)
-    .join('', ',');
+    .replace(/[/]/g, '-');
 
   const getTime = new Intl.DateTimeFormat('en', {
     timeStyle: 'short',
