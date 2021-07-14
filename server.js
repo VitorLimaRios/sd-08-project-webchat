@@ -27,10 +27,6 @@ const io = socketIO(server, {
   },
 });
 app.use(express.static(`${__dirname}/views`));
-server.listen(PORT, () => {
-  console.log('Servidor rodando na porta:', PORT);
-});
-
 let connectedUsers = [];
 const messagesList = [];
 
@@ -38,8 +34,12 @@ io.on('connection', (socket) => {
   let userActual = socket;
   userActual = joinRequest(socket, userActual, connectedUsers, messagesList);
   disconnect(userActual, connectedUsers, userActual);
-  message(userActual, messagesList);
+  message(socket, messagesList, io);
   const newUser = alterNickname(userActual, userActual, connectedUsers);
   connectedUsers = newUser.userList;
   userActual = newUser.userActual;
+});
+
+server.listen(PORT, () => {
+  console.log('Servidor rodando na porta:', PORT);
 });

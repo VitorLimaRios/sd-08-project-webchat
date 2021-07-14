@@ -27,7 +27,7 @@ module.exports = {
       });
     });
   },
-  message: (socket, messagesList) => {
+  message: (socket, messagesList, io) => {
     socket.on('message', (message) => {
       const msgTime = new Date().toLocaleString().replaceAll('/', '-');
       let { nickname } = message;
@@ -36,7 +36,7 @@ module.exports = {
       }
       const chatMessage = `${msgTime} - ${nickname}: ${message.chatMessage}`;
       messagesList.push(chatMessage);
-      socket.emit('message', chatMessage);
+      io.emit('message', chatMessage);
       socket.broadcast.emit('messages-update', {
         messages: messagesList,
       });
