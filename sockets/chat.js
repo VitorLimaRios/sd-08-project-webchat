@@ -42,6 +42,7 @@ const onWelcome = (socket) => {
 
 const onMessage = (io, socket) => {
   socket.on('message', ({ nickname, chatMessage }) => {
+    db[socket.id] = { nickname };
     const date = getDateTime();
     const messageChannel = `${date} - ${nickname}: ${chatMessage}`;
     io.emit('message', messageChannel);
@@ -49,16 +50,16 @@ const onMessage = (io, socket) => {
 };
 
 const onUsers = (io, socket) => {
-  socket.on('users', () => {
-    io.emit('users', db);
+  socket.on('users', ({ nickname }) => {
+    db[socket.id] = { nickname };
+    io.emit('users', { db });
   });
 };
 
 module.exports = (io) =>
   io.on('connection', (socket) => {
-    db[socket.id] = { nickname: null };
+    db[socket.id] = { nickname: socket.id.substr(0, 16) };
     console.log(`cliente: conectado com id: ${socket.id}`);
-
     onDisconnect(socket);
     onNotification(socket);
     onWelcome(socket);
