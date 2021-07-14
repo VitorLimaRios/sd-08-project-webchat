@@ -13,7 +13,7 @@ const ioServer = io(server);
 const socketList = [];
 
 ioServer.on('connection', async (socket) => {
-  events.connect(ioServer, socket, socketList);
+  events.nickname(ioServer, socket, socketList);
   events.message(ioServer, socket);
 });
  

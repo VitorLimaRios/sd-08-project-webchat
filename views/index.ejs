@@ -7,13 +7,26 @@
     <title>Webchat</title>
 </head>
 <body>
-    <main>
-        <div>
-            <form action="" class="flex flex-row">
-                <input type="text" data-testid="online-user"/>
-                <button type="submit" id="save-nickname">Salvar</button>
+    <main class="flex flex-row bg-purple-200">
+        <div class="w-1/3 h-screen flex flex-col pl-2 pr-1 py-2">
+            <form action="" class="flex flex-row space-x-1 pb-2">
+                <input type="text" data-testid="nickname-box" class="bg-dark-50 placeholder-gray-300 text-blue-100 px-2 py-1 rounded-md flex-1 focus:outline-none focus:border-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"/>
+                <button type="submit" data-testid="nickname-button" class="p-2 rounded-md text-gray-200 bg-blue-500 font-semibold uppercase w-20 hover:bg-light-blue-400">Salvar</button>
             </form>
-            <ul id="cur-users"></ul>
+            <p class="inline-flex uppercase text-dark-100 text-lg mx-auto underline pb-2">Active users</p>
+            <ul class="h-full w-full flex flex-col border-dark-400 border-r-1 border-l-1" id="current-users">
+                <li class="inline-flex text-dark-50 mx-auto" data-testid="online-user">User 1</li>
+            </ul>
+        </div>
+        <div class="w-2/3 h-screen flex flex-col pr-2 pl-1 py-2">
+            <ul class="h-full w-full flex flex-col border-2 border-green-300 bg-green-100 rounded-md p-1 space-y-1" id="messages">
+                <li data-testid="message" class="inline-flex mr-auto p-2 rounded-md bg-dark-50 text-light-50">Otehr user message</li>
+                <li data-testid="message" class="inline-flex ml-auto p-2 rounded-md bg-purple-400">Own message</li>
+            </ul>
+            <form action="" class="flex flex-row space-x-1 pt-2">
+                <input type="text" data-testid="message-box" class="bg-dark-50 placeholder-gray-300 text-blue-100 px-2 py-1 rounded-md flex-1 focus:outline-none focus:border-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"/>
+                <button type="submit" data-testid="send-button" class="p-2 rounded-md text-gray-200 bg-blue-500 font-semibold uppercase w-20 hover:bg-light-blue-400">Enviar</button>
+            </form>
         </div>
     </main>
     <script src="/socket.io/socket.io.js"></script>

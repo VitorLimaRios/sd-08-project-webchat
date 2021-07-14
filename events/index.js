@@ -1,7 +1,7 @@
-const connect = require('./connect');
+const nickname = require('./nickname');
 const message = require('./message');
 
 module.exports = {
-  connect,
+  nickname,
   message,
 };
