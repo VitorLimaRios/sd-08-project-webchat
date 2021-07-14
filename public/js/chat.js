@@ -50,6 +50,12 @@ const createMessageLi = (message) => {
   return li;
 };
 
+socket.on('messagesHistory', (messages) => {
+  messages.forEach((message) => {
+    messagesList.appendChild(createMessageLi(message));
+  });
+});
+
 socket.on('message', (message) => {
   messagesList.appendChild(createMessageLi(message));
 });
