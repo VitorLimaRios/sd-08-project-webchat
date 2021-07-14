@@ -39,7 +39,7 @@ const updateUsers = (io, socket) => {
 
 const socketDisconnect = (io, socket) => {
   socket.on('disconnect', () => {
-    users.splice(users.indexOf(socket.id), 1);
+    users = users.filter((obj) => obj.socketId !== socket.id);
     io.emit('userList', users);
     console.log(`${socket.id} se desconectou`);
   });
