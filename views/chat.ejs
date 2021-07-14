@@ -5,24 +5,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="./css/chat.css">
 </head>
 <body>
   <main>
-    <% if(messages) { %>
-      <ul>
-        <% messages.forEach((item) => { %>
-          <li data-testid="message"><%= item.message %></li>
-        <% }) %>
-      </ul>
-    <% } %>
-
-    <form>
-      <input data-testid="message-box" name="message" type="text" />
-      <button data-testid="send-button">Send</button>
-    </form>
+    <ul class="messages"></ul>
+    <input class="message-box" data-testid="message-box" name="message" type="text" />
+    <button class="send-button" data-testid="send-button">Send</button>
   </main>
   <aside>
-
+    <input class="nickname-box" data-testid="nickname-box" name="nickname" type="text" />
+    <button class="nickname-button" data-testid="nickname-button">Change Username</button>
+    <ul class="users"></ul>
   </aside>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src='./js/chat.js'></script>
 </body>
 </html>
