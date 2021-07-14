@@ -25,16 +25,22 @@ describe('1 - Crie um back-end para conexão simultânea de clientes e troca de 
     client1.emit('message', { chatMessage, nickname });
 
     client1.on('message', (message) => {
+      console.log('Req1');
+      console.log(message);
       expect(message.includes(chatMessage)).toBeTruthy();
       expect.assertions(1);
     });
 
     client2.on('message', (message) => {
+      console.log('Req2');
+      console.log(message);
       expect(message.includes(chatMessage)).toBeTruthy();
       expect.assertions(2);
     });
 
     client3.on('message', (message) => {
+      console.log('Req3');
+      console.log(message);
       expect(message.includes(chatMessage)).toBeTruthy();
       expect.assertions(3);
       done();

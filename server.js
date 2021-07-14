@@ -26,7 +26,7 @@ app.use(homeWebChat);
 
 const io = socketServer(http, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:3000/',
     methods: ['GET', 'POST'],
   },
 });

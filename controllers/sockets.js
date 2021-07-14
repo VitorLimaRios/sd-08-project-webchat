@@ -22,7 +22,8 @@ module.exports = (io) => {
     socket.on('message', (data) => {
       const { chatMessage, nickname } = data;
       const msg = formatMessage(chatMessage, nickname);
-      socket.broadcast.emit('message', msg);
+      console.log(msg);
+      io.emit('message', msg);
     });
   });
 };

@@ -18,6 +18,13 @@ class Chat {
     this.addEventBtnGetMessage();
     this.addEventBtnSaveMyName();
     Chat.eventScrolled();
+    this.disconect();
+  }
+
+  disconect() {
+    window.onbeforeunload = () => {
+      this.socket.disconnect();
+    };
   }
   
   getMessage() {
