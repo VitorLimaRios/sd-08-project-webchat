@@ -1,7 +1,9 @@
 const Chat = require('../models/Chat');
 
-function updateAll(socket, connectedUsers) {
+function updateAll(socket, connectedUsers, userActual) {
+  console.log(userActual.userName);
   socket.broadcast.emit('list-update', {
+    joined: userActual.userName,
     list: connectedUsers,
   });
 }
@@ -11,11 +13,14 @@ module.exports = {
     socket.on('join-request', (userName) => {
       userActual.userName = userName;
       connectedUsers.push(userName);
-      updateAll(socket, connectedUsers);
+      updateAll(socket, connectedUsers, userActual);
       socket.emit('messages-update', {
         messages: messagesList,
       });
-      socket.emit('user-ok', connectedUsers);
+      socket.emit('user-ok', {
+        joined: userActual.userName,
+        list: connectedUsers,
+      });
     });
     return userActual;
   },
@@ -55,7 +60,7 @@ module.exports = {
       userList[indexUser] = nickname;
       userActual.userName = nickname;
       socket.emit('user-ok', userList);
-      updateAll(socket, connectedUsers);
+      updateAll(socket, connectedUsers, userActual);
     });
     return { userActual, userList };
   },

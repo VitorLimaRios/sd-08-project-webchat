@@ -13,11 +13,15 @@ function generateNickname(length) {
   }
   return result;
 }
-function renderUserList() {
+function renderUserList(userJoined) {
   const ul = document.querySelector('.user-list');
-  ul.innerHTML = '';
+  // ul.innerHTML = '';
   userList.forEach((user) => {
-    ul.innerHTML += `<li data-testid="online-user">${user}</li>`;
+    if (user === userJoined) {
+      ul.innerHTML += `<li data-testid="online-user">${user}</li>`;
+    } else {
+      ul.innerHTML += `<li>${user}</li>`;
+    }
   });
 }
 function renderMessage() {
@@ -34,17 +38,16 @@ const client = window.io();
 
 document.title = `Chat (${userName})`;
 client.emit('join-request', userName);
-client.on('user-ok', (list) => {
-  userList = list;
-  renderUserList();
+client.on('user-ok', (data) => {
+  userList = data.list;
+  renderUserList(data.joined);
 });
 client.on('list-update', (data) => {
-  userList = data.list;
-  renderUserList();
+  userList = data.list;  
+  renderUserList(data.joined);
 });
 client.on('messages-update', (data) => {
   messagesList = data.messages;
-  console.log(messagesList);
   renderMessage();
 });
 
@@ -62,9 +65,9 @@ nicknameButton.addEventListener('click', (event) => {
   nicknameBox.value = '';
   if (newNickname !== '') {
     document.title = `Chat (${newNickname})`;
-    client.on('user-ok', (list) => {
-      userList = list;
-      renderUserList();
+    client.on('user-ok', (data) => {
+      userList = data.list;
+      renderUserList(data.joined);
     });
     client.emit('alter-nickname', newNickname);
   }
