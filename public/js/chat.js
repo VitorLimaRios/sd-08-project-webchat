@@ -12,6 +12,7 @@ const ONLINE = 'online-user';
 
 const renderUsers = (user) => {
   users.innerHTML = '';
+  sessionStorage.setItem('nickname', user);
   console.log(user);
   let li = document.createElement('li');
   li = document.createElement('li');
@@ -20,17 +21,17 @@ const renderUsers = (user) => {
   users.appendChild(li);
 };
 
-function makeid(length) {
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i += 1) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  sessionStorage.setItem('nickname', result);
-  // renderUsers(result);
-  return socket.emit('user', result);
-} // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+// function makeid(length) {
+//   let result = '';
+//   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+//   const charactersLength = characters.length;
+//   for (let i = 0; i < length; i += 1) {
+//     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+//   }
+//   sessionStorage.setItem('nickname', result);
+//   // renderUsers(result);
+//   return socket.emit('user', result);
+// } // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
 
 // const userList = [];
 
@@ -50,7 +51,7 @@ function makeid(length) {
 //   });
 // };
 // updateNick();
-makeid(16);
+// makeid(16);
 
 // nicknameOnline.innerHTML = makeid(16);
 // const randomNick = makeid(16);

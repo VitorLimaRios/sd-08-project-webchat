@@ -40,6 +40,7 @@ const userDisconnect = (socket, users) => {
 const addUser = (user, socket) => {
   const socketId = socket.id;
   usersList.push({ user, socketId });
+  console.log(usersList);
   if (usersList.length > 1) {
     io.emit('allUsers', usersList);
   } else {
@@ -53,17 +54,22 @@ const changeNickFunc = (data) => {
   io.emit('changeNickName', usersList);
 };
 
-// function makeid(length, socket) {
-//   let result = '';
-//   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-//   const charactersLength = characters.length;
-//   for (let i = 0; i < length; i += 1) {
-//     result += characters.charAt(Math.floor(Math.random() * charactersLength));
-//   }
-//   usersList.push({ user: result, socketId: socket.id });
-//   return socket.emit('user', result);
-//   // return result;
-// } // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+const makeid = async (length, socket) => {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i += 1) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  usersList.push({ user: result, socketId: socket.id });
+  if (usersList.length === 1) {
+    io.emit('user', result);
+  } else {
+    io.emit('allUsers', usersList);
+  }
+  return result;
+  // return result;
+} // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
 
 const messageFormated = async (chatMessage, nickname) => {
   const timeNow = dateFormat(now, 'dd-mm-yyyy h:MM:ss TT');
@@ -78,29 +84,28 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 io.on('connection', async (socket) => {
   // console.log(`connected ${socket.id}`);
+  await makeid(16, socket);
   const historyAll = await history();
   io.emit('start', historyAll);
-  // if (usersList.length < 1) {
-  //   makeid(16, socket);
-  // }
+  console.log(usersList);
 
-  socket.on('user', async (user) => addUser(user, socket));
+  socket.on('user', (user) => addUser(user, socket));
 
-  socket.on('changeNickName', async (data) => changeNickFunc(data));
+  socket.on('changeNickName', (data) => changeNickFunc(data));
 
   socket.on('message', async ({ chatMessage, nickname }) => {
     const value = await messageFormated(chatMessage, nickname);
     io.emit('message', value);
   });
 
-  socket.on('disconnect', async () => {
+  socket.on('disconnect', () => {
     userDisconnect(socket, usersList);
     io.emit('allUsers', usersList);
   });
 });
 
 app.get('/', async (_req, res) => {
-  res.render('chat');
+  res.status(200).render('chat');
 });
 
 http.listen(PORT, () => console.log(`App listening ${PORT}`));
