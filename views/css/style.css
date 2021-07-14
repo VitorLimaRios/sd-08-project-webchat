@@ -14,7 +14,7 @@
   padding: 10px;
 }
 
-.nickname-area input,
+.nickname-area input , 
 .message-form input {
   flex: 1;
   margin-right: 8px;
