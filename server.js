@@ -14,22 +14,9 @@ const PORT = 3001;
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(express.static(__dirname + '/public'));
 
-io.on('connection', (socket) => {
-  console.log('Alguém se conectou');
-
-  socket.on('disconnect', () => {
-    console.log('Connection closed');
-  });
-
-  socket.on('message', (msg) => {
-    io.emit('serverMessage', { message: msg });
-  });
-
-  socket.emit('message', ('Bem vinde'));
-
-  socket.broadcast.emit('serverMessage', { message: 'Nova conexão' });
-});
+require('./sockets/webchat')(io);
 
 // const WebchatController = require('./controllers/WebchatController');
 
