@@ -27,9 +27,7 @@ require('./sockets/chat')(io);
 
 const PORT = 3000;
 
-app.get('/', (req, res) => {
-  console.log('oi');
-  return res.sendFile(path.join(__dirname, '/index.html'));
-});
+app.get('/', (req, res) => 
+  res.sendFile(path.join(__dirname, '/index.html')));
 
 http.listen(PORT, () => console.log(`ouvindo porta ${PORT}`));
