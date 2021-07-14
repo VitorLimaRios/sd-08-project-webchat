@@ -38,6 +38,11 @@ io.on('connection', (socket) => {
     clients[user.id].nickname = user.newNickname;
     io.emit('usersOnline', Object.values(clients));
   });
+
+  socket.on('disconnect', () => {
+    delete clients[socket.id];
+    io.emit('usersOnline', Object.values(clients));
+  });
 });
 
 const PORT = process.env.PORT || 3000;
