@@ -17,6 +17,7 @@ document.querySelector('.nickname-button').addEventListener('click', () => {
   const newNickname = nameInput.value;
   socket.emit('updateUsersList', { nickname, newNickname });
   nickname = nameInput.value;
+  nameInput.value = '';
 });
 
 const createMessage = (message) => {
@@ -27,7 +28,6 @@ const createMessage = (message) => {
 };
 
 socket.on('generateName', (randomName) => {
-  nameInput.value = randomName;
   nickname = randomName;
 });
 
@@ -37,15 +37,18 @@ socket.on('restoreMessages', (messageHistory) => {
   messageHistory.forEach(({ message }) => createMessage(message));
 });
 
-socket.on('userList', (userList) => {
-  console.log(`Por algum motivo o tamanho eh ${usersUl.childNodes.length}`);
-  usersUl.innerHTML = '';
-  console.log(`Por algum motivo o tamanho eh ${usersUl.childNodes.length}`);
-  userList.forEach((obj) => {
-    const name = obj.nickname;
-    const li = document.createElement('li');
+const createNickname = (name) => {
+  const li = document.createElement('li');
     li.setAttribute('data-testid', 'online-user');
     li.innerText = name;
     usersUl.appendChild(li);
+};
+
+socket.on('userList', (userList) => {
+  usersUl.innerHTML = '';
+  createNickname(userList.find(({ socketId }) => socket.id === socketId).nickname);
+  userList.forEach((obj) => {
+    if (socket.id === obj.socketId) return;
+    createNickname(obj.nickname);
   });
 });
