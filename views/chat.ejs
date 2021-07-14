@@ -9,15 +9,21 @@
 
   <body>
     <div>
-      <ul id="chat"></ul>
-      <ul id="usersOn"></ul>
+      <div id="chat">
+        <% messages.forEach((element)=> { %> <p data-testid="message">
+            <%= ` ${element.timestamp} ${element.nickname} ${element.message}` %>
+          </p>
+          <% }) %>
+      </div>
+      <ul id='usersOnline'></ul>
       <input data-testid="message-box" id="message" type="text" placeholder="mensagem" />
       <input data-testid="nickname-box" type="text" id="nickname" placeholder="nickname">
       <button data-testid="nickname-button" id="buttonNick">Enviar nickname</button>
       <button data-testid="send-button" type="button" id="button">Enviar Mensagem</button>
+      <p id="user" data-testid="online-user"></p>
     </div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/index.js"></script>
   </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/index.js"></script>
 
 </html>

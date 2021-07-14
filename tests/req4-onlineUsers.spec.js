@@ -397,7 +397,6 @@ describe('4 - Informe a todos os clientes quem está online no momento', () => {
         expect.stringMatching(/^[\w'-]{16}$/),
       ])
     )
-
     // he changes his nickname
     let nicknameBox = await page.$(`input${dataTestid('nickname-box')}`);
     await nicknameBox.type(nickname);
