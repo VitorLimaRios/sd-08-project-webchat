@@ -33,7 +33,6 @@ const insertUser = (onlineUser) => {
 };
 
 const reorderList = (receivedOnlineUsers, nickName) => {
-  // const thisNickName = getNickNameFromLocalStorage();
   const thisNickName = nickName;
   for (let index = 0; index < receivedOnlineUsers.length; index += 1) {
     if (receivedOnlineUsers[index].nickname === thisNickName) {
@@ -68,34 +67,42 @@ const createClientMessage = (message) => {
   return messageElementFromClient;
 };
 
-const welcomeMessage = () => {
-  const messageElementFromRobot = document.createElement('div');
-  messageElementFromRobot.classList.add('msg-robot');
+// const welcomeMessage = () => {
+//   const messageElementFromRobot = document.createElement('div');
+//   messageElementFromRobot.classList.add('msg-robot');
 
-  // const nickName = getNickNameFromLocalStorage();
+//   // const nickName = getNickNameFromLocalStorage();
   
-  const messageComponent = `
-    <div class="msg-bubble">
-      <div class="msg-text">
-        Bem vindo
-      </div>
-    </div>
-  `;
+//   const messageComponent = `
+//     <div class="msg-bubble">
+//       <div class="msg-text">
+//         Bem vindo
+//       </div>
+//     </div>
+//   `;
 
-  messageElementFromRobot.innerHTML = messageComponent;
+//   messageElementFromRobot.innerHTML = messageComponent;
 
-  return messageElementFromRobot;
-};
+//   return messageElementFromRobot;
+// };
 
 // let onlineUsers;
 
 let nickname = generateNickName();
 
-client.on('confirmConnection', () => {
-  const newMessageRobot = welcomeMessage();
-  document.querySelector('#listMessages').append(newMessageRobot);
+client.on('confirmConnection', async () => {
+  const response = await fetch('http://localhost:3000/historicMessage');
+  const messagesList = await response.json();
 
-  // client.emit('nickName', getNickNameFromLocalStorage());
+  messagesList.forEach(({ message, nickname: nickName, timestamp }) => {
+    const completeMessage = `${timestamp} ${nickName} ${message}`;
+    const newMessageUser = createClientMessage(completeMessage);
+  document.querySelector('#listMessages').append(newMessageUser);
+  });
+
+  // const newMessageRobot = welcomeMessage();
+  // document.querySelector('#listMessages').append(newMessageRobot);
+
   client.emit('nickName', nickname);
 });
 
@@ -114,8 +121,8 @@ document.querySelector('#formSetNickName').addEventListener('submit', (e) => {
 
   const newNickName = document.querySelector('#nickNameInput').value;
 
-  // setNickNameInLocalStorage(newNickName);
   nickname = newNickName;
+
   client.emit('nickName', nickname);
   console.log('Cliente emite novo nickName', nickname);
  });
@@ -124,8 +131,7 @@ document.querySelector('#formSendMessage').addEventListener('submit', (e) => {
   e.preventDefault();
 
   const chatMessage = document.querySelector('#messageInput').value;
-
-  // const nickname = getNickNameFromLocalStorage();
+  
   console.log(nickname);
   client.emit('message', { chatMessage, nickname });
 });
