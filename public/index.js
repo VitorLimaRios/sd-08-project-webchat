@@ -20,8 +20,9 @@ const refreshChat = (data) => {
 
 const refreshUsers = (data) => {
   usersOnline.innerHTML = '';
-  const realData = data.filter((element) => element.nickname !== user.innerHTML);
-  realData.forEach((element) => {
+  const newUser = data.filter((element) => element.nickname === user.innerText);
+  const users = data.filter((element) => element.socketId !== socket.id);
+  [...newUser, ...users].forEach((element) => {
     const li = document.createElement('li');
     li.setAttribute('data-testid', 'online-user');
     li.innerHTML = element.nickname;
