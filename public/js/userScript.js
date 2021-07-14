@@ -25,8 +25,8 @@ const userGenerator = (nickname) => {
 formMessage.addEventListener('submit', (e) => {
   e.preventDefault();
   const userNickname = document.querySelector('.user');
-  const dataMessage = { nickname: userNickname.innerText, message: inputMessage.value };
-  socket.emit('userMessage', dataMessage);
+  const dataMessage = { chatMessage: inputMessage.value, nickname: userNickname.innerText };
+  socket.emit('message', dataMessage);
   inputMessage.value = '';
   return false;
 });
@@ -40,19 +40,16 @@ formNickname.addEventListener('submit', (e) => {
   return false;
 });
 
-const newMessage = (nickname, message, timestamp) => {
+const newMessage = (message) => {
   const messageUl = document.querySelector('#messages');
   const li = document.createElement('li');
-  li.innerText = `${timestamp} - ${nickname}: ${message}`;
+  li.innerText = message;
   li.className = 'message';
   li.dataset.testid = 'message';
   messageUl.appendChild(li);
 };
 
-socket.on('chatMessage', (dataMessage) => {
-  const { nickname, message, timestamp } = dataMessage;
-  return newMessage(nickname, message, timestamp);
-});
+socket.on('message', (message) => newMessage(message));
 
 window.onload = () => {
   userGenerator();
