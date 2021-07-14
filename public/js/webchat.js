@@ -1,6 +1,19 @@
 const socket = window.io();
 let nickname = null;
 
+// https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+function makeid(length) {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+nickname = makeid(16);
+
 const form = document.querySelector('#form-msg');
 const inputMessage = document.querySelector('#message-input');
 form.addEventListener('submit', (e) => {
@@ -33,10 +46,13 @@ const createMessage = (message) => {
 const createUser = (user) => {
   const users = document.querySelector('#users');
   const li = document.createElement('li');
-  li.textContent = user;
-  li.dataset.testid = 'online-user';
+  li.id = 'users';
+  li.setAttribute('data-testid', 'online-user');
+  li.innerText = user;
   users.appendChild(li);
 };
+
+createUser(nickname);
 
 socket.on('message', (message) => createMessage(message));
 
