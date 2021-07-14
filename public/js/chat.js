@@ -18,6 +18,8 @@ class Chat {
     this.addEventBtnGetMessage();
     this.addEventBtnSaveMyName();
     Chat.eventScrolled();
+    this.createNickNameRandomInitial();
+    
     this.disconect();
   }
 
@@ -26,15 +28,45 @@ class Chat {
       this.socket.disconnect();
     };
   }
+
+  static setNameInChat(nickName) {
+    const htmlWithNickName = (
+      `<li class="name-user-logged">
+        <span class="dot"></span>
+        <span id="is-my-nick-name" data-testid="online-user">
+          ${nickName}
+        </span>
+      </li>`
+    );
+    return htmlWithNickName;
+  }
+
+  myNicknameAtTheBeginningOfTheList() {
+    const usersOnlineNickNameGroup = document.getElementById('online-user-nickname-group');
+    usersOnlineNickNameGroup.insertAdjacentHTML('afterbegin', Chat.setNameInChat(this.nickName));
+  }
+
+  createNickNameRandomInitial() {
+    const LENGTH = 11;
+    let nameTemp = 'User-';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let indice = 0; indice < LENGTH; indice += 1) {
+      nameTemp += possible.charAt(Math.floor(Math.random() * possible.length));
+    } 
+    this.nickName = nameTemp;
+    this.myNicknameAtTheBeginningOfTheList();
+  }
   
   getMessage() {
     const message = document.getElementById('text-message');
     this.message = message.value;
   }
-
+  
   setNickName() {
+    const myNickName = document.getElementById('is-my-nick-name');
     const saveName = document.getElementById('setMyName');
     this.nickName = saveName.value;
+    myNickName.innerText = this.nickName;
   }
 
   static setMessageChat(date, nickName, message) {
@@ -48,7 +80,9 @@ class Chat {
           <span>${nickName}</span>
         </div>
         <div class="content-message">
-          <p>${message}</p>
+          <p data-testid="message">
+            ${nickName} <br> ${message}
+          </p>
         </div>
       </div>`
     );
@@ -74,15 +108,13 @@ class Chat {
     const cutHoursRegex = new RegExp(/\d{1,2}:\d{1,2}(:\d{0,2})?\s(PM|AM)?/gm);
     const cutHours = message.match(cutHoursRegex);
     
-    const cutNameRegex = new RegExp(/(^.*\s-)+([\w\s]*:)/);
+    const cutNameRegex = new RegExp(/([PM|AM]\s-\s)([\w\s\S]*:)/);
     const cutName = message.match(cutNameRegex);
     console.log(cutName);
-    const replacerName = cutName[2].replace(cutName[2][0], '').replace(':', '');
-    console.log(replacerName);
+    const replacerName = cutName[2].replace(':', '');
 
     const cutMessageRegex = new RegExp(/((^.*-\s[\w\s\S]*?:)[\s\S.]*?)$/);
     const cutMessage = message.match(cutMessageRegex);
-    console.log(cutMessage);
     const replCutMessage = message.replace(`${cutMessage[2]} `, '');
     
     return { date: `${cutDate} ${cutHours}`, message: replCutMessage, nickname: replacerName };
@@ -93,8 +125,6 @@ class Chat {
     getMessage.addEventListener('click', () => this.sendMessage());
   }
 
-  // addEventNewMessageChat() {}
-
   static eventScrolled() {
     const element = document.getElementById('container-web-chat');
     if (element.scrollTop + element.clientHeight !== element.scrollHeight) {
@@ -103,7 +133,6 @@ class Chat {
   }
 
   onMessage() {
-    console.log(this.nickName);
     this.socket.on('message', (message) => {
       const data = Chat.splitMessage(message);
       Chat.setMessageChat(data.date, data.nickname, data.message);

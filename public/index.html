@@ -12,125 +12,29 @@
 </head>
 <body>
   <header>
-      <input id="setMyName" class="set-nick-name" placeholder="Seu nome" type="text"/>
-      <button id="saveMyName" class="save-nick-name" type="button">Salvar</button>
+      <input data-testid="nickname-box" id="setMyName" class="set-nick-name" placeholder="Seu nome" type="text"/>
+      <button data-testid="nickname-button" id="saveMyName" class="save-nick-name" type="button">Salvar</button>
   </header>
   <main class="container">
     <aside class="users-oline">
       <div>
         <h6>Usúarios online no chat.</h6>
       </div>
-      <ul class="list-users">
+      <ul id="online-user-nickname-group" class="list-users">
         <li class="name-user-logged">
           <span class="dot"></span>
-          <span>
+          <span data-testid="online-user">
             Victorsss - online
           </span>
-        </li>
-        <li class="name-user-logged">
-          <span class="dot"></span>
-          <span>Pedro</span>
-        </li>
-        <li class="name-user-logged">
-          <span class="dot"></span>
-          <span>Miguel</span>
         </li>
       </ul>
     </aside>
     <section class="content">
       <div id="container-web-chat" class="container-chat">
-        <div class="container-message">
-          <div class="date-message">
-            <span>11/12/2021</span>
-          </div>
-          <div class="name-user">
-            <span>Miguel</span>
-          </div>
-          <div class="content-message">
-            <p>Lorem ipsum  amet consectetur dolor sit amet consectetur consectetur adipisicing elit. Consectetur, minus ex! Eligendi delectus magni possimus nihil nisi, hic distinctio optio a voluptate quia quaerat. Itaque molestias dolor recusandae laboriosam dolorem.</p>
-          </div>
-        </div>
-        <div class="container-message">
-          <div class="date-message">
-            <span>11/12/2021</span>
-          </div>
-          <div class="name-user">
-            <span>Miguel</span>
-          </div>
-          <div class="content-message">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, minus ex! Eligendi delectus magni possimus nihil nisi, hic distinctio optio a voluptate quia quaerat. Itaque molestias dolor recusandae laboriosam dolorem.</p>
-          </div>
-        </div>
-        <div class="container-message">
-          <div class="date-message">
-            <span>11/12/2021</span>
-          </div>
-          <div class="name-user">
-            <span>Miguel</span>
-          </div>
-          <div class="content-message">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, minus ex! Eligendi delectus magni possimus nihil nisi, hic distinctio optio a voluptate quia quaerat. Itaque molestias dolor recusandae laboriosam dolorem.</p>
-          </div>
-        </div>
-        <div class="container-message">
-          <div class="date-message">
-            <span>11/12/2021</span>
-          </div>
-          <div class="name-user">
-            <span>Miguelsssssssssssssssssssssssssssssssssssssssssss</span>
-          </div>
-          <div class="content-message">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, minus ex! Eligendi delectus magni possimus nihil nisi, hic distinctio optio a voluptate quia quaerat. Itaque molestias dolor recusandae laboriosam dolorem.</p>
-          </div>
-        </div>
-        <div class="container-message">
-          <div class="date-message">
-            <span>11/12/2021</span>
-          </div>
-          <div class="name-user">
-            <span>Miguel</span>
-          </div>
-          <div class="content-message">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, minus ex! Eligendi delectus magni possimus nihil nisi, hic distinctio optio a voluptate quia quaerat. Itaque molestias dolor recusandae laboriosam dolorem.</p>
-          </div>
-        </div>
-        <div class="container-message">
-          <div class="date-message">
-            <span>11/12/2021</span>
-          </div>
-          <div class="name-user">
-            <span>Miguel</span>
-          </div>
-          <div class="content-message">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, minus ex! Eligendi delectus magni possimus nihil nisi, hic distinctio optio a voluptate quia quaerat. Itaque molestias dolor recusandae laboriosam dolorem.</p>
-          </div>
-        </div>
-        <div class="container-message">
-          <div class="date-message">
-            <span>11/12/2021</span>
-          </div>
-          <div class="name-user">
-            <span>Miguel</span>
-          </div>
-          <div class="content-message">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, minus ex! Eligendi delectus magni possimus nihil nisi, hic distinctio optio a voluptate quia quaerat. Itaque molestias dolor recusandae laboriosam dolorem.</p>
-          </div>
-        </div>
-        <div class="container-message">
-          <div class="date-message">
-            <span>11/12/2021</span>
-          </div>
-          <div class="name-user">
-            <span>Miguelsdsddddfdfdfffffffff'dddddddd</span>
-          </div>
-          <div class="content-message">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, minus ex! Eligendi delectus magni possimus nihil nisi, hic distinctio optio a voluptate quia quaerat. Itaque molestias dolor recusandae laboriosam dolorem.</p>
-          </div>
-        </div>
       </div>
       <div class="set-message">
-        <textarea id="text-message" name="message" class="input-message" cols="3" rows="3"></textarea>
-        <button id="send-message-chat" class="send-message" type="button">Enviar</button>
+        <input data-testid="message-box" id="text-message" name="message" class="input-message" />
+        <button data-testid="send-button" id="send-message-chat" class="send-message" type="button">Enviar</button>
       </div>
     </section>
   </main>
