@@ -55,16 +55,16 @@ const changeNickFunc = (data) => {
   io.emit('changeNickName', usersList);
 };
 
-function makeid(length, socket) {
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i += 1) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  usersList.push({ user: result, socketId: socket.id });
-  return result;
-} // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+// function makeid(length, socket) {
+//   let result = '';
+//   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+//   const charactersLength = characters.length;
+//   for (let i = 0; i < length; i += 1) {
+//     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+//   }
+//   usersList.push({ user: result, socketId: socket.id });
+//   return result;
+// } // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
 
 const messageFormated = async (chatMessage, nickname) => {
   const timeNow = dateFormat(now, 'dd-mm-yyyy h:MM:ss TT');
