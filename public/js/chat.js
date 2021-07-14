@@ -63,11 +63,6 @@ const newMessage = (message) => {
 };
 
 window.onload = () => {
-  socket.on('welcome', ({ db, messageChannel }) => {
-    updateListUsers(db);
-    newMessage(messageChannel);
-  });
-
   socket.on('message', (message) => newMessage(message));
 
   socket.on('notification', ({ db, messageChannel }) => {

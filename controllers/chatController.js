@@ -3,7 +3,6 @@ const { get } = require('../models/message');
 exports.chat = async (req, res) => {
   try {
     const messageChanel = await get();
-    console.log(messageChanel);
     
     res.status(200).render('chat', {
       title: 'Project WebChat', 
