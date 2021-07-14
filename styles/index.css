@@ -183,6 +183,9 @@ ul {
   display: -webkit-inline-flex;
   display: inline-flex;
 }
+.hidden {
+  display: none;
+}
 .flex-row {
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
@@ -220,11 +223,11 @@ ul {
   margin-left: auto;
   margin-right: auto;
 }
-.mr-auto {
-  margin-right: auto;
-}
 .ml-auto {
   margin-left: auto;
+}
+.mr-auto {
+  margin-right: auto;
 }
 .focus\:outline-none:focus {
   outline: 2px solid transparent;

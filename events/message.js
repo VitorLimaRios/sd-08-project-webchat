@@ -1,13 +1,12 @@
 const Service = require('../services').Messages;
+const utils = require('../utils');
 
 module.exports = (io, socket) => {
   socket.on('message', async (data) => {
-    const modelData = data;
-    modelData.timestamp = new Date();
+    const { chatMessage: message, nickname } = data;
+    const modelData = { message, nickname, timestamp: new Date() };
     await Service.insertOne(modelData);
-    const { timestamp: ts, nickname, message } = modelData;
-    const dateTime = ts.toLocaleString('pt-br').replace(/\//g, '-');
-    const clientData = `${dateTime} ${nickname} ${message}`;
-    io.emit('message', clientData);
+    const chatMessage = utils.buildChatMessage(modelData);
+    io.emit('message', chatMessage);
   });
 };

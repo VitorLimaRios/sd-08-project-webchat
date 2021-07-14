@@ -5,6 +5,7 @@ const cors = require('cors');
 require('dotenv').config();
 const io = require('socket.io');
 const events = require('./events');
+const { getChat } = require('./controllers');
 
 const app = express();
 const server = http.createServer(app);
@@ -25,9 +26,7 @@ app.use('/styles', express.static(path.resolve(__dirname, 'styles')));
 app.use('/clientScripts', express.static(path.resolve(__dirname, 'clientScripts')));
 app.use('/node_modules', express.static(path.resolve(__dirname, 'node_modules')));
 
-app.get('/', (_req, res) => {
-  res.status(200).render('index');
-});
+app.get('/', getChat);
 
 const PORT = process.env.PORT || 3000;
  

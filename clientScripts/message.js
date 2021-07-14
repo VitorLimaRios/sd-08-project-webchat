@@ -30,10 +30,10 @@ export default function (socket) {
   getSendBtn().addEventListener('click', (evt) => {
     evt.preventDefault();
   
-    const message = getMessageBoxInput().value;
+    const chatMessage = getMessageBoxInput().value;
     const { nickname } = socketList.data.find(({ id }) => id === socket.id);
 
-    socket.emit('message', { message, nickname });
+    socket.emit('message', { chatMessage, nickname });
     getMessageBoxInput().value = '';
   });
 
