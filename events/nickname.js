@@ -1,7 +1,8 @@
-const { nanoid } = require('nanoid');
+// const { nanoid } = require('nanoid');
 
 module.exports = (io, socket, socketList) => {
-  const modelData = { id: socket.id, nickname: nanoid(16) };
+  // const nickname = nanoid(16);
+  const modelData = { id: socket.id, nickname: socket.id.substring(0, 16) };
   socketList.push(modelData);
   io.emit('updateOnlineClients', socketList);
   

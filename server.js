@@ -13,7 +13,7 @@ const ioServer = io(server);
 
 const socketList = [];
 
-ioServer.on('connection', async (socket) => {
+ioServer.on('connection', (socket) => {
   events.nickname(ioServer, socket, socketList);
   events.message(ioServer, socket);
 });
@@ -24,7 +24,6 @@ app.use(cors());
 
 app.use('/styles', express.static(path.resolve(__dirname, 'styles')));
 app.use('/clientScripts', express.static(path.resolve(__dirname, 'clientScripts')));
-app.use('/node_modules', express.static(path.resolve(__dirname, 'node_modules')));
 
 app.get('/', getChat);
 

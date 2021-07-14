@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --runInBand  --detectOpenHandles --forceExit",
     "test-coverage": "jest --coverage",
-    "style": "windicss './views/index.ejs' -to ./styles/index.css; ./stylescript.sh",
+    "style": "windicss './views/index.ejs' -to ./styles/index.css",
     "start": "node server.js",
     "debug": "nodemon server.js",
     "lint": "eslint --no-inline-config --ext .js,.jsx --no-error-on-unmatched-pattern -c .eslintrc.json .",
