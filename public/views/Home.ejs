@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WEBCHAT</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <main class="main">
+    <section class="app-container">
+      <div class="header">
+        <p class="header-title">WEBCHAT</p>
+      </div>
+      <aside class="side-painel-container">
+        <div class="nickname-control-container">
+          <form action="" method="GET" class="nickname-change-form" id="nicknameForm">
+            <label for="nickname" class="nickname-change-label">
+              <input
+                type="text"
+                maxlength="16"
+                minlength="3"
+                placeholder="Digite aqui seu nickname"
+                class="nickname-change-input"
+                id="nickname"
+                data-testid="nickname-box"
+              >
+            </label>
+            <button type="submit" class="nickname-btn" data-testid="nickname-button">Salvar</button>
+          </form>
+        </div>
+        <div class="users-list-container">
+          <ul class="users-list" id="users"></ul>
+        </div>
+      </aside>
+      <div class="chat-container">
+        <ul class="messages-list" id="messages">
+          <% chat.forEach((message) => { %>
+            <li class="message" data-testid="message"><%=`${message.timestamp} - ${message.nickname}: ${message.message}` %></li>
+          <% }) %>
+        </ul>
+      </div>
+      <div class="message-to-send-container">
+        <form action="" method="GET" class="message-to-send-form" id="messageForm">
+          <label for="message-to-send" class="message-to-send-label">
+            <input
+              type="text"
+              maxlength="300"
+              minlength="1"
+              placeholder="Digite aqui sua mensagem"
+              class="message-to-send-input"
+              id="messageToSend"
+              data-testid="message-box"
+            >
+          </label>
+          <button type="submit" class="message-btn" data-testid="send-button">Enviar</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <p class="footer-title">by: Digo-Castro</p>
+    <ul class="links-list">
+      <li class="links-item">
+        <a class="link">GitHub</a>
+      </li>
+      <li class="links-item">
+        <a class="link">LinkedIn</a>
+      </li>
+    </ul>
+  </footer>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="../js/userScript.js"></script>
+  <script>
+    socket.on('usersList', (users) => {
+      let usersList;
+      usersList = users;
+      const localUser = sessionStorage.getItem('nickname');
+      const searchUser = usersList.filter((user) => user.userNickname === localUser);
+      const firstUser = searchUser[0];
+      usersList = usersList.filter((user) => user !== firstUser)
+      usersList.unshift(firstUser);
+      const usersUl = document.querySelector('#users');
+      const liList = usersUl.children;
+
+      for (let i = liList.length - 1; i > -1; i = i - 1) {
+        liList[i].outerHTML = '';
+      }
+      if (usersList.length) return usersList.forEach((user) => {
+        const li = document.createElement('li');
+        li.innerText = `${user.userNickname}`;
+        li.dataset.testid = 'online-user';
+        li.className = 'user';
+        usersUl.appendChild(li);
+      });
+    })
+  </script>
+</body>
+</html>
