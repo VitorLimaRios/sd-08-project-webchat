@@ -31,6 +31,14 @@ const onNotification = (socket) => {
   });
 };
 
+const onWelcome = (socket) => {
+  const messageChannel = `Seja Bem Vindo!! Cliente ${socket.id}`;
+  socket.emit('welcome', {
+    db,
+    messageChannel,
+  });
+};
+
 const onMessage = (io, socket) => {
   socket.on('message', async ({ nickname, chatMessage }) => {
     db[socket.id] = { nickname };
@@ -54,6 +62,7 @@ module.exports = (io) =>
     console.log(`cliente: conectado com id: ${socket.id}`);
     onDisconnect(socket);
     onNotification(socket);
+    onWelcome(socket);
     onMessage(io, socket);
     onUsers(io, socket);
   });

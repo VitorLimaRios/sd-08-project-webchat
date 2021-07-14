@@ -70,6 +70,10 @@ window.onload = () => {
     newMessage(messageChannel);
   });
 
+  socket.on('welcome', ({ db }) => {
+    updateListUsers(db);
+  });
+
   socket.on('users', ({ db }) => {
     updateListUsers(db);
   });
@@ -81,10 +85,4 @@ window.onload = () => {
 
   updateNickname();
   sendMessage();
-
-  // welcomeUser();
-  // onDisconnect(socket);
-  // onNotification(socket);
-  // onMessage(io, socket);
-  // onUsers(io, socket);
 };
