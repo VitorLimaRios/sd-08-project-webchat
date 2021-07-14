@@ -61,7 +61,8 @@ const changeNickFunc = (data) => {
 //     result += characters.charAt(Math.floor(Math.random() * charactersLength));
 //   }
 //   usersList.push({ user: result, socketId: socket.id });
-//   return result;
+//   return socket.emit('user', result);
+//   // return result;
 // } // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
 
 const messageFormated = async (chatMessage, nickname) => {
@@ -79,17 +80,20 @@ io.on('connection', async (socket) => {
   // console.log(`connected ${socket.id}`);
   const historyAll = await history();
   io.emit('start', historyAll);
+  // if (usersList.length < 1) {
+  //   makeid(16, socket);
+  // }
 
-  socket.on('user', (user) => addUser(user, socket));
+  socket.on('user', async (user) => addUser(user, socket));
 
-  socket.on('changeNickName', (data) => changeNickFunc(data));
+  socket.on('changeNickName', async (data) => changeNickFunc(data));
 
   socket.on('message', async ({ chatMessage, nickname }) => {
     const value = await messageFormated(chatMessage, nickname);
     io.emit('message', value);
   });
 
-  socket.on('disconnect', () => {
+  socket.on('disconnect', async () => {
     userDisconnect(socket, usersList);
     io.emit('allUsers', usersList);
   });
