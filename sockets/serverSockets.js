@@ -1,3 +1,5 @@
+const Chat = require('../models/Chat');
+
 function updateAll(socket, connectedUsers) {
   socket.broadcast.emit('list-update', {
     list: connectedUsers,
@@ -28,13 +30,14 @@ module.exports = {
     });
   },
   message: (socket, messagesList, io) => {
-    socket.on('message', (message) => {
+    socket.on('message', async (message) => {
       const msgTime = new Date().toLocaleString().replaceAll('/', '-');
       let { nickname } = message;
       if (socket.userName !== undefined) {
         nickname = socket.userName;
       }
       const chatMessage = `${msgTime} - ${nickname}: ${message.chatMessage}`;
+      await Chat.setMessage(chatMessage, nickname, msgTime);
       messagesList.push(chatMessage);
       io.emit('message', chatMessage);
       socket.broadcast.emit('messages-update', {

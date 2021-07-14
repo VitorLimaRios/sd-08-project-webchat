@@ -10,13 +10,15 @@ const {
 } = require('./sockets/serverSockets');
 
 const PORT = process.env.PORT || 3000;
+const Chat = require('./models/Chat');
 
 const app = express();
 app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', './views');
-app.get('/', (req, res) => {
-  res.render('index', { title: 'Chat em Tempo Real' });
+app.get('/', async (req, res) => {
+  const messages = await Chat.getMessages();
+  res.render('index', messages);
 });
 const server = http.createServer(app);
 
