@@ -69,7 +69,7 @@ const makeid = async (length, socket) => {
   }
   return result;
   // return result;
-} // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+}; // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
 
 const messageFormated = async (chatMessage, nickname) => {
   const timeNow = dateFormat(now, 'dd-mm-yyyy h:MM:ss TT');
