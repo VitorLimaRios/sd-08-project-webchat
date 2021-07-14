@@ -35,7 +35,7 @@ const history = async () => {
 };
 
 const userDisconnect = (socket, users) => {
-  const userDiconnect = users.findIndex((user) => user.id === socket.id);
+  const userDiconnect = users.findIndex((user) => user.socketId === socket.id);
   usersList.splice(userDiconnect, 1);
 };
 
@@ -98,7 +98,7 @@ io.on('connection', async (socket) => {
 });
 
 app.get('/', async (_req, res) => {
-  res.render('chat');
+  res.render('../views/chat');
 });
 
 http.listen(PORT, () => console.log(`App listening ${PORT}`));

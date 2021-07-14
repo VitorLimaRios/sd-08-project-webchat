@@ -98,8 +98,11 @@ const renderMessage = (msg) => {
 
 const renderAllUsers = (user) => {
   users.innerHTML = '';
+  console.log(socket.id);
   const socketUser = user.find((currentUser) => currentUser.socketId === socket.id);
-  const otherUsers = user.filter((currentUser) => currentUser.socketId !== socket.id); 
+  console.log(socketUser);
+  const otherUsers = user.filter((currentUser) => currentUser.socketId !== socket.id);
+  console.log(otherUsers);
   let li = document.createElement('li');
   [socketUser, ...otherUsers].forEach((elem) => {
     li = document.createElement('li');
