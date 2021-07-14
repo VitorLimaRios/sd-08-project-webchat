@@ -20,28 +20,26 @@ app.get('/', (_req, res) => res.render('index'));
 
 // const messages = [];
 const clients = {};
+const currentTime = moment().format('DD-MM-YYYY h:mm:ss');
 
 io.on('connection', (socket) => {
-  const currentTime = moment().format('DD-MM-YYYY h:mm:ss');
-
   socket.on('message', (message) => {
-    const { nickname, chatMessage } = message;
-    io.emit('message', `${currentTime} - ${nickname}: ${chatMessage}`);
+    io.emit('message', `${currentTime} - ${message.nickname}: ${message.chatMessage}`);
   });
 
   socket.on('newUser', (nickname) => {
     clients[socket.id] = { nickname };
-    io.emit('usersOnline', Object.values(clients));
+    io.emit('usersOnline', clients);
   });
 
   socket.on('updateNickname', (user) => {
-    clients[user.id].nickname = user.newNickname;
-    io.emit('usersOnline', Object.values(clients));
+    clients[user.id].nickname = user.nickname;
+    io.emit('usersOnline', clients);
   });
 
   socket.on('disconnect', () => {
     delete clients[socket.id];
-    io.emit('usersOnline', Object.values(clients));
+    io.emit('usersOnline', clients);
   });
 });
 
