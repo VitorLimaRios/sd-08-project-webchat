@@ -6,7 +6,7 @@ function makeid(length) {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < length; i += 1) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
@@ -52,25 +52,15 @@ const createUser = (user) => {
   users.appendChild(li);
 };
 
-createUser(nickname);
+createUser(`${nickname}`);
 
-socket.on('message', (message) => createMessage(message));
-
-socket.on('init', (data) => {
-  nickname = data.nickname;
-  data.historyMsgs.forEach((message) => {
-    createMessage(message);
-  });
+socket.on('connection', (usersArray) => {
+  usersArray.forEach((newUser) => createUser(newUser));
+  console.log(usersArray);
 });
-
-// socket.on('updateUsers', (updatedList) => {
-//   const users = document.querySelector('#users');
-//   [...users.children].forEach((elem) => elem.remove());
-//   createUser(nickname);
-//   updatedList.forEach((user) => {
-//     if (user !== nickname) createUser(user);
-//   });
-// });
+socket.on('message', (message) => createMessage(message));
+socket.emit('serverMessage', nickname);
+socket.on('serverMessage', (nick) => createUser(nick));
 
 window.onbeforeunload = () => {
   socket.disconnect();
