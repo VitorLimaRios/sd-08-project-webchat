@@ -11,7 +11,7 @@
   <body>
     <header>
       <h1>
-        <%= message %>
+        <%= subtitle %>
       </h1>
     </header>
     <form class="form-nickname" id="form_nickname">
@@ -24,6 +24,10 @@
         </ul>
       </div>
       <div class="messages" id="chat_message">
+        <% messageChanel.forEach((element)=> { %> <p data-testid="message">
+            <%= ` ${element.timestamp} - ${element.nickname}: ${element.message}` %>
+          </p>
+          <% }) %>
       </div>
     </section>
     <form class="form-send" id="form_send">

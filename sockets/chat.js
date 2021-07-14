@@ -1,3 +1,5 @@
+const { saveMessage } = require('../services/chatUseCase');
+
 const db = {};
 
 const getDateTime = () => {
@@ -38,9 +40,10 @@ const onWelcome = (socket) => {
 };
 
 const onMessage = (io, socket) => {
-  socket.on('message', ({ nickname, chatMessage }) => {
+  socket.on('message', async ({ nickname, chatMessage }) => {
     db[socket.id] = { nickname };
     const date = getDateTime();
+    await saveMessage({ nickname, chatMessage, date });
     const messageChannel = `${date} - ${nickname}: ${chatMessage}`;
     io.emit('message', messageChannel);
   });
