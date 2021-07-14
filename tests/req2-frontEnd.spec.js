@@ -103,7 +103,7 @@ describe('2 - Crie um frontend para que as pessoas interajam com o chat', () => 
     expect(nicknameButton).not.toBeNull();
   });
 
-  it.only('Será validado que é possível enviar mensagens após alterar o nickname', async () => {
+  it('Será validado que é possível enviar mensagens após alterar o nickname', async () => {
 
     //Client changes nickname
     const nicknameBox = await page.$(`input${dataTestid('nickname-box')}`);
