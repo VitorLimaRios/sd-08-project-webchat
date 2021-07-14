@@ -23,8 +23,8 @@ form button {
   background: rgb(130, 224, 255);
   border: none;
   cursor: pointer;
-  width: 9%;
   padding: 10px;
+  width: 9%;
 }
 
 .messages {
