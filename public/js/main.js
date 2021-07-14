@@ -15,6 +15,12 @@ const renderNewMessage = (innerText) => {
   return messagesContainer.appendChild(message);
 };
 
+const renderChatHistory = (historic) => {
+  historic.forEach((message) => {
+    renderNewMessage(`${message.timestamp} - ${message.nickname}: ${message.message}`);
+  });
+};
+
 const renderOnlineUsers = (users) => {
   onlineUsersContainer.innerHTML = '';
 
@@ -56,3 +62,4 @@ changeNicknameButton.addEventListener('click', () => {
 
 client.on('message', (message) => renderNewMessage(message));
 client.on('usersOnline', (users) => renderOnlineUsers(users));
+client.on('history', (history) => renderChatHistory(history));

@@ -11,6 +11,8 @@ const io = require('socket.io')(http, {
   },
 });
 
+const chatModel = require('./models/chatModel');
+
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
@@ -18,13 +20,16 @@ app.use(express.static(`${__dirname}/public`));
 
 app.get('/', (_req, res) => res.render('index'));
 
-// const messages = [];
 const clients = {};
 const currentTime = moment().format('DD-MM-YYYY h:mm:ss');
 
-io.on('connection', (socket) => {
-  socket.on('message', (message) => {
-    io.emit('message', `${currentTime} - ${message.nickname}: ${message.chatMessage}`);
+io.on('connection', async (socket) => {
+  socket.emit('history', await chatModel.getChatMessages());
+
+  socket.on('message', async (message) => {
+    const { chatMessage, nickname } = message;
+    await chatModel.saveChatMessage({ message: chatMessage, nickname, timestamp: currentTime });
+    io.emit('message', `${currentTime} - ${nickname}: ${chatMessage}`);
   });
 
   socket.on('newUser', (nickname) => {
