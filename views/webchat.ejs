@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Webchat</title>
+    <style></style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+    <script>
+      const socket = io();
+    </script>
+  </head>
+  <body>
+    <form class="login-form" action="room.html">
+      <input type="text" placeholder="username" name="username" />
+    </form>
+
+    <ul id="messages"></ul>
+
+    <form action="">
+      <input id="messageInput" autocomplete="off" />
+      <button>Send</button>
+    </form>
+
+    <script>
+      const socket = io();
+      const form = document.querySelector('form');
+      const inputMessage = document.querySelector('#messageInput');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        socket.emit('message', inputMessage.value);
+        inputMessage.value = '';
+        return false;
+      })
+
+      const createMessage = (message) => {
+        const messagesUl = document.querySelector('#messages');
+        const li = document.createElement('li');
+        li.innerText = message;
+        messagesUl.appendChild(li);
+      }
+
+      socket.on('message', (message) => createMessage(message));
+      socket.on('serverMessage', ({ message }) => createMessage(message));
+    </script>
+  </body>
+</html>
