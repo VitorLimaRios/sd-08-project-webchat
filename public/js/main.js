@@ -30,11 +30,6 @@ client.on('connect', () => {
   nickname = client.id.slice(0, 16);
   client.emit('newUser', nickname);
 
-  sendMessageButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    client.emit('message', { chatMessage: messageInput.value, nickname });
-  });
-
   changeNicknameButton.addEventListener('click', () => {
     nickname = nicknameInput.value;
     client.emit('updateNickname', { id: client.id, newNickname: nickname });
@@ -42,5 +37,11 @@ client.on('connect', () => {
   });
 });
 
-client.on('emitMessage', (message) => renderNewMessage(message));
+sendMessageButton.addEventListener('click', (event) => {
+  event.preventDefault();
+  client.emit('message', { chatMessage: messageInput.value, nickname });
+  messageInput.value = '';
+});
+
+client.on('message', (message) => renderNewMessage(message));
 client.on('usersOnline', (users) => renderOnlineUsers(users));

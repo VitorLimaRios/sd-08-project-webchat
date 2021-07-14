@@ -26,7 +26,7 @@ io.on('connection', (socket) => {
 
   socket.on('message', (message) => {
     const { nickname, chatMessage } = message;
-    io.emit('emitMessage', `${currentTime} - ${nickname}: ${chatMessage}`);
+    io.emit('message', `${currentTime} - ${nickname}: ${chatMessage}`);
   });
 
   socket.on('newUser', (nickname) => {
