@@ -5,9 +5,13 @@ const getAll = async () => connection()
   .find({})
   .toArray());
 
-const create = async (msg) => connection()
+const create = async (chatMessage, nickname, dateMsg) => connection()
   .then((db) => db.collection('messages')
-  .insertOne(msg));
+  .insertOne({
+    chatMessage,
+    nickname,
+    timestamp: dateMsg,
+  }));
 
 module.exports = {
   getAll,

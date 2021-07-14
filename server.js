@@ -1,4 +1,6 @@
-const app = require('express')();
+const express = require('express');
+
+const app = express();
 const http = require('http').createServer(app);
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -10,24 +12,19 @@ const io = require('socket.io')(http, {
   },
 });
 
-const PORT = 3001;
-
 app.use(bodyParser.json());
 app.use(cors());
-app.use(express.static(__dirname + '/public'));
+app.set('view engine', 'ejs');
+app.set('views', './views');
+app.use(express.static('public'));
 
 require('./sockets/webchat')(io);
 
-// const WebchatController = require('./controllers/WebchatController');
-
 app.get('/', (_req, res) => {
-  // res.status(200).json({ ok: true });
-  res.sendFile(__dirname + '/webchat.html');
+  res.render('webchat');
 });
 
-// app.use('/languages', WebchatController);
-// require('./sockets/votes')(io);
-
+const PORT = 3001;
 http.listen(PORT, () => {
   console.log('Listening on port %s', PORT);
 });

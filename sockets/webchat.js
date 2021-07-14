@@ -1,17 +1,21 @@
+const moment = require('moment');
+const MessageModel = require('../models/Message');
+
 module.exports = (io) => {
   io.on('connection', (socket) => {
-    console.log('Alguém se conectou');
-  
+    socket.emit('connection', socket.id);
+    socket.on('users', (users) => io.emit('users', users));
+    socket.on('nicknameOn', (nickname) => socket.broadcast.emit('nicknameOn', nickname));
     socket.on('disconnect', () => {
-      console.log('Connection closed');
+      socket.broadcast.emit('updateUsers');
     });
-  
-    socket.on('message', (msg) => {
-      io.emit('serverMessage', { message: msg });
+
+    socket.on('message', async ({ nickname, chatMessage }) => {
+      const dateMsg = moment().format('DD-MM-yyyy HH:mm:ss');
+      await MessageModel.create(chatMessage, nickname, dateMsg);
+      io.emit('message', `${dateMsg} - ${nickname}: ${chatMessage}`);
     });
-  
-    socket.emit('message', ('Bem vinde'));
-  
-    socket.broadcast.emit('serverMessage', { message: 'Nova conexão' });
-  });  
+  });
 };
+
+// socket.broadcast.emit('serverMessage', { message: 'Nova conexão' });

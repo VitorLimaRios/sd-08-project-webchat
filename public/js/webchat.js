@@ -12,13 +12,14 @@ form.addEventListener('submit', (e) => {
 const createMessage = (message) => {
   const messagesUl = document.querySelector('#messages');
   const li = document.createElement('li');
+  li.id = 'message';
+  li.setAttribute('data-testid', 'message');
   li.innerText = message;
   messagesUl.appendChild(li);
 };
 
-// window.onbeforeunload = (e) => {
-//   socket.disconnect();
-// };
+window.onbeforeunload = () => {
+  socket.disconnect();
+};
 
 socket.on('message', (message) => createMessage(message));
-socket.on('serverMessage', ({ message }) => createMessage(message));

@@ -1,11 +1,11 @@
-const { Router } = require('express');
-const Language = require('../models/Language');
+// const { Router } = require('express');
+// const Message = require('../models/Message');
 
-const router = Router();
+// const router = Router();
 
-router.get('/', async (_req, res) => {
-  const languages = await Language.getAll();
-  res.status(200).json(languages);
-});
+// router.get('/', async (_req, res) => {
+//   const messages = await Message.getAll();
+//   res.status(200).json(messages);
+// });
 
-module.exports = router;
+// module.exports = router;

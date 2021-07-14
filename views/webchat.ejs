@@ -7,24 +7,40 @@
     <title>Webchat</title>
     <link rel="stylesheet" href="/public/css/webchat.css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
-    <script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script> -->
+    <!-- <script>
       const socket = io();
-    </script>
+    </script> -->
   </head>
   <body>
     <form class="nickname-form">
-      <input type="text" placeholder="Insira seu nickname" />
-      <button>Salvar</button>
+      <input
+        type="text"
+        id="nickname-text"
+        placeholder="Insira seu nickname"
+        data-testid="nickname-box"
+      />
+      <button id="nickname-btn" data-testid="nickname-button">Salvar</button>
     </form>
 
-    <ul id="messages"></ul>
+    <section class="usuarios-logados">
+      <p>Usuários logados:</p>
+      <ul id="users"><ul>
+    </section>
 
+    <ul id="messages"></ul>
+    <!-- cada li tem que ter data-testid="message" -->
     <form action="">
-      <input id="messageInput" autocomplete="off" placeholder="Digite uma nova mensagem aqui" />
-      <button>Enviar</button>
+      <input
+        type="text"
+        id="messageInput"
+        autocomplete="off"
+        placeholder="Digite uma nova mensagem aqui"
+        data-testid="message-box"
+      />
+      <button id="send-btn" data-testid="send-button">Enviar</button>
     </form>
   </body>
   <script src="/socket.io/socket.io.js"></script>
-  <script src='../public/js/webchat.js'></script>
+  <script src='/js/webchat.js'></script>
 </html>
