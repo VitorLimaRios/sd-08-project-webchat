@@ -6,7 +6,6 @@ const now = Date.now();
 const app = express();
 const http = require('http').createServer(app);
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const path = require('path');
 
 const io = require('socket.io')(http, {
@@ -22,7 +21,6 @@ const PORT = 3000;
 
 const formatMessage = ({ time, nickname, message }) => (`${time} - ${nickname}: ${message}`);
 
-app.use(bodyParser.json());
 app.use(cors());
 
 const usersList = [];
@@ -98,7 +96,7 @@ io.on('connection', async (socket) => {
 });
 
 app.get('/', async (_req, res) => {
-  res.render('../views/chat');
+  res.render('chat');
 });
 
 http.listen(PORT, () => console.log(`App listening ${PORT}`));
