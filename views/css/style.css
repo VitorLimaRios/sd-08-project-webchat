@@ -1,35 +1,35 @@
 .container {
-	display: flex;
+  display: flex;
 }
 
 .user-area {
-	background-color: #ddd;
-	height: 80vh;
-	width: 40%;
+  background-color: #ddd;
+  height: 80vh;
+  width: 40%;
 }
 
 .nickname-area {
-	display: flex;
-	justify-content: space-between;
-	padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
 }
 
 .nickname-area input,
 .message-form input {
-	flex: 1;
-	margin-right: 8px;
-	min-width: 30px;
+  flex: 1;
+  margin-right: 8px;
+  min-width: 30px;
 }
 
 .chat-area {
-	background-color: #eee;
-	height: 80vh;
-	width: 60%;
+  background-color: #eee;
+  height: 80vh;
+  width: 60%;
 }
 
 .message-form {
-	background-color: #ccc;
-	display: flex;
-	justify-content: space-between;
-	padding: 10px;
+  background-color: #ccc;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
 }
