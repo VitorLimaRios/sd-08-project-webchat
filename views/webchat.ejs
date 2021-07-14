@@ -6,14 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webchat</title>
     <link rel="stylesheet" href="/public/css/webchat.css">
-
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script> -->
-    <!-- <script>
-      const socket = io();
-    </script> -->
   </head>
   <body>
-    <form class="nickname-form">
+    <form id="nickname-form" class="nickname-form">
       <input
         type="text"
         id="nickname-text"
@@ -30,10 +25,10 @@
 
     <ul id="messages"></ul>
     <!-- cada li tem que ter data-testid="message" -->
-    <form action="">
+    <form id="form-msg" action="">
       <input
         type="text"
-        id="messageInput"
+        id="message-input"
         autocomplete="off"
         placeholder="Digite uma nova mensagem aqui"
         data-testid="message-box"

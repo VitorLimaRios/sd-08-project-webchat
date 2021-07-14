@@ -24,7 +24,7 @@ app.get('/', (_req, res) => {
   res.render('webchat');
 });
 
-const PORT = 3001;
+const PORT = 3000;
 http.listen(PORT, () => {
   console.log('Listening on port %s', PORT);
 });
