@@ -65,19 +65,3 @@ socket.on('serverMessage', (nick) => createUser(nick));
 window.onbeforeunload = () => {
   socket.disconnect();
 };
-
-// socket.on('init', (data) => {
-//   nickname = data.nickname;
-//   data.historyMsgs.forEach((message) => {
-//     createMessage(message);
-//   });
-// });
-
-// socket.on('updateUsers', (updatedList) => {
-//   const users = document.querySelector('#users');
-//   [...users.children].forEach((elem) => elem.remove());
-//   createUser(nickname);
-//   updatedList.forEach((user) => {
-//     if (user !== nickname) createUser(user);
-//   });
-// });

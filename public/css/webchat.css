@@ -22,8 +22,8 @@ form input {
 form button {
   background: rgb(130, 224, 255);
   border: none;
-  width: 9%;
   cursor: pointer;
+  width: 9%;
   padding: 10px;
 }
 
