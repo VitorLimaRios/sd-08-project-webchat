@@ -11,9 +11,9 @@ const createUser = (socket) => {
 };
 
 const sendMessageToAll = (io, { chatMessage, nickname }) => {
-  const date = moment().format('DD-MM-YYYY');
-  const hour = moment().format('LTS');
-  const serverMessage = `${date} ${hour} - ${nickname}: ${chatMessage}`;
+  const timestamp = moment().format('DD-MM-YYYY h:mm:ss A\'');
+  const serverMessage = `${timestamp} - ${nickname}: ${chatMessage}`;
+
   io.emit('message', serverMessage);
 };
 
