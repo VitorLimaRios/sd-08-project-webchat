@@ -13,32 +13,34 @@ class Chat {
     this.addEventBtnGetMessage = this.addEventBtnGetMessage.bind(this);
     this.addEventBtnSaveMyName = this.addEventBtnSaveMyName.bind(this);
     this.onMessage = this.onMessage.bind(this);
-
-    this.onMessage();
-    this.addEventBtnGetMessage();
-    this.addEventBtnSaveMyName();
-    Chat.eventScrolled();
-    this.createNickNameRandomInitial();
-    
-    this.disconect();
+    this.onLoadingDate = this.onLoadingDate.bind(this);
+    this.main();
   }
 
-  disconect() {
-    window.onbeforeunload = () => {
-      this.socket.disconnect();
-    };
+  disconectUs() {
+    this.socket.io.emit('disconnect');
   }
 
-  static setNameInChat(nickName) {
+  static setNameInChat(nickName, idType = true) {
     const htmlWithNickName = (
       `<li class="name-user-logged">
         <span class="dot"></span>
-        <span id="is-my-nick-name" data-testid="online-user">
+        <span ${idType
+          ? 'id="is-my-nick-name"'
+          : 'class="is-other-nick-name"'
+        }
+        data-testid="online-user">
           ${nickName}
         </span>
       </li>`
     );
     return htmlWithNickName;
+  }
+
+  static addUserToOlineGroup(nickName) {
+    const usersOnlineNickNameGroup = document.getElementById('online-user-nickname-group');
+    const htmlWithNickName = Chat.setNameInChat(nickName, false);
+    usersOnlineNickNameGroup.insertAdjacentHTML('beforeend', htmlWithNickName);
   }
 
   myNicknameAtTheBeginningOfTheList() {
@@ -63,10 +65,15 @@ class Chat {
   }
   
   setNickName() {
+    const nickTemp = this.nickName;
     const myNickName = document.getElementById('is-my-nick-name');
     const saveName = document.getElementById('setMyName');
     this.nickName = saveName.value;
     myNickName.innerText = this.nickName;
+    this.socket.emit('update-nickname', {
+      nickname: this.nickName,
+      oldNickname: nickTemp,
+    });
   }
 
   static setMessageChat(date, nickName, message) {
@@ -138,6 +145,73 @@ class Chat {
       Chat.setMessageChat(data.date, data.nickname, data.message);
       Chat.eventScrolled();
     });
+  }
+
+  emitUserLogged() {
+    this.socket.emit('newLoggedInUser', this.nickName);
+  }
+
+  onUserLogged() {
+    this.socket.on('newLoggedInUser', (nickName) => {
+      Chat.addUserToOlineGroup(nickName);
+    });
+  }
+
+  getUser(data) {
+    this.usersOnline.push(...data);
+    const myIndex = this.usersOnline.indexOf(this.nickName);
+    if (myIndex > -1) {
+      console.log(myIndex);
+      this.usersOnline.splice(myIndex, 1);
+    }
+    this.usersOnline.map(Chat.addUserToOlineGroup);
+  }
+
+  onLoadingDate() {
+    this.socket.on('loadingMsgAndUsersLogged', (data) => {
+      this.getUser(data);
+    });
+  }
+
+  static getHtmlUser(nickname) {
+    const getGroupUser = document.getElementsByClassName('is-other-nick-name');
+    const arrUsers = Array.from(getGroupUser);
+    const htmlUser = arrUsers.find((el) => el.innerText === nickname);
+    return htmlUser;
+  }
+
+  static removeOfflineUserNickname(nickname) {
+    const htmlUser = this.getHtmlUser(nickname);
+    const parentUser = htmlUser.parentElement;
+    parentUser.parentElement.removeChild(parentUser);
+  }
+
+  onOfflineUser() {
+    this.socket.on('removed-user', (nickname) => {
+      Chat.removeOfflineUserNickname(nickname);
+    });
+  }
+
+  onUpdateNicknameOtherClient() {
+    this.socket.on('update-nickname', ({ nickname, oldNickname }) => {
+      const htmlUser = Chat.getHtmlUser(oldNickname);
+      console.log(htmlUser);
+      htmlUser.innerText = nickname;
+    });
+  }
+
+  main() {
+    this.onMessage();
+    this.createNickNameRandomInitial();
+    this.addEventBtnGetMessage();
+    this.addEventBtnSaveMyName();
+    this.emitUserLogged();
+    this.onUserLogged();
+    this.onLoadingDate();
+    Chat.eventScrolled();
+    this.disconectUs();
+    this.onOfflineUser();
+    this.onUpdateNicknameOtherClient();
   }
 }
 
