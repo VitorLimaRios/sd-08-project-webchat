@@ -35,32 +35,44 @@ const router = require('./controllers/MessageController');
     socket.on('nickName', (nickName) => {
       onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
       onlineUsers = [...onlineUsers, { socketId: socket.id, nickname: nickName }];
-      console.log('Conectou um cliente', onlineUsers);
       io.emit('onlineUsers', onlineUsers);
     });
   };
 
+  const saveMessageInDB = async (chatMessage, nickname, date) => {
+    await updateMessagesRepository({ chatMessage, nickname, date });
+  };
+
+  const relayMessages = (chatMessage, nickname, date) => {
+    io.emit('message',
+      `${date} ${nickname} ${chatMessage}`);
+  };
+
+  const messageEvent = (socket) => {
+    const date = generateDate();
+
+    socket.on('message', async ({ chatMessage, nickname }) => {
+      saveMessageInDB(chatMessage, nickname, date);
+
+      relayMessages(chatMessage, nickname, date);
+    });
+  };
+
+  const clientDisconnect = (socket) => {
+    socket.on('disconnect', () => {
+      onlineUsers = onlineUsers.filter((onlineUser) => onlineUser.socketId !== socket.id);
+      io.emit('clientExit', onlineUsers);
+    });
+  };
+
   io.on('connection', (socket) => {
-    console.log(`novo usuário conectado! ${socket.id}`);
     socket.emit('confirmConnection');
    
     capureNickNameEvent(socket);
 
-    const date = generateDate();
+    messageEvent(socket);
 
-    socket.on('message', async ({ chatMessage, nickname }) => {
-      console.log('Mensagem recebida pelo servidor', nickname);
-      await updateMessagesRepository({ chatMessage, nickname, date });
-
-      io.emit('message',
-      `${date} ${nickname} ${chatMessage}`);
-    });
-
-    socket.on('disconnect', () => {
-      onlineUsers = onlineUsers.filter((onlineUser) => onlineUser.socketId !== socket.id);
-      console.log('Um cliente desconectou', onlineUsers);
-      io.emit('clientExit', onlineUsers);
-    });
+    clientDisconnect(socket);
   });
 
 app.use(bodyParser.json());
@@ -73,5 +85,3 @@ app.get('/', (req, res) => {
 app.use('/historicMessage', router);
 
 http.listen(PORT, () => console.log('App listening on PORT %s', PORT));
-
-app.get('/', (_req, res) => res.end());

@@ -1,7 +1,6 @@
 const client = window.io();
 
-// Referência: https://www.webtutorial.com.br/funcao-para-gerar-uma-string-aleatoria-random-com-caracteres-especificos-em-javascript/
-
+// Reference: https://www.webtutorial.com.br/funcao-para-gerar-uma-string-aleatoria-random-com-caracteres-especificos-em-javascript/
 const generateNickName = () => {
   let randomString = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -11,18 +10,7 @@ const generateNickName = () => {
     return randomString;
 };
 
-// const setNickNameInLocalStorage = (nickName) => {
-//   localStorage.setItem('nickName', nickName);
-// };
-
-// const getNickNameFromLocalStorage = () => {
-//   if (localStorage.getItem('nickName')) {
-//     return localStorage.getItem('nickName');
-//   } 
-//     const nickName = generateNickName();
-//     // setNickNameInLocalStorage(nickName);
-//     return nickName;
-// };
+let nickname = generateNickName();
 
 const insertUser = (onlineUser) => {
   const liUser = document.createElement('li');
@@ -67,76 +55,55 @@ const createClientMessage = (message) => {
   return messageElementFromClient;
 };
 
-// const welcomeMessage = () => {
-//   const messageElementFromRobot = document.createElement('div');
-//   messageElementFromRobot.classList.add('msg-robot');
-
-//   // const nickName = getNickNameFromLocalStorage();
-  
-//   const messageComponent = `
-//     <div class="msg-bubble">
-//       <div class="msg-text">
-//         Bem vindo
-//       </div>
-//     </div>
-//   `;
-
-//   messageElementFromRobot.innerHTML = messageComponent;
-
-//   return messageElementFromRobot;
-// };
-
-// let onlineUsers;
-
-let nickname = generateNickName();
-
-client.on('confirmConnection', async () => {
+const getHistoryMessages = async () => {
   const response = await fetch('http://localhost:3000/historicMessage');
   const messagesList = await response.json();
+  return messagesList;
+};
 
+const renderHistoryMessages = async () => {
+  const messagesList = await getHistoryMessages();
   messagesList.forEach(({ message, nickname: nickName, timestamp }) => {
     const completeMessage = `${timestamp} ${nickName} ${message}`;
     const newMessageUser = createClientMessage(completeMessage);
   document.querySelector('#listMessages').append(newMessageUser);
   });
+};
 
-  // const newMessageRobot = welcomeMessage();
-  // document.querySelector('#listMessages').append(newMessageRobot);
+client.on('confirmConnection', async () => {
+  await renderHistoryMessages();
 
   client.emit('nickName', nickname);
 });
 
 client.on('onlineUsers', (receivedOnlineUsers) => {
-  console.log('Qualquer nova conexão', receivedOnlineUsers, nickname);
   insertUserList(receivedOnlineUsers, nickname);
 });
 
 client.on('clientExit', (receivedOnlineUsers) => {
-  console.log('Quando um cliente se desconecta', receivedOnlineUsers);
   insertUserList(receivedOnlineUsers, nickname);
-});
-
-document.querySelector('#formSetNickName').addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  const newNickName = document.querySelector('#nickNameInput').value;
-
-  nickname = newNickName;
-
-  client.emit('nickName', nickname);
-  console.log('Cliente emite novo nickName', nickname);
- });
-
-document.querySelector('#formSendMessage').addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  const chatMessage = document.querySelector('#messageInput').value;
-  
-  console.log(nickname);
-  client.emit('message', { chatMessage, nickname });
 });
 
 client.on('message', (message) => {
   const newMessageUser = createClientMessage(message);
   document.querySelector('#listMessages').append(newMessageUser);
 });
+
+const changeNickname = () => {
+  document.querySelector('#formSetNickName').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const newNickName = document.querySelector('#nickNameInput').value;
+    nickname = newNickName;
+    client.emit('nickName', nickname);
+   });
+};
+changeNickname();
+
+const sendMessage = () => {
+  document.querySelector('#formSendMessage').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const chatMessage = document.querySelector('#messageInput').value;
+    client.emit('message', { chatMessage, nickname });
+  });
+};
+sendMessage();
