@@ -13,12 +13,22 @@ function generateNickname(length) {
   }
   return result;
 }
-function userUpdate() {
+function userUpdate(joined) {
   const ul = document.querySelector('.user-list');
-  ul.innerHTML = '';
-  userList.forEach((userName) => {
-    ul.innerHTML += `<li data-testid="online-user">${userName}</li>`;
-  });
+  if (joined !== undefined) {
+    ul.innerHTML = '';
+    ul.innerHTML += `<li data-testid="online-user">${joined}</li>`;
+    userList.forEach((userName) => {
+      if (userName !== joined) {
+        ul.innerHTML += `<li data-testid="online-user">${userName}</li>`;
+      }
+    });
+  } else {
+    ul.innerHTML = '';
+    userList.forEach((userName) => {
+      ul.innerHTML += `<li data-testid="online-user">${userName}</li>`;
+    });
+  }
 }
 function renderMessage() {
   const ul = document.querySelector('.chat-list');
@@ -36,7 +46,7 @@ document.title = `Chat (${userName})`;
 client.emit('join-request', userName);
 client.on('user-ok', (data) => {
   userList = data.list;
-  userUpdate();
+  userUpdate(data.joined);
 });
 client.on('messages-update', (data) => {
   messagesList = data.messages;
