@@ -20,7 +20,7 @@ const createElement = ({ tag, className, message }) => {
 const updateListUsers = (list) => {
   const listUsers = document.getElementById('list_users');
   listUsers.innerHTML = '';
-  Object.values(list).forEach(({ nickname }) => {
+  list.forEach(({ nickname }) => {
     const li = createElement({ tag: 'li', message: nickname });
     li.setAttribute('data-testid', 'online-user');
     listUsers.appendChild(li);
@@ -62,24 +62,38 @@ const newMessage = (message) => {
   chat.appendChild(p);
 };
 
-window.onload = () => {
+const orderListUsers = (database, callback) => {
+  const db = Object.values(database).map(({ nickname }, index) => {
+    const connectId = Object.keys(database)[index];
+    return {
+      nickname, connectId,
+    };
+  }).sort((a) => {
+    if (a.connectId === socket.id) return -1;
+    return 1;
+  });
+
+  return callback(db);
+};
+
+window.onload = async () => {
   socket.on('message', (message) => newMessage(message));
 
   socket.on('notification', ({ db, messageChannel }) => {
-    updateListUsers(db);
+    orderListUsers(db, updateListUsers);
     newMessage(messageChannel);
   });
 
   socket.on('welcome', ({ db }) => {
-    updateListUsers(db);
+    orderListUsers(db, updateListUsers);
   });
 
   socket.on('users', ({ db }) => {
-    updateListUsers(db);
+    orderListUsers(db, updateListUsers);
   });
 
   socket.on('logout', ({ db, messageChannel }) => {
-    updateListUsers(db);
+    orderListUsers(db, updateListUsers);
     newMessage(messageChannel);
   });
 
