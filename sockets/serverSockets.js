@@ -60,7 +60,7 @@ module.exports = {
       );
       userList[indexUser] = nickname;
       userActual.userName = nickname;
-      socket.emit('user-ok', userList);
+      socket.emit('user-ok', { list: userList });
       updateAll(socket, connectedUsers, userActual);
     });
     return { userActual, userList };

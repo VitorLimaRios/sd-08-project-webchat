@@ -31,17 +31,17 @@ app.use(express.static(`${__dirname}/views`));
 let connectedUsers = [];
 const messagesList = [];
 
-io.on('connection', (socket) => { 
+io.on('connection', (socket) => {
   let userActual = socket;
   userActual = joinRequest(socket, userActual, connectedUsers, messagesList);
   socket.on('disconnect', () => {
-    let userList = connectedUsers;
-    userList = connectedUsers.filter((user) => user !== userActual.userName);
+    connectedUsers = connectedUsers.filter(
+      (user) => user !== userActual.userName,
+    );
     socket.broadcast.emit('user-desconected', {
       left: userActual.userName,
-      list: userList,
+      list: connectedUsers,
     });
-    connectedUsers = userList;
   });
   message(socket, messagesList, io);
   const newUser = alterNickname(userActual, userActual, connectedUsers);
