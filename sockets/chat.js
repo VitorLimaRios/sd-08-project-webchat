@@ -1,4 +1,5 @@
 const { saveMessage } = require('../services/chatUseCase');
+const { addUserOn, updateUserOn, removeUserOn } = require('../services/usersOnUseCase');
 
 const db = {};
 
@@ -15,11 +16,12 @@ const getDateTime = () => {
 };
 
 const onDisconnect = (socket) => {
-  socket.on('disconnect', () => {
+  socket.on('disconnect', async () => {
     delete db[socket.id];
     const messageChannel = `cliente: ${socket.id} foi desconectado`;
     console.log(messageChannel);
     socket.broadcast.emit('logout', { db, messageChannel });
+    await removeUserOn({ database: db});
   });
 };
 
@@ -43,21 +45,26 @@ const onMessage = (io, socket) => {
   socket.on('message', async ({ nickname, chatMessage }) => {
     db[socket.id] = { nickname };
     const date = getDateTime();
-    await saveMessage({ nickname, chatMessage, date });
     const messageChannel = `${date} - ${nickname}: ${chatMessage}`;
     io.emit('message', messageChannel);
+    await saveMessage({ nickname, chatMessage, date });
+
   });
 };
 
 const onUsers = (io, socket) => {
-  socket.on('users', ({ nickname }) => {
+  socket.on('users', async ({ nickname }) => {
     db[socket.id] = { nickname };
     io.emit('users', { db });
+    await updateUserOn({ connectId: socket.id, nickname });
   });
 };
 
 module.exports = (io) =>
-  io.on('connection', (socket) => {
+  io.on('connection', async (socket) => {
+    const nickname = socket.id.substr(0, 16);
+    await addUserOn({ connectId: socket.id, nickname});
+
     db[socket.id] = { nickname: socket.id.substr(0, 16) };
     console.log(`cliente: conectado com id: ${socket.id}`);
     onDisconnect(socket);

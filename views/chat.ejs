@@ -21,13 +21,17 @@
     <section class="chat">
       <div class="list-users">
         <ul id="list_users">
+        <% usersOn.forEach((element)=> { %> <li data-testid="online-user">
+            <%= `${element.nickname}` %>
+            </li>
+        <% }) %>
         </ul>
       </div>
       <div class="messages" id="chat_message">
         <% messageChanel.forEach((element)=> { %> <p data-testid="message">
             <%= ` ${element.timestamp} - ${element.nickname}: ${element.message}` %>
-          </p>
-          <% }) %>
+            </p>
+        <% }) %>
       </div>
     </section>
     <form class="form-send" id="form_send">

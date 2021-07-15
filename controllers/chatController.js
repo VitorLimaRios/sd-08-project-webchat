@@ -1,15 +1,14 @@
-const { get } = require('../models/message');
+const { getChat } = require('../services/chatUseCase')
 
 exports.chat = async (req, res) => {
   try {
-    const messageChanel = await get();
-    
+    const chat = await getChat();
     res.status(200).render('chat', {
-      title: 'Project WebChat', 
+      title: 'Project WebChat',
       subtitle: 'SOCKET.IO - WEBCHAT',
-      messageChanel,
+      ...chat
     });
   } catch (err) {
-    res.status(400).json({ statusCode: 'bad request', error: err.message });
+    res.status(400).json({statusCode: 'bad request', error: err.message});
   }
 };
