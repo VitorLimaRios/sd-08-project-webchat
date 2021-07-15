@@ -13,15 +13,11 @@ function generateNickname(length) {
   }
   return result;
 }
-function renderUserList(userJoined) {
+function userUpdate() {
   const ul = document.querySelector('.user-list');
-  // ul.innerHTML = '';
-  userList.forEach((user) => {
-    if (user === userJoined) {
-      ul.innerHTML += `<li data-testid="online-user">${user}</li>`;
-    } else {
-      ul.innerHTML += `<li>${user}</li>`;
-    }
+  ul.innerHTML = '';
+  userList.forEach((userName) => {
+    ul.innerHTML += `<li data-testid="online-user">${userName}</li>`;
   });
 }
 function renderMessage() {
@@ -40,11 +36,7 @@ document.title = `Chat (${userName})`;
 client.emit('join-request', userName);
 client.on('user-ok', (data) => {
   userList = data.list;
-  renderUserList(data.joined);
-});
-client.on('list-update', (data) => {
-  userList = data.list;  
-  renderUserList(data.joined);
+  userUpdate();
 });
 client.on('messages-update', (data) => {
   messagesList = data.messages;
@@ -67,7 +59,7 @@ nicknameButton.addEventListener('click', (event) => {
     document.title = `Chat (${newNickname})`;
     client.on('user-ok', (data) => {
       userList = data.list;
-      renderUserList(data.joined);
+      userUpdate();
     });
     client.emit('alter-nickname', newNickname);
   }
@@ -75,4 +67,13 @@ nicknameButton.addEventListener('click', (event) => {
 client.on('message', (message) => {
   messagesList.push(message);
   renderMessage();
+});
+client.on('user-desconected', (data) => {
+  userList = data.list;
+  client.emit('updateusers-server', userList);
+  userUpdate();
+});
+client.on('list-update', (data) => {
+  userList = data.list;
+  userUpdate();
 });

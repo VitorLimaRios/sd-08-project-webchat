@@ -1,7 +1,6 @@
 const Chat = require('../models/Chat');
 
 function updateAll(socket, connectedUsers, userActual) {
-  console.log(userActual.userName);
   socket.broadcast.emit('list-update', {
     joined: userActual.userName,
     list: connectedUsers,
@@ -21,14 +20,16 @@ module.exports = {
         joined: userActual.userName,
         list: connectedUsers,
       });
+      console.log('Nova Conexão', connectedUsers);
     });
     return userActual;
   },
   disconnect: (socket, connectedUsers, userActual) => {
     let userList = connectedUsers;
+    userList = connectedUsers.filter((user) => user !== userActual.userName);
     socket.on('disconnect', () => {
-      userList = connectedUsers.filter((user) => user !== userActual.userName);
-      socket.broadcast.emit('list-update', {
+      console.log('desconectado', userActual.userName, userList);
+      socket.broadcast.emit('user-desconected', {
         left: userActual.userName,
         list: userList,
       });

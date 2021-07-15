@@ -4,7 +4,6 @@ require('dotenv').config();
 const socketIO = require('socket.io');
 const {
   joinRequest,
-  disconnect,
   message,
   alterNickname,
 } = require('./sockets/serverSockets');
@@ -32,14 +31,25 @@ app.use(express.static(`${__dirname}/views`));
 let connectedUsers = [];
 const messagesList = [];
 
-io.on('connection', (socket) => {
+io.on('connection', (socket) => { 
   let userActual = socket;
   userActual = joinRequest(socket, userActual, connectedUsers, messagesList);
-  disconnect(userActual, connectedUsers, userActual);
+  socket.on('disconnect', () => {
+    let userList = connectedUsers;
+    userList = connectedUsers.filter((user) => user !== userActual.userName);
+    socket.broadcast.emit('user-desconected', {
+      left: userActual.userName,
+      list: userList,
+    });
+    connectedUsers = userList;
+  });
   message(socket, messagesList, io);
   const newUser = alterNickname(userActual, userActual, connectedUsers);
   connectedUsers = newUser.userList;
   userActual = newUser.userActual;
+  socket.on('updateusers-server', (users) => {
+    connectedUsers = users;
+  });
 });
 
 server.listen(PORT, () => {
