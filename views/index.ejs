@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input
+      type="text"
+      class="nickname-input"
+      data-testid="nickname-box"
+    />
+    <button
+      type="button"
+      class="save-nickname-btn"
+      data-testid="nickname-button"
+    >
+      Save
+    </button>
+    <ul class="online-users"></ul>
+    <ul class="messages-container">
+      <% messages.forEach((message) => { %>
+      <li data-testid="message">
+        <%= message.timestamp %> - <%= message.nickname %>: <%= message.message %>
+      </li>
+      <% }) %>
+    </ul>
+    <input
+      type="text"
+      class="message-input"
+      data-testid="message-box"
+    />
+    <button
+      type="button"
+      class="send-message-btn"
+      data-testid="send-button"
+    >
+      Enviar
+    </button>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/script.js"></script>
+</html>
