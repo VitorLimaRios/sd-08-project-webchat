@@ -1,5 +1,4 @@
 const express = require('express');
-const random = require('random-name');
 
 const app = express();
 const path = require('path');
@@ -15,6 +14,16 @@ const timestamp = `${dateFormat} ${hourFormat}`;
 
 const clients = {};
 
+const nameRandom = () => {
+    let result = '';
+    const characters = '0123456789abcdefg';
+    const charactersLength = characters.length;
+    for (let i = 0; i < 16; i += 1) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return `${result}`;
+};
+
 const io = require('socket.io')(http, {
     cors: {
       origin: 'http://localhost:3000',
@@ -26,7 +35,7 @@ app.set('view engine', 'ejs');
 app.set('views', './public/views');
 
 io.on('connect', (socket) => {
-    const newUser = { hour: timestamp, nickname: random(), message: 'Bem Vindo!' };
+    const newUser = nameRandom();
     clients[socket.id] = newUser;
     socket.emit('connected', newUser);
     console.log(clients);
@@ -35,7 +44,6 @@ io.on('connect', (socket) => {
 
     socket.on('message', ({ chatMessage, nickname }) => {
         // const oldNick = clients[socket.id];
-
         const newMessage = `${timestamp} - ${nickname}: ${chatMessage}`;
         io.emit('message', newMessage);
     });
