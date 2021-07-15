@@ -1,12 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>webchat T8</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
 </head>
+
 <body>
-  
+  <form>
+    <input type="text" id="nickname-box" data-testid="nickname-box" placeholder="Insira seu nickname"
+      class="input is-rounded" />
+    <button type="button" id="nickname-button" data-testid="nickname-button" class="button is-success is-light"
+      onclick="changeNick()">
+      Salvar
+    </button>
+  </form>
+  <div id="appendList" class="notification is-primary">
+    <ul id="online-user-list"></ul>
+  </div>
+  <div class="content">
+    <ul id="messages" class="media-content"></ul>
+  </div>
+  <input type="textarea" id="message-box" data-testid="message-box" class="textarea is-success" />
+  <button type="button" id="send-button" data-testid="send-button" class="button is-success" onclick="creatMenssage()">
+    Enviar
+  </button>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="index.js"></script>
 </body>
 </html>
