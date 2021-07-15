@@ -21,7 +21,7 @@ const onDisconnect = (socket) => {
     const messageChannel = `cliente: ${socket.id} foi desconectado`;
     console.log(messageChannel);
     socket.broadcast.emit('logout', { db, messageChannel });
-    await removeUserOn({ database: db});
+    await removeUserOn({ database: db });
   });
 };
 
@@ -48,7 +48,6 @@ const onMessage = (io, socket) => {
     const messageChannel = `${date} - ${nickname}: ${chatMessage}`;
     io.emit('message', messageChannel);
     await saveMessage({ nickname, chatMessage, date });
-
   });
 };
 
@@ -63,7 +62,7 @@ const onUsers = (io, socket) => {
 module.exports = (io) =>
   io.on('connection', async (socket) => {
     const nickname = socket.id.substr(0, 16);
-    await addUserOn({ connectId: socket.id, nickname});
+    await addUserOn({ connectId: socket.id, nickname });
 
     db[socket.id] = { nickname: socket.id.substr(0, 16) };
     console.log(`cliente: conectado com id: ${socket.id}`);
