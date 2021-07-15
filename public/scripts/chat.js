@@ -17,9 +17,6 @@ const createMessage = (message) => {
 
 btnSalvar.addEventListener('click', () => {
   const changeUser = { oldUser: usersList.firstChild.textContent, newUser: nicknameInput.value };
-  const localUsers = JSON.parse(localStorage.getItem('users'));
-  localUsers[0] = nicknameInput.value;
-  localStorage.setItem('users', JSON.stringify(localUsers));
   usersList.firstChild.textContent = nicknameInput.value;
   socket.emit('updateUsers', changeUser);
   return false;
@@ -27,7 +24,7 @@ btnSalvar.addEventListener('click', () => {
 
 btnEnviar.addEventListener('click', (e) => {
   e.preventDefault();
-  const [nickname] = JSON.parse(localStorage.getItem('users'));
+  const nickname = usersList.firstChild.textContent;
   const chatMessage = messageArea.value;
   socket.emit('message', { chatMessage, nickname });
   return false;
@@ -41,58 +38,28 @@ const createUser = (name, id = '') => {
   usersList.appendChild(li);
 };
 
-const mainUserName = () => {
+const getConnectedUsers = (users) => {
+  const mainUser = usersList.firstChild.textContent;
+  const user = users.find(({ userName }) => userName === mainUser);
+  const index = users.indexOf(user);
+  users.splice(index, 1);
+  users.map(({ userName }) => createUser(userName, 'otherUser'));
+  return false;
+};
+
+const userConnect = () => {
   const socketId = socket.id;
-  const localUsers = localStorage.getItem('users');
-  const users = JSON.parse(localUsers);
   const randomUserName = `Usuario${socketId.substring(0, 9)}`;
-  if (!users) {
-    localStorage.setItem('users', JSON.stringify([randomUserName]));
-  } else {
-    localStorage.setItem('users', JSON.stringify([randomUserName, ...users]));
-  }
   createUser(randomUserName, 'mainUser');
   socket.emit('userConnect', randomUserName);
-  return false;
 };
 
-const getAllUsers = () => {
-  const mainUser = usersList.firstChild.textContent;
-  const localUsers = localStorage.getItem('users');
-  const users = JSON.parse(localUsers);
-  const index = users.indexOf(mainUser);
-  users.splice(index, 1);
-  users.map((user) => createUser(user, 'otherUser'));
-  return false;
-};
-
-const refreshUsers = () => {
+const refreshUsers = (users) => {
   const mainUser = usersList.firstChild.textContent;
   usersList.innerText = '';
   createUser(mainUser, 'mainUser');
-  getAllUsers();
+  getConnectedUsers(users);
 };
-
-// btnEnviar.addEventListener('click', (e) => {
-//   e.preventDefault();
-//   const message = messageArea.value;
-//   const nickname = usersList.firstChild.textContent;
-//   // const url = 'http://localhost:3000/';
-
-//   // const body = { message, nickname };
-
-//   // const request = new XMLHttpRequest();
-//   // request.open('POST', url, true);
-//   // request.setRequestHeader('Content-type', 'application/json');
-//   // request.send(JSON.stringify(body));
-
-//   // fetch('http://localhost:3000/', {
-//   //   method: 'post',
-//   //   body: JSON.stringify(body),
-//   // }).then((response) => console.log(response))
-//   // .catch((err) => console.log(err));
-//   return false;
-// });
 
 socket.on('message', (message) => {
   createMessage(message);
@@ -100,21 +67,18 @@ socket.on('message', (message) => {
 
 socket.on('userConnect', (userName) => {
   createUser(userName, 'otherUser');
-  // getAllUsers();
 });
 
-socket.on('updateUsers', (_users) => {
-  refreshUsers();
+socket.on('updateUsers', (users) => {
+  refreshUsers(users);
+});
+
+socket.on('otherUsers', (users) => {
+  getConnectedUsers(users);
 });
 
 socket.on('connection', () => {
-  mainUserName();
-  getAllUsers();
-  // const localUsers = JSON.parse(localStorage.getItem('users'));
-  // socket.emit('users', localUsers);
-  // socket.on('users', (users) => {
-
-  // });
+  userConnect();
 });
 
 socket.on('oldMessages', (messages) => {
@@ -125,13 +89,7 @@ socket.on('oldMessages', (messages) => {
   });
 });
 
-window.onbeforeunload = () => {
-  const mainUser = usersList.firstChild.textContent;
-  const localUsers = localStorage.getItem('users');
-  const users = JSON.parse(localUsers);
-  const index = users.indexOf(mainUser);
-  users.splice(index, 1);
-  localStorage.setItem('users', JSON.stringify(users));
-  // socket.emit('updateUsers');
-  socket.disconnect();
-};
+socket.on('disconnectUser', (userstest) => {
+  console.log(userstest);
+  refreshUsers(userstest);
+});
