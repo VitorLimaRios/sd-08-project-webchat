@@ -25,7 +25,7 @@ io.on('connection', async (client) => {
   io.emit('usersOnline', await userChat.getAll());
 
   client.on('updateNickName', async ({ prevNickname, newNickname }) => {
-    const { _id: id } = await userChat.getByName(prevNickname);
+    const { id } = await userChat.getByName(prevNickname);
     await userChat.updateNickName(id, newNickname);
     const newUsers = await userChat.getAll();
     io.emit('usersOnline', newUsers);
