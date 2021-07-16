@@ -27,7 +27,7 @@
   border-bottom-right-radius: 225px 15px;
   border-top-left-radius: 255px 15px;
   border-top-right-radius: 15px 225px;
-  font-family: 'Courgette', Arial, Helvetica, sans-serif;
+  font-family: Courgette, Arial, Helvetica, sans-serif;
   font-size: 20px;
   height: 40px;
   margin-bottom: 10px;
@@ -46,7 +46,7 @@
   border-top-left-radius: 255px 15px;
   border-top-right-radius: 15px 225px;
   cursor: pointer;
-  font-family: 'Courgette', Arial, Helvetica, sans-serif;
+  font-family: Courgette, Arial, Helvetica, sans-serif;
   font-size: 20px;
   height: 40px;
   margin-bottom: 10px;
@@ -92,7 +92,7 @@
   border-bottom-right-radius: 225px 15px;
   border-top-left-radius: 255px 15px;
   border-top-right-radius: 15px 225px;
-  font-family: 'Courgette', Arial, Helvetica, sans-serif;
+  font-family: Courgette, Arial, Helvetica, sans-serif;
   font-size: 20px;
   height: 40px;
   margin-right: 20px;
@@ -110,14 +110,14 @@
   border-top-left-radius: 255px 15px;
   border-top-right-radius: 15px 225px;
   cursor: pointer;
-  font-family: 'Courgette', Arial, Helvetica, sans-serif;
+  font-family: Courgette, Arial, Helvetica, sans-serif;
   font-size: 20px;
   height: 40px;
   width: 35%;
 }
 
 #onlineUser, li, h4, h6 {
-  font-family: 'Courgette', Arial, Helvetica, sans-serif;
+  font-family: Courgette, Arial, Helvetica, sans-serif;
   font-size: 20px;
 }
 
