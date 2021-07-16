@@ -18,16 +18,20 @@ const chatModel = require('./models/chatModel');
 const chatUsers = {};
 const date = dateFormat(new Date(), 'dd-mm-yyyy h:MM:ss TT');
 
-io.on('connection', (client) => { 
-   chatUsers[client.id] = `User_${randomNick.randomChar(11)}`;
+io.on('connection', (client) => {  
+  chatUsers[client.id] = `User_${randomNick.randomChar(11)}`;
+
   client.emit('currentUser', chatUsers[client.id]);
+
   client.on('message', ({ nickname, chatMessage }) => {
     chatModel.insertMessage({ message: chatMessage, nickname, timestamp: date });
     const newMessage = `${date} - ${nickname}: ${chatMessage}`;
+
     io.emit('message', newMessage);
   });
 
   io.emit('userNickname', Object.values(chatUsers));
+
   client.on('changeNick', (nickname) => {
     Object.values(chatUsers).filter((e) => e !== chatUsers[client.id]);
     chatUsers[client.id] = nickname;

@@ -24,7 +24,6 @@ const createUsersList = (user) => {
     const singleUser = document.createElement('li');
     singleUser.setAttribute('data-testid', 'online-user');
     singleUser.setAttribute('id', 'onlineUser');
-    singleUser.setAttribute('class', 'onlineUser');
     singleUser.innerText = e;
     if (nickname === e) {
       usersList.prepend(singleUser);
@@ -53,7 +52,7 @@ window.addEventListener('load', async () => {
   const dbMessages = await (await fetch('http://localhost:3000/messages')).json();
 
   dbMessages.forEach((e) => {
-    const message = `${e.timestamp} : ${e.nickname} say's: ${e.message}`;
+    const message = `${e.timestamp} - ${e.nickname}: ${e.message}`;
     createMessagesList(message);
   });
 });
