@@ -34,6 +34,15 @@ const updateUser = (oldNick, newNick) => {
   console.log(newNick);
 };
 
+const deleteUser = (oldNick) => {
+  for (const li of document.querySelectorAll('li')) {
+    if (li.textContent.includes(oldNick)) {
+      li.remove();
+    }
+  }
+  console.log(oldNick);
+};
+
 const saveBtn = document.querySelector('#nickname-btn');
 const inputNickname = document.querySelector('#nickname-text');
 saveBtn.addEventListener('click', (e) => {
@@ -77,6 +86,7 @@ socket.on('message', (message) => createMessage(message));
 socket.emit('serverMessage', nickname);
 socket.on('serverMessage', (nick) => createUser(nick));
 socket.on('changeNickname', (nick) => updateUser(nick.nickOld, nick.nickNew));
+socket.on('deleteNickname', (nick) => deleteUser(nick));
 
 window.onbeforeunload = () => {
   socket.disconnect();

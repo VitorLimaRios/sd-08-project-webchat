@@ -3,16 +3,19 @@ const MessageModel = require('../models/Message');
 
 const usersArray = [];
 
+
 module.exports = (io) => {
   io.on('connection', (socket) => {
     socket.emit('connection', usersArray);
     socket.on('users', (users) => io.emit('users', users));
     socket.on('disconnect', () => {
-      socket.broadcast.emit('updateUsers');
-      usersArray.splice(usersArray.indexOfindexof({ nickname: nick.nickOld, id: sockect.id }));
-      // const index = usersArray.findIndex((user) => user.id === socket.id);
-      // usersArray.splice(index, 1);
-      // delete usersObject[socket.id];
+      // socket.broadcast.emit('updateUsers');
+      const index = usersArray.findIndex((user) => user.id === socket.id);
+      socket.emit('deleteNickname', usersArray[index].nickname);
+      console.log(usersArray[index].nickname);
+      usersArray.splice(index, 1)
+      console.log(usersArray);
+      console.log(index);
     });
 
     socket.on('message', async ({ nickname, chatMessage }) => {
@@ -28,8 +31,8 @@ module.exports = (io) => {
 
     socket.on('changeNickname', (nick) => {
       socket.broadcast.emit('changeNickname', nick);
-      console.log('mudou nick: ', socket.id);
-      usersArray.findIndex()
+      const newValue = usersArray.findIndex((user) => user.id === socket.id);
+      usersArray[newValue] = { nickname: nick.nickNew, id: socket.id };
     });
   });
 };
