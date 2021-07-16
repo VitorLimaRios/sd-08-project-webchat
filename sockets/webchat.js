@@ -14,24 +14,23 @@ const serverMessage = (nickname, socket) => {
   usersArray.push({ nickname, id: socket.id });
 };
 
-// const disconnect = (socket, io) => {
-//   const index = usersArray.findIndex((user) => user.id === socket.id);
-//   socket.emit('deleteNickname', usersArray[index].nickname);
-//   usersArray.splice(index, 1);
-// };
+// TODO req 3 não passa nada. console.log vem certo.
+const disconnect = (socket) => {
+  const index = usersArray.findIndex((user) => user.id === socket.id);
+  if (index > 0) {
+    socket.broadcast.emit('deleteNickname', usersArray[index].nickname);
+    usersArray.splice(index, 1);
+  }
+};
 
 module.exports = (io) => {
-  io.on('connection', (socket) => {
+  io.on('connection', async (socket) => {
     socket.emit('connection', usersArray);
-    socket.on('users', (users) => io.emit('users', users));
-    socket.on('disconnect', () => {
-      // TODO ainda não remove li, req 3 não passa nada.
-      const index = usersArray.findIndex((user) => user.id === socket.id);
-      socket.emit('deleteNickname', usersArray[index].nickname);
-      // console.log(usersArray[index].nickname);
-      usersArray.splice(index, 1);
-      // console.log(usersArray);
-      // console.log(index);
+    // socket.on('users', (users) => io.emit('users', users));
+
+    const historicoMsgs = await MessageModel.getAll();
+    historicoMsgs.forEach((message) => {
+      socket.emit('message', `${message.timestamp} - ${message.nickname}: ${message.message}`);
     });
 
     socket.on('message', async ({ nickname, chatMessage }) => {
@@ -40,17 +39,16 @@ module.exports = (io) => {
       io.emit('message', `${dateMsg} - ${nickname}: ${chatMessage}`);
     });
 
-    // socket.on('serverMessage', (nickname) => {
-    //   socket.broadcast.emit('serverMessage', nickname);
-    //   usersArray.push({ nickname, id: socket.id });
-    // });
+    socket.on('disconnect', () => disconnect(socket));
     socket.on('serverMessage', (nickname) => serverMessage(nickname, socket));
-
-    // socket.on('changeNickname', (nick) => {
-    //   socket.broadcast.emit('changeNickname', nick);
-    //   const newValue = usersArray.findIndex((user) => user.id === socket.id);
-    //   usersArray[newValue] = { nickname: nick.nickNew, id: socket.id };
-    // });
     socket.on('changeNickname', (nick) => changeNickname(nick, socket));
   });
+
+    // socket.on('disconnect', () => {
+    //   const index = usersArray.findIndex((user) => user.id === socket.id);
+    //   if (index > 0) {
+    //     socket.broadcast.emit('deleteNickname', usersArray[index].nickname);
+    //     usersArray.splice(index, 1);
+    //   }
+    // });
 };

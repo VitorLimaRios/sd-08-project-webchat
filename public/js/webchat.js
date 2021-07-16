@@ -18,29 +18,19 @@ const form = document.querySelector('#form-msg');
 const inputMessage = document.querySelector('#message-input');
 form.addEventListener('submit', (e) => {
   e.preventDefault();
-  console.log('entrou');
   socket.emit('message', { chatMessage: inputMessage.value, nickname });
   inputMessage.value = '';
   return false;
 });
-// TODO por que esse li dá erro e o outro não?
-const updateUser = (oldNick, newNick) => {
-  console.log(oldNick);
-  document.querySelectorAll('li').forEach((li) => {
-    if (li.textContent.includes(oldNick)) {
-      li.innerText = newNick;
-    }
-  });
-  console.log(newNick);
-};
 
-const deleteUser = (oldNick) => {
-  console.log(oldNick);
+const updateUser = (oldNick, newNick) => {
+  let userNick = '';
   document.querySelectorAll('li').forEach((li) => {
     if (li.textContent.includes(oldNick)) {
-      li.remove();
+      userNick = li;
     }
   });
+  userNick.innerText = newNick;
 };
 
 const saveBtn = document.querySelector('#nickname-btn');
@@ -55,7 +45,6 @@ saveBtn.addEventListener('click', (e) => {
 });
 
 const createMessage = (message) => {
-  console.log('entrou no createmsg');
   const messagesUl = document.querySelector('#messages');
   const li = document.createElement('li');
   li.id = 'message';
@@ -74,6 +63,15 @@ const createUser = (user) => {
 };
 
 createUser(`${nickname}`);
+
+const deleteUser = (oldNickname) => {
+  console.log(oldNickname);
+  document.querySelectorAll('li').forEach((li) => {
+    if (li.textContent.includes(oldNickname)) {
+      li.remove();
+    }
+  });
+};
 
 socket.on('connection', (usersArray) => {
   usersArray.forEach((newUser) => {

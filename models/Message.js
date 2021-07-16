@@ -5,10 +5,10 @@ const getAll = async () => connection()
   .find({})
   .toArray());
 
-const create = async (chatMessage, nickname, dateMsg) => connection()
+const create = async (message, nickname, dateMsg) => connection()
   .then((db) => db.collection('messages')
   .insertOne({
-    chatMessage,
+    message,
     nickname,
     timestamp: dateMsg,
   }));
