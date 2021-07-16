@@ -14,22 +14,21 @@
       data-testid="nickname-box"/>
       <button id='saveNickname' data-testid="nickname-button">SALVAR</button>
       <section>
-        <ul id='userList'>Users Connected</ul>
+        <h4>Users Connected</h4>
+        <ul id='userList'></ul>
       </section>
     </div>
     <div>
-      <h2 id='welcome-messages'></h2>
-      <h3 id='messages'>message</h3>
-      <form action="">
-        <input 
-        id="messageInput"
-        autocomplete="off"
-        placeholder="Digite sua mensagem"
-        data-testid="message-box"/>
-        <button data-testid="send-button">ENVIAR</button>
-      </form>
+      <h2></h2>
+      <ul id='messages'>Chat Message</ul>
+      <input 
+      id="messageInput"
+      autocomplete="off"
+      placeholder="Digite sua mensagem"
+      data-testid="message-box"/>
+      <button id='sendMessage' data-testid="send-button">ENVIAR</button>
     </div>
-    <script src="./js/message.js"></script>
+    <script src="./js/client.js"></script>
   </body>
 
 </html>
