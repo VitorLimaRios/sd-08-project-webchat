@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/index.css" />
+    <title>Web Chat - Trybe</title>
+  </head>
+
+  <body>
+    <h1>Trybe - Web Chat</h1>
+    <div class="main">
+      <div class="div-left">
+        <form id="nicknameForm">
+          <input
+            class="input-name"
+            type="text"
+            id="nicknameBox"
+            maxlength="16"
+            data-testid="nickname-box"
+            placeholder="Change your nickname"
+          />
+          <button class="btn-save" type="submit" data-testid="nickname-button">
+            Change
+          </button>
+        </form>
+        <div id="usersList"></div>
+      </div>
+      <div class="div-right">
+        <div id="messagesList" class="display-msg"></div>
+      </div>
+      <div class="div-bottom">
+        <form id="messagesForm">
+          <input
+            class="input-msg"
+            type="text"
+            id="messageBox"
+            data-testid="message-box"
+            placeholder="Enter your message..."
+            autocomplete="off"
+          />
+          <button class="btn-send" type="submit" data-testid="send-button">
+            Send
+          </button>
+        </form>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/client.js"></script>
+  </body>
+</html>

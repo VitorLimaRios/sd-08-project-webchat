@@ -1,0 +1,159 @@
+@import url("https://fonts.googleapis.com/css2?family=Courgette&display=swap");
+
+.main {
+  align-items: center;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 1%;
+  height: 95vh;
+  justify-content: center;
+  width: 100%;
+}
+
+.div-left {
+  border: 2px solid black;
+  border-bottom-left-radius: 15px 255px;
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  height: 50%;
+  padding: 25px;
+  width: 45%;
+}
+
+.input-name {
+  border: 2px solid black;
+  border-bottom-left-radius: 15px 255px;
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  font-family: "Courgette", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  height: 40px;
+  margin-bottom: 10px;
+  margin-right: 20px;
+  width: 55%;
+}
+
+.input-name:focus {
+  outline: none;
+}
+
+.btn-save {
+  border: 2px solid black;
+  border-bottom-left-radius: 15px 255px;
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  cursor: pointer;
+  font-family: "Courgette", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  height: 40px;
+  margin-bottom: 10px;
+  width: 35%;
+}
+
+.display-users {
+  border: 2px solid black;
+  border-bottom-left-radius: 15px 255px;
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  height: 75%;
+  margin: auto;
+  padding: 20px;
+}
+
+.div-right {
+  border: 2px solid black;
+  border-bottom-left-radius: 15px 255px;
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  height: 50%;
+  padding: 25px;
+  width: 45%;
+  overflow-y: scroll;
+}
+
+.display-msg {
+  padding: 20px;
+}
+
+.div-bottom {
+  height: 10%;
+  padding: 25px;
+  width: 90%;
+}
+
+.input-msg {
+  border: 2px solid black;
+  border-bottom-left-radius: 15px 255px;
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  font-family: "Courgette", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  height: 40px;
+  margin-right: 20px;
+  width: 60%;
+}
+
+.input-msg:focus {
+  outline: none;
+}
+
+.btn-send {
+  border: 2px solid black;
+  border-bottom-left-radius: 15px 255px;
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  cursor: pointer;
+  font-family: "Courgette", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  height: 40px;
+  width: 35%;
+}
+
+#onlineUser,
+li,
+h4,
+h6 {
+  font-family: "Courgette", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+}
+
+
+h4 {
+  height: auto;
+  margin: 0;
+  width: 80%;
+}
+
+h6 {
+  height: auto;
+  margin: 0;
+  text-align-last: right;
+  width: 80%;
+}
+
+.msg {
+  border: 1px solid black;
+  border-bottom-left-radius: 70px 165px;
+  border-bottom-right-radius: 165px 70px;
+  border-top-right-radius: 70px 165px;
+  padding: 0% 1% 0% 5%;
+  width: auto;
+  margin-bottom: 1%;
+  list-style: none;
+  word-break: break-word;
+}
+
+.msg-info-time {
+  font-size: 12px;
+}
+
+.msg-text {
+  margin: 0;
+}
