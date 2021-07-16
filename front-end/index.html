@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>webchat</title>
+  <title>webchat T8</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
   <link rel="stylesheet" href="./style.css">
 </head>
@@ -26,7 +26,13 @@
     <ul id="messages" class="media-content"></ul>
   </div>
   <input type="textarea" id="message-box" data-testid="message-box" class="textarea is-success" />
-  <button type="button" id="send-button" data-testid="send-button" class="button is-success" onclick="creatMenssage()">
+  <button
+    type="button"
+    id="send-button"
+    data-testid="send-button"
+    class="button is-success"
+    onclick="creatMenssage()"
+  >
     Enviar
   </button>
   <script src="/socket.io/socket.io.js"></script>
@@ -37,6 +43,7 @@
     const myOnlineUser = 'my-online-user';
 
     function addUserOn(user) {
+      console.log(user);
       socket.emit('addOn', user);
     }
 
@@ -48,7 +55,7 @@
       nickElemente.innerHTML = newUser.nickname;
       document.querySelector('#online-user-list').appendChild(nickElemente);
 
-      addUserOn(newUser.nickname);
+      addUserOn(newUser);
     });
 
     // renderizar menssagens do banco
@@ -168,4 +175,4 @@
   </script>
 </body>
 
-</html> 
+</html>

@@ -28,8 +28,7 @@ const aoInicializar = (socket) => {
   // enviar novo usuario ao front
   socket.emit('newUser', { newUser, onlineUsers });
   socket.on('addOn', (user) => {
-    onlineUsers.push(newUser);
-    console.log(user);
+    onlineUsers.push(user);
   });
   console.log(onlineUsers.length);
 
@@ -59,6 +58,9 @@ const salvaBD = async (message, nickname, timestamp) => {
 io.on('connection', (socket) => {
   // remover quem sair do chat
   socket.on('disconnect', (user) => {
+    // console.log(user);
+    // console.log(onlineUsers.indexOf(user));
+    console.log(onlineUsers);
     onlineUsers.splice(onlineUsers.indexOf(user), 1);
     io.emit('remover', onlineUsers);
   });
