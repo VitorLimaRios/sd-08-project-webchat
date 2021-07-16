@@ -14,19 +14,21 @@ const serverMessage = (nickname, socket) => {
   usersArray.push({ nickname, id: socket.id });
 };
 
-// TODO req 4 nao passa mais.
+// TODO req 1 parou de passar. req 4 nao passa mais.
 const disconnect = (socket) => {
   const index = usersArray.findIndex((user) => user.id === socket.id);
-  if (index > 0) {
+  console.log(index);
+  if (index !== -1) {
     socket.broadcast.emit('deleteNickname', usersArray[index].nickname);
     usersArray.splice(index, 1);
   }
+  console.log(usersArray);
 };
 
 module.exports = (io) => {
   io.on('connection', async (socket) => {
     socket.emit('connection', usersArray);
-    // socket.on('users', (users) => io.emit('users', users));
+    socket.on('users', (users) => io.emit('users', users));
 
     const historicoMsgs = await MessageModel.getAll();
     historicoMsgs.forEach((message) => {
