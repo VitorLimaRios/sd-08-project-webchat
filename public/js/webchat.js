@@ -24,17 +24,29 @@ form.addEventListener('submit', (e) => {
   return false;
 });
 
+const updateUser = (oldNick, newNick) => {
+  console.log(oldNick);
+  for (const li of document.querySelectorAll('li')) {
+    if (li.textContent.includes(oldNick)) {
+      li.innerText = newNick;
+    }
+  }
+  console.log(newNick);
+};
+
 const saveBtn = document.querySelector('#nickname-btn');
 const inputNickname = document.querySelector('#nickname-text');
 saveBtn.addEventListener('click', (e) => {
   e.preventDefault();
+  updateUser(nickname, inputNickname.value);
+  socket.emit('changeNickname', { nickOld: nickname, nickNew: inputNickname.value });
   nickname = inputNickname.value;
-  socket.emit('changeNickname', nickname);
   inputMessage.value = '';
   return false;
 });
 
 const createMessage = (message) => {
+  console.log('entrou no createmsg');
   const messagesUl = document.querySelector('#messages');
   const li = document.createElement('li');
   li.id = 'message';
@@ -55,12 +67,16 @@ const createUser = (user) => {
 createUser(`${nickname}`);
 
 socket.on('connection', (usersArray) => {
-  usersArray.forEach((newUser) => createUser(newUser));
   console.log(usersArray);
+  usersArray.forEach((newUser) => {
+    createUser(newUser.nickname);
+    console.log(newUser);
+  });
 });
 socket.on('message', (message) => createMessage(message));
 socket.emit('serverMessage', nickname);
 socket.on('serverMessage', (nick) => createUser(nick));
+socket.on('changeNickname', (nick) => updateUser(nick.nickOld, nick.nickNew));
 
 window.onbeforeunload = () => {
   socket.disconnect();
