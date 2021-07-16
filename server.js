@@ -23,16 +23,19 @@ io.on('connection', async (client) => {
 
   client.emit('user', newUser);
   io.emit('usersOnline', await userChat.getAll());
+  io.emit('chat', await userChat.getAllMessages());
 
   client.on('updateNickName', async ({ prevNickname, newNickname }) => {
-    const { id } = await userChat.getByName(prevNickname);
+    const { _id: id } = await userChat.getByName(prevNickname);
     await userChat.updateNickName(id, newNickname);
     const newUsers = await userChat.getAll();
     io.emit('usersOnline', newUsers);
   });
 
-  client.on('message', ({ chatMessage, nickname }) => {
-    io.emit('message', `${moment().format('DD-MM-YYYY HH:mm:ss')} - ${nickname}: ${chatMessage}`);
+  client.on('message', async ({ chatMessage, nickname }) => {
+    const message = `${moment().format('DD-MM-YYYY HH:mm:ss')} - ${nickname}: ${chatMessage}`;
+    await userChat.addMessage(message);
+    io.emit('message', message);
   });
 });
 

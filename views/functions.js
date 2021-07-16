@@ -74,6 +74,15 @@ const showUsers = (onlineUsers) => {
   });
 };
 
+const showMessages = (messages) => {
+  if (messages !== null) {
+    messages.forEach(({ message }) => {
+      newMessage(message);
+    });  
+  }
+};
+
 socket.on('user', (user) => getUser(user));
 socket.on('message', (message) => newMessage(message));
 socket.on('usersOnline', (onlineUsers) => showUsers(onlineUsers));
+socket.on('chat', (messages) => showMessages(messages));
