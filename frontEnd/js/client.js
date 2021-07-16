@@ -24,6 +24,7 @@ const createUsersList = (user) => {
     const singleUser = document.createElement('li');
     singleUser.setAttribute('data-testid', 'online-user');
     singleUser.setAttribute('id', 'onlineUser');
+    singleUser.setAttribute('class', 'onlineUser');
     singleUser.innerText = e;
     if (nickname === e) {
       usersList.prepend(singleUser);

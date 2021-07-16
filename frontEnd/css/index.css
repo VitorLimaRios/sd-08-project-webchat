@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap') ;
 
 .main {
   align-items: center;
@@ -12,10 +12,6 @@
 
 .div-left {
   border: 2px solid black;
-  border-bottom-left-radius: 15px 255px;
-  border-bottom-right-radius: 225px 15px;
-  border-top-left-radius: 255px 15px;
-  border-top-right-radius: 15px 225px;
   height: 50%;
   padding: 25px;
   width: 45%;
@@ -23,10 +19,6 @@
 
 .input-name {
   border: 2px solid black;
-  border-bottom-left-radius: 15px 255px;
-  border-bottom-right-radius: 225px 15px;
-  border-top-left-radius: 255px 15px;
-  border-top-right-radius: 15px 225px;
   font-family: Courgette, Arial, Helvetica, sans-serif;
   font-size: 20px;
   height: 40px;
@@ -41,10 +33,6 @@
 
 .btn-save {
   border: 2px solid black;
-  border-bottom-left-radius: 15px 255px;
-  border-bottom-right-radius: 225px 15px;
-  border-top-left-radius: 255px 15px;
-  border-top-right-radius: 15px 225px;
   cursor: pointer;
   font-family: Courgette, Arial, Helvetica, sans-serif;
   font-size: 20px;
@@ -53,23 +41,8 @@
   width: 35%;
 }
 
-.display-users {
-  border: 2px solid black;
-  border-bottom-left-radius: 15px 255px;
-  border-bottom-right-radius: 225px 15px;
-  border-top-left-radius: 255px 15px;
-  border-top-right-radius: 15px 225px;
-  height: 75%;
-  margin: auto;
-  padding: 20px;
-}
-
 .div-right {
   border: 2px solid black;
-  border-bottom-left-radius: 15px 255px;
-  border-bottom-right-radius: 225px 15px;
-  border-top-left-radius: 255px 15px;
-  border-top-right-radius: 15px 225px;
   height: 50%;
   overflow-y: scroll;
   padding: 25px;
@@ -88,10 +61,6 @@
 
 .input-msg {
   border: 2px solid black;
-  border-bottom-left-radius: 15px 255px;
-  border-bottom-right-radius: 225px 15px;
-  border-top-left-radius: 255px 15px;
-  border-top-right-radius: 15px 225px;
   font-family: Courgette, Arial, Helvetica, sans-serif;
   font-size: 20px;
   height: 40px;
@@ -105,10 +74,6 @@
 
 .btn-send {
   border: 2px solid black;
-  border-bottom-left-radius: 15px 255px;
-  border-bottom-right-radius: 225px 15px;
-  border-top-left-radius: 255px 15px;
-  border-top-right-radius: 15px 225px;
   cursor: pointer;
   font-family: Courgette, Arial, Helvetica, sans-serif;
   font-size: 20px;
@@ -116,7 +81,7 @@
   width: 35%;
 }
 
-#onlineUser, li, h4, h6 {
+.onlineUser , li , h4 , h6 {
   font-family: Courgette, Arial, Helvetica, sans-serif;
   font-size: 20px;
 }

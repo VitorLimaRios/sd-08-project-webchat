@@ -10,9 +10,16 @@
   <body>
     <h1>Trybe - Web Chat</h1>
     <div class="main">
-      <div class="div-left">
+      <div class="div-left" style="  border-bottom-left-radius: 15px 255px; 
+      border-bottom-right-radius: 225px 15px; 
+      border-top-left-radius: 255px 15px;
+      border-top-right-radius: 15px 225px;" >
         <form id="nicknameForm">
           <input
+          style="  border-bottom-left-radius: 15px 255px; 
+          border-bottom-right-radius: 225px 15px;
+          border-top-left-radius: 255px 15px;
+          border-top-right-radius: 15px 225px;"
             class="input-name"
             type="text"
             id="nicknameBox"
@@ -20,26 +27,45 @@
             data-testid="nickname-box"
             placeholder="Change your nickname"
           />
-          <button class="btn-save" type="submit" data-testid="nickname-button">
-            Change
+          <button
+          style="  border-bottom-left-radius: 15px 255px;
+          border-bottom-right-radius: 225px 15px;
+          border-top-left-radius: 255px 15px;
+          border-top-right-radius: 15px 225px;"
+          class="btn-save" type="submit" data-testid="nickname-button">
+            Change nick name
           </button>
         </form>
         <div id="usersList"></div>
       </div>
-      <div class="div-right">
+      <div class="div-right"
+      style="  border-bottom-left-radius: 15px 255px;
+      border-bottom-right-radius: 225px 15px;
+      border-top-left-radius: 255px 15px;
+      border-top-right-radius: 15px 225px;"
+      >
         <div id="messagesList" class="display-msg"></div>
       </div>
       <div class="div-bottom">
         <form id="messagesForm">
           <input
             class="input-msg"
+            style="  border-bottom-left-radius: 15px 255px;
+            border-bottom-right-radius: 225px 15px;
+            border-top-left-radius: 255px 15px;
+            border-top-right-radius: 15px 225px;"
             type="text"
             id="messageBox"
             data-testid="message-box"
             placeholder="Enter your message..."
             autocomplete="off"
           />
-          <button class="btn-send" type="submit" data-testid="send-button">
+          <button
+          style="  border-bottom-left-radius: 15px 255px;
+          border-bottom-right-radius: 225px 15px;
+          border-top-left-radius: 255px 15px;
+          border-top-right-radius: 15px 225px;"
+          class="btn-send" type="submit" data-testid="send-button">
             Send
           </button>
         </form>
