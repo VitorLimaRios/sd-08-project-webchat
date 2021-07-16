@@ -116,10 +116,7 @@
   width: 35%;
 }
 
-#onlineUser, 
-li, 
-h4, 
-h6 {
+#onlineUser, li, h4, h6 {
   font-family: 'Courgette', Arial, Helvetica, sans-serif;
   font-size: 20px;
 }
