@@ -71,9 +71,9 @@
   border-top-left-radius: 255px 15px;
   border-top-right-radius: 15px 225px;
   height: 50%;
+  overflow-y: scroll;
   padding: 25px;
   width: 45%;
-  overflow-y: scroll;
 }
 
 .display-msg {
@@ -124,7 +124,6 @@ h6 {
   font-size: 20px;
 }
 
-
 h4 {
   height: auto;
   margin: 0;
@@ -143,10 +142,10 @@ h6 {
   border-bottom-left-radius: 70px 165px;
   border-bottom-right-radius: 165px 70px;
   border-top-right-radius: 70px 165px;
+  list-style: none;
+  margin-bottom: 1%;
   padding: 0% 1% 0% 5%;
   width: auto;
-  margin-bottom: 1%;
-  list-style: none;
   word-break: break-word;
 }
 
