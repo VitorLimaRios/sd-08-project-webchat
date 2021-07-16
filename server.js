@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const randomNick = require('random-character');
 const dateFormat = require('dateformat');
 
 const app = express();
@@ -28,7 +29,7 @@ const chatUsers = {};
 const date = dateFormat(new Date(), 'dd-mm-yyyy h:MM:ss TT');
 
 io.on('connection', (client) => { 
-   chatUsers[client.id] = `User_${makeChar(11)}`;
+   chatUsers[client.id] = `User_${randomNick.randomChar(11)}`;
   client.emit('currentUser', chatUsers[client.id]);
   client.on('message', ({ nickname, chatMessage }) => {
     chatModel.insertMessage({ message: chatMessage, nickname, timestamp: date });
