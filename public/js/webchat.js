@@ -23,24 +23,24 @@ form.addEventListener('submit', (e) => {
   inputMessage.value = '';
   return false;
 });
-
+// TODO por que esse li dá erro e o outro não?
 const updateUser = (oldNick, newNick) => {
   console.log(oldNick);
-  for (const li of document.querySelectorAll('li')) {
+  document.querySelectorAll('li').forEach((li) => {
     if (li.textContent.includes(oldNick)) {
       li.innerText = newNick;
     }
-  }
+  });
   console.log(newNick);
 };
 
 const deleteUser = (oldNick) => {
-  for (const li of document.querySelectorAll('li')) {
+  console.log(oldNick);
+  document.querySelectorAll('li').forEach((li) => {
     if (li.textContent.includes(oldNick)) {
       li.remove();
     }
-  }
-  console.log(oldNick);
+  });
 };
 
 const saveBtn = document.querySelector('#nickname-btn');
@@ -76,10 +76,8 @@ const createUser = (user) => {
 createUser(`${nickname}`);
 
 socket.on('connection', (usersArray) => {
-  console.log(usersArray);
   usersArray.forEach((newUser) => {
     createUser(newUser.nickname);
-    console.log(newUser);
   });
 });
 socket.on('message', (message) => createMessage(message));
@@ -88,6 +86,6 @@ socket.on('serverMessage', (nick) => createUser(nick));
 socket.on('changeNickname', (nick) => updateUser(nick.nickOld, nick.nickNew));
 socket.on('deleteNickname', (nick) => deleteUser(nick));
 
-window.onbeforeunload = () => {
-  socket.disconnect();
-};
+// window.onbeforeunload = () => {
+//   socket.disconnect();
+// };
