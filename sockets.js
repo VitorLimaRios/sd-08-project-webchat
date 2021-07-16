@@ -1,35 +1,59 @@
 const moment = require('moment');
 
-function nickAleatorio(tamanho) {
-  const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
-  let aleatorio = '';
-  for (let i = 0; i < tamanho; i += 1) {
-      const rnum = Math.floor(Math.random() * letras.length);
-      aleatorio += letras.substring(rnum, rnum + 1);
-  }
-  return aleatorio;
-}
+let users = [];
 
-const users = [];
-let guestId = 0;
+const addUser = (socket, io) => {
+  const { firstNickName: nick } = socket.handshake.query;
+  const newUser = { nickname: nick, socketId: socket.id };
+  users.push(newUser);
+  console.log(`${newUser.nickname} se conectou`);
+  socket.emit('connectionMaster', newUser);
+  io.emit('connectionUsers', users);
+};
 
-module.exports = (io) => io.on('connection', (socket) => {
-  console.log('Alguém se conectou');
-  guestId += 1;
-  const nick = nickAleatorio(16);
-  const guest = `Guest ${guestId}`;
-  users.push({ guestId, user: guest, nick });
-  // socket.write('Bem vindo ao chat!\n');
+const sendMessage = (io, socket) => {
   socket.on('message', ({ nickname, chatMessage }) => {
+    console.log(`${nickname} mandou uma mensagem`);
     const dateHour = moment().format('DD-MM-YYYY h:mm:ss A');
     io.emit('message', `${dateHour} - ${nickname}: ${chatMessage}`);
+    io.emit('saveNickNameChat', nickname);
   });
+};
+
+const changeNickname = (nickname, socket) => users.forEach((user) => {
+  const newUser = user;
+  if (user.socketId === socket.id) {
+    newUser.nickname = nickname;
+    console.log(`${user.nickname} mudou o nickname`);
+  }
+});
+
+const newNickName = (io, socket) => {
   socket.on('saveNickName', ({ nickname }) => {
-    io.emit('saveNickName', `${nickname}`);
+    const { socketId } = users.filter((user) => user.nickname === nickname);
+    const newUser = { nickname, socketId };
+    changeNickname(nickname, socket);
+    socket.emit('connectionMaster', newUser);
+    io.emit('connectionUsers', users);
   });
-  socket.emit('newConnection', { message: `${users[guestId - 1].nick}` });
-  socket.broadcast.emit('newConnection', { message: `${users[guestId - 1].nick}` });
+};
+
+const disconnectUser = (io, socket) => {
   socket.on('disconnect', () => {
-    console.log('Alguém saiu');
+    users.forEach((user) => {
+      if (user.socketId === socket.id) console.log(`${user.nickname} se desconectou`);
+    });
+    users = users.filter((user) => user.socketId !== socket.id);
+    io.emit('connectionUsers', users);
   });
+};
+
+module.exports = (io) => io.on('connection', (socket) => {
+  addUser(socket, io);
+
+  sendMessage(io, socket);
+
+  newNickName(io, socket);
+
+  disconnectUser(io, socket);
 });
