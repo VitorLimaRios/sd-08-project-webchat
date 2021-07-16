@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Webchat Project</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+  </head>
+  <body>
+    <h1>Webchat Project</h1>
+
+    <input
+      type="text"
+      data-testid="nickname-box"
+      id="nickname-box"
+      placeholder="Insira seu novo apelido"
+    />
+    <button
+    type="button" 
+    data-testid="nickname-button"
+    id="nickname-button">
+      Save
+    </button>
+
+    <h3>Users</h3>
+    <ul id="showNicknames"></ul>
+
+    <h3>Messages</h3>
+    <ul id="showMessages"></ul>
+
+    <input
+      type="text"
+      id="message-box"
+      data-testid="message-box"
+      placeholder="Nova mensagem"
+    />
+
+    <button
+    type="button"
+    data-testid="send-button"
+    id="sendMessage">
+      Send
+    </button>
+
+    <script src="functions.js"></script>
+  </body>
+</html> 
