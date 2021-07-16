@@ -24,13 +24,17 @@ const socket = window.io('http://localhost:3000/', {
   },
 });
 
-const createMessage = (message) => {
-  const messagesUl = document.querySelector('#messageAdd');
+const createLi = (string, addToUl) => {
   const li = document.createElement('li');
   li.className = className;
-  li.innerText = message;
-  li.dataset.testid = 'message';
-  messagesUl.appendChild(li);
+  li.innerText = string;
+  li.dataset.testid = 'online-user';
+  addToUl.appendChild(li);
+};
+
+const createMessage = (message) => {
+  const messagesUl = document.querySelector('#messageAdd');
+  createLi(message, messagesUl);
 };
 
 buttonSendMsg.addEventListener('click', () => {
@@ -47,12 +51,7 @@ const createMasterUser = ({ nickname }) => {
   nick = nickname;
   const userMasterUl = document.querySelector('#master');
   userMasterUl.innerText = '';
-  const li = document.createElement('li');
-  li.className = className;
-  li.id = 'online';
-  li.innerText = nickname;
-  li.dataset.testid = 'online-user';
-  userMasterUl.appendChild(li);
+  createLi(nickname, userMasterUl);
 };
 
 socket.on('connectionMaster', (nickBK) => createMasterUser(nickBK));
@@ -62,46 +61,12 @@ const createListUser = (users) => {
   userListUl.innerHTML = '';
   const excludeMaster = users.filter((user) => user.nickname !== nick);
   excludeMaster.forEach((user) => {
-    const li = document.createElement('li');
-    li.className = className;
-    li.id = 'online';
-    li.innerText = user.nickname;
-    li.dataset.testid = 'online-user';
-    userListUl.appendChild(li);
+    const { nickname } = user;
+    createLi(nickname, userListUl);
   });
 };
 
 socket.on('connectionUsers', (nickBK) => createListUser(nickBK));
-
-// const editMasterUser = (nickname) => {
-//   nick = nickname;
-//   const userMasterUl = document.querySelector('#master');
-//   userMasterUl.innerHTML = '';
-//   const li = document.createElement('li');
-//   li.className = className;
-//   li.id = 'online';
-//   li.innerText = nick;
-//   li.dataset.testid = 'online-user';
-//   userMasterUl.appendChild(li);
-// };
-
-// socket.on('editMasterUser', (nickBK) => editMasterUser(nickBK));
-
-// const editListUsers = (users) => {
-//   const userListUl = document.querySelector('#listUsers');
-//   userListUl.innerHTML = '';
-//   const excludeMaster = users.filter((user) => user.nickname !== nick);
-//   excludeMaster.forEach((user) => {
-//     const li = document.createElement('li');
-//     li.className = className;
-//     li.id = 'online';
-//     li.innerText = user.nickname;
-//     li.dataset.testid = 'online-user';
-//     userListUl.appendChild(li);
-//   });
-// };
-
-// socket.on('editListUsers', (nickBK) => editListUsers(nickBK));
 
 nickNameButton.addEventListener('click', () => {
   if (inputNickName.value === '') {
