@@ -13,7 +13,7 @@ const updateNickName = (id, newNickname) => {
   connection().then((db) =>
     db
       .collection('users')
-      .updateOne({ _id: ObjectID(id) }, { nickname: newNickname }));
+      .updateOne({ id: ObjectID(id) }, { nickname: newNickname }));
 };
 
 const addMessage = (message) => {
