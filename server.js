@@ -10,49 +10,73 @@ const PORT = process.env.PORT || 3000;
 const date = new Date();
 const dateFormat = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`;
 const hourFormat = `${date.getHours()}:${date.getMinutes()}`;
-const timestamp = `${dateFormat} ${hourFormat}`;
+const timestamps = `${dateFormat} ${hourFormat}`;
 
-const clients = {};
-
-const nameRandom = () => {
-    let result = '';
-    const characters = '0123456789abcdefg';
-    const charactersLength = characters.length;
-    for (let i = 0; i < 16; i += 1) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return `${result}`;
-};
+let users = [];
 
 const io = require('socket.io')(http, {
     cors: {
-      origin: 'http://localhost:3000',
-      methods: ['GET', 'POST'],
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST'],
     },
 });
+
+const chatModel = require('./models/chatModel');
 
 app.set('view engine', 'ejs');
 app.set('views', './public/views');
 
-io.on('connect', (socket) => {
-    const newUser = nameRandom();
-    clients[socket.id] = newUser;
-    socket.emit('connected', newUser);
-    console.log(clients);
+const create = async (msg) => {
+    const result = await chatModel.create(msg);
+    return result;
+};
 
-    socket.broadcast.emit('newUser', newUser);
+const getMessages = async () => {
+    const messages = await chatModel.getAllMessages();  
+    return messages;
+};
+
+const onlineUsers = 'online-users';
+
+const newUser = (socket) => {
+    socket.on('newUser', (nicknames) => {
+        users.push({ id: socket.id, nicknames });
+        socket.emit('newUser', nicknames);
+        getMessages().then((msg) => msg.map(({ message, nickname, timestamp }) => {
+        const messages = `${timestamp} ${nickname} ${message}`;
+        return socket.emit('historyMsg', messages);
+    }));
+    });
+};
+
+const disconnectUser = (socket) => {
+    socket.on('disconnect', () => {
+        const attUsers = users.filter((user) => user.id !== socket.id);
+        const desconected = users.filter((user) => user.id === socket.id);
+        users = attUsers;
+        io.emit(onlineUsers, users);
+        io.emit('clientExit', desconected);
+    });
+};
+
+io.on('connect', (socket) => {
+    newUser(socket);
 
     socket.on('message', ({ chatMessage, nickname }) => {
-        // const oldNick = clients[socket.id];
-        const newMessage = `${timestamp} - ${nickname}: ${chatMessage}`;
+        create({ message: chatMessage, nickname, timestamps });
+        const newMessage = `${timestamps} - ${nickname}: ${chatMessage}`;
         io.emit('message', newMessage);
     });
-
-    socket.on('disconnect', () => {
-        const clientDisconnected = clients[socket.id];
-        delete clients[socket.id];
-        io.emit('clientExit', clientDisconnected);
-    });    
+    
+    socket.on('updateNick', (userUp) => {
+        const index = users.findIndex((user) => user.id === socket.id);
+        users[index].nickname = userUp;
+        io.emit(onlineUsers, users);
+    });
+    
+    socket.on(onlineUsers, () => io.emit(onlineUsers, users));
+    
+    disconnectUser(socket);
 });
 
 http.listen(PORT, () => console.log(`App listening on Port ${PORT}`));
