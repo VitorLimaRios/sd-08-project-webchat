@@ -83,7 +83,3 @@ socket.emit('serverMessage', nickname);
 socket.on('serverMessage', (nick) => createUser(nick));
 socket.on('changeNickname', (nick) => updateUser(nick.nickOld, nick.nickNew));
 socket.on('deleteNickname', (nick) => deleteUser(nick));
-
-// window.onbeforeunload = () => {
-//   socket.disconnect();
-// };

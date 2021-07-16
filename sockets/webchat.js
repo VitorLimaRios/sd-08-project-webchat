@@ -14,7 +14,6 @@ const serverMessage = (nickname, socket) => {
   usersArray.push({ nickname, id: socket.id });
 };
 
-// TODO req 1 parou de passar. req 4 nao passa mais.
 const disconnect = (socket) => {
   const index = usersArray.findIndex((user) => user.id === socket.id);
   console.log(index);
