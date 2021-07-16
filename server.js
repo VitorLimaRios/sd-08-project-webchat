@@ -77,13 +77,13 @@ io.on('connection', (socket) => {
 
   // receber mensagens
   socket.on('message', async ({ chatMessage, nickname }) => {
-    const timestamp = moment().format('DD-MM-YYYY hh:mm:ss A');
-
-    // enviar mensagens
-    sendMessage(timestamp, nickname, chatMessage);
+    const timestamp = await moment().format('DD-MM-YYYY hh:mm:ss A');
 
     // salvar no DB
-    salvaBD(chatMessage, nickname, timestamp);
+    await salvaBD(chatMessage, nickname, timestamp);
+
+    // enviar mensagens
+   sendMessage(timestamp, nickname, chatMessage);
   });
 });
 
