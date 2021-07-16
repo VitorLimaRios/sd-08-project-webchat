@@ -14,7 +14,7 @@ const serverMessage = (nickname, socket) => {
   usersArray.push({ nickname, id: socket.id });
 };
 
-// TODO req 3 não passa nada. console.log vem certo.
+// TODO req 4 nao passa mais.
 const disconnect = (socket) => {
   const index = usersArray.findIndex((user) => user.id === socket.id);
   if (index > 0) {
@@ -43,12 +43,4 @@ module.exports = (io) => {
     socket.on('serverMessage', (nickname) => serverMessage(nickname, socket));
     socket.on('changeNickname', (nick) => changeNickname(nick, socket));
   });
-
-    // socket.on('disconnect', () => {
-    //   const index = usersArray.findIndex((user) => user.id === socket.id);
-    //   if (index > 0) {
-    //     socket.broadcast.emit('deleteNickname', usersArray[index].nickname);
-    //     usersArray.splice(index, 1);
-    //   }
-    // });
 };
