@@ -26,6 +26,13 @@ const controllerNewMessage = (message, nickname) => {
   return msg;
 };
 
+const controllerGetAllMessages = async () => {
+  const allMessages = await ChatDB.getAllMessage();
+  return allMessages.map(({ message, nickname, timestamp }) => (
+    formatMessage(message, nickname, timestamp)));
+};
+
 module.exports = {
   controllerNewMessage,
+  controllerGetAllMessages,
 };

@@ -14,6 +14,7 @@ class Chat {
     this.addEventBtnSaveMyName = this.addEventBtnSaveMyName.bind(this);
     this.onMessage = this.onMessage.bind(this);
     this.onLoadingDate = this.onLoadingDate.bind(this);
+    
     this.main();
   }
 
@@ -117,7 +118,6 @@ class Chat {
     
     const cutNameRegex = new RegExp(/([PM|AM]\s-\s)([\w\s\S]*:)/);
     const cutName = message.match(cutNameRegex);
-    console.log(cutName);
     const replacerName = cutName[2].replace(':', '');
 
     const cutMessageRegex = new RegExp(/((^.*-\s[\w\s\S]*?:)[\s\S.]*?)$/);
@@ -152,13 +152,23 @@ class Chat {
   }
 
   onUserLogged() {
-    this.socket.on('newLoggedInUser', (nickName) => {
-      Chat.addUserToOlineGroup(nickName);
+    this.socket.on('newLoggedInUser', (nickname) => {
+      Chat.addUserToOlineGroup(nickname);
     });
   }
 
+  static loadMessageHistory(messages) {
+    if (messages.length) {
+      messages.forEach((element) => {
+        const data = Chat.splitMessage(element);
+        Chat.setMessageChat(data.date, data.nickname, data.message);
+      });
+    }
+  }
+
   getUser(data) {
-    this.usersOnline.push(...data);
+    Chat.loadMessageHistory(data.messages);
+    this.usersOnline.push(...data.nickname);
     const myIndex = this.usersOnline.indexOf(this.nickName);
     if (myIndex > -1) {
       console.log(myIndex);
@@ -195,7 +205,6 @@ class Chat {
   onUpdateNicknameOtherClient() {
     this.socket.on('update-nickname', ({ nickname, oldNickname }) => {
       const htmlUser = Chat.getHtmlUser(oldNickname);
-      console.log(htmlUser);
       htmlUser.innerText = nickname;
     });
   }

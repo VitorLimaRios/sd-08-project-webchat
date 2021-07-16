@@ -1,4 +1,4 @@
-const { controllerNewMessage } = require('./controllerAndDataHandler');
+const { controllerNewMessage, controllerGetAllMessages } = require('./controllerAndDataHandler');
 
 // module.exports = (io, usersOnline) => {
 //   io.on('connection', (socket) => {
@@ -30,10 +30,12 @@ const message = (socket, io) => {
 };
 
 const newLoggedInUser = (socket) => {
-  socket.on('newLoggedInUser', (nickName) => {
+  socket.on('newLoggedInUser', async (nickName) => {
     usersOnline[socket.id] = nickName;
-    console.log(usersOnline);
-    socket.emit('loadingMsgAndUsersLogged', Object.values(usersOnline));
+    socket.emit('loadingMsgAndUsersLogged', {
+      nickname: Object.values(usersOnline),
+      messages: await controllerGetAllMessages(),
+    });
     socket.broadcast.emit('newLoggedInUser', nickName);
   });
 };

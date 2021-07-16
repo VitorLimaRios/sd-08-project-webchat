@@ -16,7 +16,7 @@ const saveMessage = async ({ message, nickname, timestamp }) => {
 
 const getAllMessage = async () => {
   const collection = await getCollection();
-  return collection.findMany();
+  return collection.find().toArray();
 };
 
 module.exports = {
