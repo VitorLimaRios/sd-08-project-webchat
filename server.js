@@ -15,7 +15,7 @@ const io = require('socket.io')(http, {
 });
 
 const PORT = process.env.PORT || 3000;
-const person = {};
+const person = [];
 
 const timestamp = () => {
   const time = moment().format('DD-MM-YYYY h:mm:ss A');
@@ -24,13 +24,10 @@ const timestamp = () => {
 
 io.on('connection', (client) => {
   const { id } = client;
-  
   person[id] = something().slice(0, 16);
-  client.emit('currentUser', person[id]);
   
-  const newUser = person[id];
-  console.log(`${newUser} joined chat at ${timestamp()}`);
-  client.emit('enter', (newUser));
+  const joinedPerson = person[id];
+  console.log(`${joinedPerson} joined chat at ${timestamp()}`);
   
   client.on('message', ({ nickname, chatMessage }) => {
     const content = `${timestamp()} - ${nickname}: ${chatMessage}`;
@@ -38,14 +35,11 @@ io.on('connection', (client) => {
   });
   
   client.on('disconnect', () => {
-    const disconnected = person[id];
-    console.log(`${disconnected} left chat at ${timestamp()}`);
+    const disconnectedPerson = person[id];
     delete person[id];
-    io.emit('exit', disconnected);
+    console.log(`${disconnectedPerson} left chat at ${timestamp()}`);
   });
 });
 
 app.use(cors());
-// app.use(express.static(`${__dirname}/public`));
-
 http.listen(PORT, () => console.log('Rodando liso na porta', PORT)); 
