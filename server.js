@@ -1,7 +1,7 @@
 const express = require('express');
 const moment = require('moment');
 const cors = require('cors');
-// const something = require('random-name'); // Referência Thays Costa
+const something = require('random-name'); // Referência Thays Costa
 
 const app = express();
 const http = require('http').createServer(app);
@@ -15,7 +15,7 @@ const io = require('socket.io')(http, {
 });
 
 const PORT = process.env.PORT || 3000;
-// const person = [];
+const person = {};
 
 const timestamp = () => {
   const time = moment().format('DD-MM-YYYY h:mm:ss A');
@@ -23,22 +23,24 @@ const timestamp = () => {
 };
 
 io.on('connection', (client) => {
-  /* const { id } = client;
+  const { id } = client;
   person[id] = something().slice(0, 16);
   
   const joinedPerson = person[id];
-  person.push({ id, nickname: joinedPerson });
-  console.log(`${joinedPerson} joined chat at ${timestamp()}`); */
+  
+  console.log(`${joinedPerson} joined chat at ${timestamp()}`);
   
   client.on('message', ({ nickname, chatMessage }) => {
     const content = `${timestamp()} - ${nickname}: ${chatMessage}`;
+    console.log(`${nickname} sent a message at ${timestamp()}`);
     io.emit('message', content);
   });
   
-/*   client.on('disconnect', () => {
+   client.on('disconnect', () => {
     const disconnectedPerson = person[id];
+    delete person[id];
     console.log(`${disconnectedPerson} left chat at ${timestamp()}`);
-  }); */
+  });
 });
 
 app.use(cors());
