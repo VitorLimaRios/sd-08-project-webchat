@@ -1,5 +1,10 @@
 module.exports = () => {
-  const d = new Date().toLocaleString('pt-BR');
-  const numbers = d.split(' ')[0].split('-');
-  return `${numbers[2]}-${numbers[1]}-${numbers[0]} ${d.split(' ')[1]}`;
+  const d = new Date();
+  const day = d.getDate();
+  const month = d.getMonth();
+  const year = d.getFullYear();
+  const hours = d.getHours();
+  const minutes = d.getMinutes();
+  const seconds = d.getSeconds();
+  return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
 };
