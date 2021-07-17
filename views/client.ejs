@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/style/style.css" type="text/css">
+  </head>
+
+  <body>
+    <div class="msger-box">
+      <section class="msger">
+        <header class="msger-header">
+          <div class="msger-header-title">
+            <i class="fas fa-comment-alt"></i>
+            <%= title %>
+          </div>
+          <div class="msger-header-options">
+            <span><i class="fas fa-cog"></i></span>
+          </div>
+        </header>
+        <main id='listMessages' class="msger-chat">
+          <div>
+            <% messages.forEach((element)=> { %> <p data-testid="message">
+                <%= ` ${element.timestamp} - ${element.nickname}: ${element.message}` %>
+              </p>
+              <% }) %>
+          </div>
+        </main>
+        <form class="msger-inputarea" id='formSendMessage'>
+          <input type="text" id='messageInput' class="msger-input" placeholder="Digite uma mensagem aqui...">
+          <button type="submit" class="msger-send-btn">Send</button>
+        </form>
+      </section>
+      <aside class="list-aside">
+        <form class="form-nicknames">
+          <input type="text" id='messageInput' class="msger-input" placeholder="Insira seu Nickname">
+          <button type="submit" class="nickname-btn">Salvar</button>
+        </form>
+        <div class="list-nicknames">
+          <ul>
+            <% messages.forEach((element)=> { %> <li data-testid="online-user">
+                <%= `${element.nickname}` %>
+              </li>
+              <% }) %>
+          </ul>
+        </div>
+      </aside>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/chat.js"></script>
+  </body>
+
+</html>
