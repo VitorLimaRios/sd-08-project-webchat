@@ -1,79 +1,48 @@
 const socket = window.io();
 
-function randomString(length) {
-  const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  let result = '';
-  for (let i = length; i > 0; i -= 1) result += chars[Math.floor(Math.random() * chars.length)];
-  return result;
-}
-
-let random = randomString(16);
-socket.emit('online', random);
-socket.on('list', (list) => {
-  list.map((item) => {
-    const li = document.createElement('li');
-    const ul = document.querySelector('.online');
-    li.innerText = item;
-    if (item === random) {
-      ul.insertBefore(li, ul.firstChild);
-      li.style.borderBottom = '1px solid red';
-      li.setAttribute('id', `${random}`);
-    } else {
-      ul.appendChild(li);
-      li.setAttribute('id', `${item}`);
-    }
-    return false;
-  });
-});
-
-socket.on('removeName', (name) => {
-  const ul = document.querySelector('.online');
-  ul.removeChild(document.getElementById(`${name}`));
-});
-
-socket.on('updatelist', (name) => {
-  const li = document.createElement('li');
-  const ul = document.querySelector('.online');
-  li.innerText = name;
-  li.setAttribute('id', `${name}`);
-  ul.appendChild(li);
-});
-
+const ul = document.querySelector('.online');
+const nickInput = document.querySelector('[data-testid="nickname-box"]');
+const messagesUl = document.querySelector('.messages');
+const messageInput = document.querySelector('[data-testid="message-box"]');
 const form = document.querySelectorAll('form');
 
-form[1].addEventListener('submit', (event) => {
-  const input = document.querySelector('[data-testid="message-box"]');
-  const online = document.querySelector('.online').childNodes[0];
-  event.preventDefault();
-  if (!input.value) {
-    window.alert('Mensagem em branco.');
-    return;
-  }
-  socket.emit('message', { 
-    chatMessage: input.value,
-    nickname: online.innerText,
-  });
-});
+let nickname = null;
 
-form[0].addEventListener('submit', (event) => {
-  const nickInput = document.querySelector('[data-testid="nickname-box"]').value;
-  const nickname = document.querySelector('.online').childNodes[0];
-  event.preventDefault();
-  random = nickInput;
-  socket.emit('updateName', random);
-  nickname.innerText = random;
-  nickname.setAttribute('id', `${random}`);
-  // document.querySelector('.online').childNodes[0].innerText = random;
+const createElements = (user) => {
+  const li = document.createElement('li');
+  li.innerText = user;
+  ul.appendChild(li);
+};
+
+socket.on('renderUsers', (users) => {
+  [...ul.children].forEach((element) => element.remove());
+  console.log(users);
+  users.map((user) => createElements(user));
 });
 
 const createMessage = (message) => {
-  const messagesUl = document.querySelector('.messages');
-  const newLi = document.createElement('li');
-  newLi.innerText = message;
-  newLi.setAttribute('data-testid', 'message');
-  newLi.setAttribute('class', 'message');
-  messagesUl.insertBefore(newLi, messagesUl.lastChild);
+  const li = document.createElement('li');
+  li.innerText = message;
+  li.setAttribute('data-testid', 'message');
+  li.setAttribute('class', 'message');
+  messagesUl.insertBefore(li, messagesUl.lastChild);
 };
+
+form[0].addEventListener('submit', (e) => {
+  e.preventDefault();
+  nickname = nickInput.value;
+  socket.emit('changeNickname', nickname);
+});
+
+form[1].addEventListener('submit', (e) => {
+  e.preventDefault();
+  socket.emit('message', { chatMessage: messageInput.value, nickname });
+  messageInput.value = '';
+});
+
+socket.on('nickname', (user) => {
+  nickname = user.nickname;
+});
 
 socket.on('message', (message) => createMessage(message));
 

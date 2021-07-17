@@ -1,23 +1,42 @@
 const getDate = require('../public/utils/getDate');
-const { onlineAdd, onlineRemove, getList } = require('../public/utils/online');
+
+let onlineList = [];
+
+const onlineAdd = (socket) => {
+  const newUser = { nickname: socket.id.slice(0, 16), socket };
+  onlineList.push(newUser);
+  socket.emit('nickname', { nickname: newUser.nickname });
+};
+
+const updateOnlineList = (io) => {
+  const users = onlineList.map(({ nickname }) => nickname);
+  io.emit('renderUsers', users);
+};
+
+const changeNickname = (nickname, socket, io) => {
+  const user = onlineList.find((currentUser) => currentUser.socket === socket);
+  user.nickname = nickname;
+  updateOnlineList(io);
+};
+
+const main = (io, socket) => {
+  onlineAdd(socket);
+  updateOnlineList(io);
+};
+
+const disconnect = (io, socket) => {
+  onlineList = onlineList.filter((current) => current.socket !== socket);
+  updateOnlineList(io);
+};
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
-    socket.on('online', (name) => {
-      onlineAdd(name);
-      socket.emit('list', getList());
-      socket.broadcast.emit('updatelist', name);
-      socket.on('disconnect', () => {
-        onlineRemove(name);
-        io.emit('removeName', name);
-      });
-      socket.on('updateName', (newName) => {
-        onlineRemove(name);
-        onlineAdd(newName);
-      });
-    });
+    main(io, socket);
+    
+    socket.on('disconnect', () => disconnect(io, socket));
     socket.on('message', ({ chatMessage, nickname }) => {
       io.emit('message', `${getDate()} - ${nickname}: ${chatMessage}`);
     });
+    socket.on('changeNickname', (nickname) => changeNickname(nickname, socket, io));
   });
 };
