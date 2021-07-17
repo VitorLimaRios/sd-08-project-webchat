@@ -11,5 +11,5 @@ const create = async (message, nickname, timestamp) => {
 
 module.exports = {
     getAll,
-    create,
+    create,  
 };
