@@ -36,7 +36,7 @@ const changeUserName = (socket, newNickName) => {
 const history = async (socket) => {
     const messages = await findMessagens();
     messages.forEach(({ message, nickname, timestamp }) => {
-        socket.emit('message', `${timestamp} ${nickname} ${message}`);
+        socket.emit('history', `${timestamp} ${nickname} ${message}`);
     });
 };
 
@@ -76,6 +76,9 @@ module.exports = (io) => {
             update();
         });
         socket.on('message', (newMessage) => message(newMessage, io));
-        socket.on('disconnect', () => removeUser(socket));
+        socket.on('disconnect', () => {
+            removeUser(socket);
+            update();
+        });
     });
 };

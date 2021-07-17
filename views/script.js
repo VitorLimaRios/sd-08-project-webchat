@@ -53,6 +53,8 @@ btn.addEventListener('click', () => {
 
 socket.on('message', (user) => createMessage(user));
 
+socket.on('history', (user) => createMessage(user));
+
 socket.on('updateUser', (usersList, nickName) => updateUsersList(nickName, usersList));
 
 socket.on('updateNickName', (nickName) => {
