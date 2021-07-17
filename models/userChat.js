@@ -13,7 +13,7 @@ const updateNickName = (id, newNickname) => {
   connection().then((db) =>
     db
       .collection('users')
-      .updateOne({ _id: ObjectID(id) }, { nickname: newNickname }));
+      .updateOne({ _id: ObjectID(id) }, { $set: { nickname: newNickname } }));
 };
 
 const addMessage = (message) => {
@@ -24,9 +24,9 @@ const getByName = (nickname) => {
   connection().then((db) => db.collection('users').findOne({ nickname }));
 };
 
-const getAllMessages = async () => (
-connection().then((db) => db.collection('messages').find().toArray())
-);
+const getAllMessages = async () => {
+  connection().then((db) => db.collection('messages').find().toArray());
+};
 
 module.exports = {
   getAll,
