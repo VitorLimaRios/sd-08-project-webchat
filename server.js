@@ -29,14 +29,14 @@ const disconnect = (client) => {
   io.emit('exit', disconnectedPerson);
   delete person[id];
   io.emit('personList', person);
-  console.log(`${disconnectedPerson} left at ${timestamp()}`);
+  // console.log(`${disconnectedPerson} left at ${timestamp()}`);
 };
 
 const message = async (nickname, chatMessage) => {
   const content = `${timestamp()} - ${nickname}: ${chatMessage}`;
   await saveMessage(chatMessage, nickname, timestamp());
   io.emit('message', content);
-  console.log(`${nickname} sent a message at ${timestamp()}`);
+  // console.log(`${nickname} sent a message at ${timestamp()}`);
 };
 
 io.on('connection', async (client) => {
@@ -46,7 +46,7 @@ io.on('connection', async (client) => {
   io.emit('personList', person);
   const allMessages = await fetchMessages();
   client.emit('listMessages', allMessages);
-  console.log(`${person[id]} joined at ${timestamp()}`);
+  // console.log(`${person[id]} joined at ${timestamp()}`);
 
   client.on('message', ({ nickname, chatMessage }) => message(nickname, chatMessage));
 
