@@ -42,7 +42,7 @@ const message = /* async */ (nickname, chatMessage) => {
     const content = `${timestamp} - ${nickname}: ${chatMessage}`;
     // await saveMessage(chatMessage, nickname, timestamp);
     io.emit('message', content);
-    console.log(`${nickname} sent a message at ${timestamp}`);
+    // console.log(`${nickname} sent a message at ${timestamp}`);
   } catch (err) { console.error(err); }
 };
 
@@ -50,8 +50,8 @@ io.on('connection', /* async */ (client) => {
   try {
     const { id } = client;
     person[id] = id.slice(0, 16);
-    // client.emit('setCurrentPerson', person[id]);
-    // io.emit('personList', person);
+    client.emit('setCurrentPerson', person[id]);
+    io.emit('personList', person);
     // const allMessages = await fetchMessages();
     // client.emit('listMessages', allMessages);
     // console.log(`${person[id]} joined at ${timestamp}`);
@@ -71,7 +71,7 @@ io.on('connection', /* async */ (client) => {
 });
 
 app.use(cors());
-/* app.use(express.static('public'));
-app.get('/', (_req, res) => { res.render('index'); }); */
+app.use(express.static('public'));
+app.get('/', (_req, res) => { res.render('index'); });
 app.get('/test', (_req, res) => res.json({ message: 'Rodando liso!' }));
 http.listen(PORT, () => console.log(`Rodando liso na porta ${PORT}`)); 

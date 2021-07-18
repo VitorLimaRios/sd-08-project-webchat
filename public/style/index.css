@@ -1,8 +1,4 @@
 body {
-  margin: 0;
-}
-
-/* body {
   border: 0;
   font: inherit;
   font-family: Roboto, sans-serif;
@@ -115,4 +111,4 @@ ul {
 .section-title {
   font-size: 1.5em;
   font-weight: 700;
-} */
+}

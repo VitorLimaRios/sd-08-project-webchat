@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style/index.css">
+  <title>WebChat - Ander Santana - Turma 08</title>
+</head>
+
+<body>
+  <header>
+    <h1>WebChat da alegria</h1>
+    <h2>O melhor chat da Trybe</h2>
+  </header>
+<div class="grid-container">
+  <form class="grid-person" id="person-form">
+    <input
+      type="text"
+      id="nickname-input"
+      data-testid="nickname-box"
+      placeholder="What's your name?">
+    <button
+      type="submit"
+      data-testid="nickname-button"
+      >
+        Save
+    </button>
+  </form>
+
+  <section class="grid-online" id="online-users">
+    <h2 class="section-title">Who is here?</h2>
+    <ul id="who-is-online"></ul>
+  </section>
+
+  <section class="grid-message">
+    <ul id="message-list"></ul>
+  </section>
+
+  <form class="grid-send" id="message-form">
+    <input
+      type="text"
+      id="message-input"
+      data-testid="message-box"
+      placeholder="What's up?">
+    <button
+      type="submit"
+      data-testid="send-button"
+      >
+        Send
+    </button>
+  </form>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js "></script>
+  <script src="./js/client.js"></script>
+
+</body>
+</html>
