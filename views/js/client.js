@@ -1,5 +1,6 @@
 const client = window.io();
 
+// https://stackoverflow.com/questions/52713660/create-a-javascript-function-which-generates-a-random-character-id-comprising-o/58180485
 const randomNickName = () => {
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.toLowerCase().split('');
   let nickname = '';
