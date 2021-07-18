@@ -1,6 +1,6 @@
 const connection = require('./connection');
 
-const saveMessage = (message, nickname, timestamp) => {
+const saveMessage = async (message, nickname, timestamp) => {
   connection().then((db) => db.collection('messages')
   .insertOne({ message, nickname, timestamp }))
   .catch((err) => {
@@ -9,7 +9,7 @@ const saveMessage = (message, nickname, timestamp) => {
   });
 };
 
-const fetchMessages = () => {
+const fetchMessages = async () => {
     const allMessages = connection()
     .then((db) => db.collection('messages').find().toArray())
     .catch((err) => {

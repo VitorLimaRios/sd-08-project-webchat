@@ -19,8 +19,10 @@ const io = require('socket.io')(http, {
 const { saveMessage, fetchMessages } = require('./models/messages');
 
 const timestamp = () => {
-  const time = moment().format('DD-MM-YYYY h:mm:ss A');
-  return time;
+  try {
+    const time = moment().format('DD-MM-YYYY h:mm:ss A');
+    return time;
+  } catch (err) { console.error(err); }
 };
 
 const disconnect = (client) => {
