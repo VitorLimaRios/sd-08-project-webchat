@@ -1,23 +1,18 @@
 const connection = require('./connection');
 
-const saveMessage = async (message, nickname, timestamp) => {
+const saveMessage = async (message, nickname, timestamp) => 
   connection().then((db) => db.collection('messages')
-  .insertOne({ message, nickname, timestamp }))
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  });
-};
+    .insertOne({ message, nickname, timestamp }));
 
-const fetchMessages = async () => {
+/* const fetchMessages = async () => {
     const allMessages = connection()
-    .then((db) => db.collection('messages').find().toArray())
-    .catch((err) => {
-      console.error(err);
-      process.exit(1);
-    });
+    .then((db) => db.collection('messages').find().toArray());
     return allMessages;
-};
+}; */
+
+const fetchMessages = async () =>
+  connection().then((db) => db.collection('messages')
+    .find().toArray());
 
 module.exports = {
   saveMessage,
