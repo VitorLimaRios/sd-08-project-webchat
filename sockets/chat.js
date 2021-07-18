@@ -1,18 +1,8 @@
-const disconnect = (socket) => {
-  socket.on('disconnect', () => {
-    socket.broadcast.emit('logout', `${socket.id} DescOnectado!`);
-  });
-};
-
 const getDate = () => {
   const date = new Date()
-    .toLocaleString({}, { hour12: true })
-    .replace(/\//g, '-');
+  .toLocaleString({}, { hour12: true })
+  .replace(/\//g, '-');
   return date;
-};
-
-const connect = (socket) => {
-  socket.broadcast.emit('users', `${socket.id} COnectado!`);
 };
 
 const message = (io, socket) => {
@@ -23,9 +13,19 @@ const message = (io, socket) => {
   });
 };
 
+const connect = (socket) => {
+  socket.broadcast.emit('users', `${socket.id} COnectado!`);
+};
+
+const disconnect = (socket) => {
+  socket.on('disconnect', () => {
+    socket.broadcast.emit('logout', `${socket.id} DescOnectado!`);
+  });
+};
+
 module.exports = (io) => io.on('connection', (socket) => {
-  socket.emit('server', 'Bem vindo');
+  socket.emit('message', 'Bem vindo');
+  message(io, socket);
   connect(socket);
   disconnect(socket);
-  message(io, socket);
 });

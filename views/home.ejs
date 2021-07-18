@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project WebChat</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./style/style.css" />
+  </head>
+
+  <body>
+    <div class="msger-box">
+      <section class="msger">
+        <header class="msger-header">
+          <div class="msger-header-title">
+            <i class="fas fa-comment-alt"></i> TrybeChat
+          </div>
+          <div class="msger-header-options">
+            <span><i class="fas fa-cog"></i></span>
+          </div>
+        </header>
+        <section class="msger-chat">
+          <div class="messages-list"> MessageList <p data-testid="message"></p>
+          </div>
+        </section>
+        <form class="msger-inputarea">
+          <input type="text" placeholder="Digite uma nova mensagem aqui" class="input-message msger-input"
+            data-testid="message-box" />
+          <button type="button" data-testid="send-button" class="send-button msger-send-btn"> Send </button>
+        </form>
+      </section>
+      <aside class="list-aside">
+        <form class="form-nicknames">
+          <input type="text" placeholder="Insira seu Nickname" data-testid="nickname-box"
+            class="nickname-box msger-input" />
+          <button type="button" data-testid="nickname-button" class="nickname-button"> Salvar </button>
+        </form>
+        <div class="list-nicknames users-list msger-chat">
+          <ul class="ul-list"></ul>
+        </div>
+      </aside>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/client.js"></script>
+  </body>
+
+</html>
