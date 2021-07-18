@@ -18,7 +18,7 @@ const io = require('socket.io')(http, {
 
 const { saveMessage, fetchMessages } = require('./models/messages');
 
-const timestamp = () => {
+const getTimestamp = () => {
   try {
     const time = moment().format('DD-MM-YYYY h:mm:ss A');
     return time;
@@ -38,8 +38,9 @@ const disconnect = (client) => {
 
 const message = async (nickname, chatMessage) => {
   try {
-    const content = `${timestamp()} - ${nickname}: ${chatMessage}`;
-    await saveMessage(chatMessage, nickname, timestamp());
+    const timestamp = getTimestamp();
+    const content = `${timestamp} - ${nickname}: ${chatMessage}`;
+    await saveMessage(chatMessage, nickname, timestamp);
     io.emit('message', content);
     // console.log(`${nickname} sent a message at ${timestamp()}`);
   } catch (err) { console.error(err); }
