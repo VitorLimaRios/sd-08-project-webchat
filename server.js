@@ -1,7 +1,6 @@
 const express = require('express');
 const moment = require('moment');
 const cors = require('cors');
-const path = require('path');
 
 const app = express();
 const http = require('http').createServer(app);
@@ -25,9 +24,10 @@ const timestamp = () => {
 };
 
 const disconnect = (client) => {
-  const disconnectedPerson = person[client.id];
+  const { id } = client;
+  const disconnectedPerson = person[id];
   io.emit('exit', disconnectedPerson);
-  delete person[client.id];
+  delete person[id];
   io.emit('personList', person);
   console.log(`${disconnectedPerson} left at ${timestamp()}`);
 };
@@ -59,6 +59,7 @@ io.on('connection', async (client) => {
 });
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'public')));
-app.get('/test', (req, res) => res.json({ message: 'Rodando liso!' }));
-http.listen(PORT, () => console.log('Rodando liso na porta', PORT)); 
+app.use(express.static('public'));
+app.get('/', (_req, res) => { res.render('index'); });
+app.get('/test', (_req, res) => res.json({ message: 'Rodando liso!' }));
+http.listen(PORT, () => console.log(`Rodando liso na porta ${PORT}`)); 
