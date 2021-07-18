@@ -24,35 +24,44 @@ const timestamp = () => {
 };
 
 const disconnect = (client) => {
-  const { id } = client;
-  const disconnectedPerson = person[id];
-  io.emit('exit', disconnectedPerson);
-  delete person[id];
-  io.emit('personList', person);
-  // console.log(`${disconnectedPerson} left at ${timestamp()}`);
+  try {
+    const { id } = client;
+    const disconnectedPerson = person[id];
+    io.emit('exit', disconnectedPerson);
+    delete person[id];
+    io.emit('personList', person);
+    // console.log(`${disconnectedPerson} left at ${timestamp()}`);
+  } catch (err) { console.log(err); }
 };
 
 const message = async (nickname, chatMessage) => {
-  const content = `${timestamp()} - ${nickname}: ${chatMessage}`;
-  await saveMessage(chatMessage, nickname, timestamp());
-  io.emit('message', content);
-  // console.log(`${nickname} sent a message at ${timestamp()}`);
+  try {
+    const content = `${timestamp()} - ${nickname}: ${chatMessage}`;
+    await saveMessage(chatMessage, nickname, timestamp());
+    io.emit('message', content);
+    // console.log(`${nickname} sent a message at ${timestamp()}`);
+  } catch (err) { console.log(err); }
 };
 
 io.on('connection', async (client) => {
-  const { id } = client;
-  person[id] = id.slice(0, 16);
-  client.emit('setCurrentPerson', person[id]);
-  io.emit('personList', person);
-  const allMessages = await fetchMessages();
-  client.emit('listMessages', allMessages);
-  // console.log(`${person[id]} joined at ${timestamp()}`);
+  try {
+    const { id } = client;
+    person[id] = id.slice(0, 16);
+    client.emit('setCurrentPerson', person[id]);
+    io.emit('personList', person);
+    const allMessages = await fetchMessages();
+    client.emit('listMessages', allMessages);
+    // console.log(`${person[id]} joined at ${timestamp()}`);
+  } catch (err) { console.log(err); }
 
   client.on('message', ({ nickname, chatMessage }) => message(nickname, chatMessage));
 
   client.on('changePerson', (customPerson) => {
-    person[id] = customPerson;
-    io.emit('personList', person);
+    try {
+      const { id } = client;
+      person[id] = customPerson;
+      io.emit('personList', person);
+    } catch (err) { console.log(err); }
   });
 
   client.on('disconnect', () => disconnect(client));

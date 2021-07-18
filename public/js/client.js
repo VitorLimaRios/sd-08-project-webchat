@@ -3,23 +3,27 @@ const whoIsOnline = document.querySelector('#who-is-online');
 const messageList = document.querySelector('#message-list');
 
 const renderWhoIsOnline = (persons) => {
-  const thisPerson = sessionStorage.getItem('person');
-  const otherPersons = Object.values(persons).filter((person) => person !== thisPerson);
-  whoIsOnline.innerHTML = '';
-
-  [thisPerson, ...otherPersons].forEach((person) => {
-    const personTag = document.createElement('li');
-    personTag.setAttribute('data-testid', 'online-user');
-    personTag.innerText = person;
-    whoIsOnline.appendChild(personTag);
-  });
+  try {
+    const thisPerson = sessionStorage.getItem('person');
+    const otherPersons = Object.values(persons).filter((person) => person !== thisPerson);
+    whoIsOnline.innerHTML = '';
+  
+    [thisPerson, ...otherPersons].forEach((person) => {
+      const personTag = document.createElement('li');
+      personTag.setAttribute('data-testid', 'online-user');
+      personTag.innerText = person;
+      whoIsOnline.appendChild(personTag);
+    });
+  } catch (err) { console.log(err); }
 };
 
 const createMessage = (message) => {
-  const messageTag = document.createElement('li');
-  messageTag.setAttribute('data-testid', 'message');
-  messageTag.innerText = message;
-  return messageTag;
+  try {
+    const messageTag = document.createElement('li');
+    messageTag.setAttribute('data-testid', 'message');
+    messageTag.innerText = message;
+    return messageTag;
+  } catch (err) { console.log(err); }
 };
 
 /* client.on('enter', (person) => {
@@ -29,39 +33,51 @@ const createMessage = (message) => {
 }); */
 
 client.on('listMessages', (messages) => {
-  messageList.innerHTML = '';
-  messages.forEach((msg) => {
-    const content = `${msg.timestamp} - ${msg.nickname}: ${msg.message}`;
-    const message = createMessage(content);
-    messageList.append(message);
-  });
+  try {
+    messageList.innerHTML = '';
+    messages.forEach((msg) => {
+      const content = `${msg.timestamp} - ${msg.nickname}: ${msg.message}`;
+      const message = createMessage(content);
+      messageList.append(message);
+    });
+  } catch (err) { console.log(err); }
 });
 
 client.on('setCurrentPerson', (person) => {
-  sessionStorage.setItem('person', person);
+  try {
+    sessionStorage.setItem('person', person);
+  } catch (err) { console.log(err); }
 });
 
 client.on('personList', (persons) => {
-  renderWhoIsOnline(persons);
+  try {
+    renderWhoIsOnline(persons);
+  } catch (err) { console.log(err); }
 });
 
 document.querySelector('#message-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const chatMessage = document.querySelector('#message-input').value;
-  const nickname = sessionStorage.getItem('person');
-  client.emit('message', { chatMessage, nickname });
+  try {
+    e.preventDefault();
+    const chatMessage = document.querySelector('#message-input').value;
+    const nickname = sessionStorage.getItem('person');
+    client.emit('message', { chatMessage, nickname });
+  } catch (err) { console.log(err); }
 });
 
 document.querySelector('#person-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const customPerson = document.querySelector('#nickname-input').value;
-  sessionStorage.setItem('person', customPerson);
-  client.emit('changePerson', customPerson);
+  try {
+    e.preventDefault();
+    const customPerson = document.querySelector('#nickname-input').value;
+    sessionStorage.setItem('person', customPerson);
+    client.emit('changePerson', customPerson);
+  } catch (err) { console.log(err); }
 });
 
 client.on('message', (content) => {
-  const message = createMessage(content);
-  messageList.append(message);
+  try {
+    const message = createMessage(content);
+    messageList.append(message);
+  } catch (err) { console.log(err); }
 });
 
 /* client.on('exit', (person) => {
