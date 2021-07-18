@@ -1,9 +1,15 @@
+// const Model = require('../models/chatModel');
+// const {
+//   chatModel: {
+//     writeMessage,
+//     readMessages,
+//   },
+// } = require('../models');
+
 const buttonSendMsg = document.querySelector('#send-button');
 const inputNickName = document.querySelector('#nickName');
 const inputTexto = document.querySelector('#message-box');
 const nickNameButton = document.querySelector('#saveNickName');
-const className = 'list-group-item';
-// const className = 'list-group-item';
 
 function nickAleatorio(tamanho) {
   const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
@@ -16,7 +22,6 @@ function nickAleatorio(tamanho) {
 }
 
 let nick = `Guest${nickAleatorio(11)}`;
-// const userLogado = [];
 
 const socket = window.io('http://localhost:3000/', {
   query: {
@@ -24,17 +29,25 @@ const socket = window.io('http://localhost:3000/', {
   },
 });
 
-const createLi = (string, addToUl) => {
+const createUserLi = (string, addToUl) => {
   const li = document.createElement('li');
-  li.className = className;
+  li.className = 'list-group-item';
   li.innerText = string;
   li.dataset.testid = 'online-user';
   addToUl.appendChild(li);
 };
 
+const createMessagesLi = (string, addToUl) => {
+  const li = document.createElement('li');
+  li.className = 'list-group-item';
+  li.innerText = string;
+  li.dataset.testid = 'message';
+  addToUl.appendChild(li);
+};
+
 const createMessage = (message) => {
   const messagesUl = document.querySelector('#messageAdd');
-  createLi(message, messagesUl);
+  createMessagesLi(message, messagesUl);
 };
 
 buttonSendMsg.addEventListener('click', () => {
@@ -51,7 +64,7 @@ const createMasterUser = ({ nickname }) => {
   nick = nickname;
   const userMasterUl = document.querySelector('#master');
   userMasterUl.innerText = '';
-  createLi(nickname, userMasterUl);
+  createUserLi(nickname, userMasterUl);
 };
 
 socket.on('connectionMaster', (nickBK) => createMasterUser(nickBK));
@@ -62,7 +75,7 @@ const createListUser = (users) => {
   const excludeMaster = users.filter((user) => user.nickname !== nick);
   excludeMaster.forEach((user) => {
     const { nickname } = user;
-    createLi(nickname, userListUl);
+    createUserLi(nickname, userListUl);
   });
 };
 

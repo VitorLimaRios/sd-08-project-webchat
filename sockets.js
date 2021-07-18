@@ -1,4 +1,10 @@
 const moment = require('moment');
+const {
+  chatModel: {
+    writeMessage,
+    // readMessages,
+  },
+} = require('./models');
 
 let users = [];
 
@@ -12,9 +18,10 @@ const addUser = (socket, io) => {
 };
 
 const sendMessage = (io, socket) => {
-  socket.on('message', ({ nickname, chatMessage }) => {
+  socket.on('message', async ({ nickname, chatMessage }) => {
     console.log(`${nickname} mandou uma mensagem`);
     const dateHour = moment().format('DD-MM-YYYY h:mm:ss A');
+    await writeMessage({ message: chatMessage, nickname, timestamp: dateHour });
     io.emit('message', `${dateHour} - ${nickname}: ${chatMessage}`);
     io.emit('saveNickNameChat', nickname);
   });
