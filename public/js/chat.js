@@ -49,3 +49,7 @@ socket.on('updatedUsers', (users) => {
     if (nickname !== user) { createUsers(user); }
   });
 });
+
+socket.on('allMessages', (messages) => {
+  messages.forEach(createMessage);
+});
