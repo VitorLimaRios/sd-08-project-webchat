@@ -8,13 +8,13 @@ const {
 
 let users = [];
 
-const addUser = (socket, io) => {
+const addUser = async (socket, io) => {
   const { firstNickName: nick } = socket.handshake.query;
   const newUser = { nickname: nick, socketId: socket.id };
   users.push(newUser);
   console.log(`${newUser.nickname} se conectou`);
-  socket.emit('connectionMaster', newUser);
-  io.emit('connectionUsers', users);
+  await socket.emit('connectionMaster', newUser);
+  await io.emit('connectionUsers', users);
 };
 
 const sendMessage = (io, socket) => {
@@ -22,8 +22,8 @@ const sendMessage = (io, socket) => {
     console.log(`${nickname} mandou uma mensagem`);
     const dateHour = moment().format('DD-MM-YYYY h:mm:ss A');
     await writeMessage({ message: chatMessage, nickname, timestamp: dateHour });
-    io.emit('message', `${dateHour} - ${nickname}: ${chatMessage}`);
-    io.emit('saveNickNameChat', nickname);
+    await io.emit('saveNickNameChat', nickname);
+    await io.emit('message', `${dateHour} - ${nickname}: ${chatMessage}`);
   });
 };
 
@@ -36,22 +36,22 @@ const changeNickname = (nickname, socket) => users.forEach((user) => {
 });
 
 const newNickName = (io, socket) => {
-  socket.on('saveNickName', ({ nickname }) => {
+  socket.on('saveNickName', async ({ nickname }) => {
     const { socketId } = users.filter((user) => user.nickname === nickname);
     const newUser = { nickname, socketId };
     changeNickname(nickname, socket);
-    socket.emit('connectionMaster', newUser);
-    io.emit('connectionUsers', users);
+    await socket.emit('connectionMaster', newUser);
+    await io.emit('connectionUsers', users);
   });
 };
 
 const disconnectUser = (io, socket) => {
-  socket.on('disconnect', () => {
+  socket.on('disconnect', async () => {
     users.forEach((user) => {
       if (user.socketId === socket.id) console.log(`${user.nickname} se desconectou`);
     });
     users = users.filter((user) => user.socketId !== socket.id);
-    io.emit('connectionUsers', users);
+    await io.emit('connectionUsers', users);
   });
 };
 
