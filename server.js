@@ -1,6 +1,7 @@
 const express = require('express');
 const moment = require('moment');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const http = require('http').createServer(app);
@@ -28,13 +29,14 @@ const disconnect = (client) => {
   io.emit('exit', disconnectedPerson);
   delete person[client.id];
   io.emit('personList', person);
-  console.log(`${disconnectedPerson} left chat at ${timestamp()}`);
+  console.log(`${disconnectedPerson} left at ${timestamp()}`);
 };
 
 const message = async (nickname, chatMessage) => {
   const content = `${timestamp()} - ${nickname}: ${chatMessage}`;
   await saveMessage(chatMessage, nickname, timestamp());
   io.emit('message', content);
+  console.log(`${nickname} sent a message at ${timestamp()}`);
 };
 
 io.on('connection', async (client) => {
@@ -44,6 +46,7 @@ io.on('connection', async (client) => {
   io.emit('personList', person);
   const allMessages = await fetchMessages();
   client.emit('listMessages', allMessages);
+  console.log(`${person[id]} joined at ${timestamp()}`);
 
   client.on('message', ({ nickname, chatMessage }) => message(nickname, chatMessage));
 
@@ -56,5 +59,6 @@ io.on('connection', async (client) => {
 });
 
 app.use(cors());
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('/test', (req, res) => res.json({ message: 'Rodando liso!' }));
 http.listen(PORT, () => console.log('Rodando liso na porta', PORT)); 
