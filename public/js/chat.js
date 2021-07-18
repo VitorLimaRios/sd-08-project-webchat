@@ -16,8 +16,10 @@ const createElements = (user) => {
 
 socket.on('renderUsers', (users) => {
   [...ul.children].forEach((element) => element.remove());
-  console.log(users);
-  users.map((user) => createElements(user));
+  createElements(nickname);
+  users.forEach((user) => {
+    if (user !== nickname) createElements(user);
+  });
 });
 
 const createMessage = (message) => {
@@ -42,6 +44,10 @@ form[1].addEventListener('submit', (e) => {
 
 socket.on('nickname', (user) => {
   nickname = user.nickname;
+});
+
+socket.on('history', (history) => {
+  createMessage(history);
 });
 
 socket.on('message', (message) => createMessage(message));

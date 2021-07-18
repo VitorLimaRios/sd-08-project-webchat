@@ -1,4 +1,5 @@
 const getDate = require('../public/utils/getDate');
+const messageModels = require('../models/messageModels');
 
 let onlineList = [];
 
@@ -19,9 +20,12 @@ const changeNickname = (nickname, socket, io) => {
   updateOnlineList(io);
 };
 
-const main = (io, socket) => {
+const main = async (io, socket) => {
   onlineAdd(socket);
   updateOnlineList(io);
+  const history = await messageModels.getAll();
+  history.map(({ message, nickname, timestamp }) =>
+    socket.emit('history', `${timestamp} - ${nickname}: ${message}`));
 };
 
 const disconnect = (io, socket) => {
@@ -29,14 +33,18 @@ const disconnect = (io, socket) => {
   updateOnlineList(io);
 };
 
+const sendMessage = async ({ chatMessage, nickname }, io) => {
+  const timestamp = getDate();
+  await messageModels.send(chatMessage, nickname, timestamp);
+  io.emit('message', `${getDate()} - ${nickname}: ${chatMessage}`);
+};
+
 module.exports = (io) => {
   io.on('connection', (socket) => {
     main(io, socket);
     
     socket.on('disconnect', () => disconnect(io, socket));
-    socket.on('message', ({ chatMessage, nickname }) => {
-      io.emit('message', `${getDate()} - ${nickname}: ${chatMessage}`);
-    });
+    socket.on('message', (message) => sendMessage(message, io));
     socket.on('changeNickname', (nickname) => changeNickname(nickname, socket, io));
   });
 };
