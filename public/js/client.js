@@ -14,7 +14,7 @@ const renderWhoIsOnline = (persons) => {
       personTag.innerText = person;
       whoIsOnline.appendChild(personTag);
     });
-  } catch (err) { console.log(err); }
+  } catch (err) { console.error(err); }
 };
 
 const createMessage = (message) => {
@@ -23,7 +23,7 @@ const createMessage = (message) => {
     messageTag.setAttribute('data-testid', 'message');
     messageTag.innerText = message;
     return messageTag;
-  } catch (err) { console.log(err); }
+  } catch (err) { console.error(err); }
 };
 
 /* client.on('enter', (person) => {
@@ -40,19 +40,19 @@ client.on('listMessages', (messages) => {
       const message = createMessage(content);
       messageList.append(message);
     });
-  } catch (err) { console.log(err); }
+  } catch (err) { console.error(err); }
 });
 
 client.on('setCurrentPerson', (person) => {
   try {
     sessionStorage.setItem('person', person);
-  } catch (err) { console.log(err); }
+  } catch (err) { console.error(err); }
 });
 
 client.on('personList', (persons) => {
   try {
     renderWhoIsOnline(persons);
-  } catch (err) { console.log(err); }
+  } catch (err) { console.error(err); }
 });
 
 document.querySelector('#message-form').addEventListener('submit', (e) => {
@@ -61,7 +61,7 @@ document.querySelector('#message-form').addEventListener('submit', (e) => {
     const chatMessage = document.querySelector('#message-input').value;
     const nickname = sessionStorage.getItem('person');
     client.emit('message', { chatMessage, nickname });
-  } catch (err) { console.log(err); }
+  } catch (err) { console.error(err); }
 });
 
 document.querySelector('#person-form').addEventListener('submit', (e) => {
@@ -70,14 +70,14 @@ document.querySelector('#person-form').addEventListener('submit', (e) => {
     const customPerson = document.querySelector('#nickname-input').value;
     sessionStorage.setItem('person', customPerson);
     client.emit('changePerson', customPerson);
-  } catch (err) { console.log(err); }
+  } catch (err) { console.error(err); }
 });
 
 client.on('message', (content) => {
   try {
     const message = createMessage(content);
     messageList.append(message);
-  } catch (err) { console.log(err); }
+  } catch (err) { console.error(err); }
 });
 
 /* client.on('exit', (person) => {

@@ -31,7 +31,7 @@ const disconnect = (client) => {
     delete person[id];
     io.emit('personList', person);
     // console.log(`${disconnectedPerson} left at ${timestamp()}`);
-  } catch (err) { console.log(err); }
+  } catch (err) { console.error(err); }
 };
 
 const message = async (nickname, chatMessage) => {
@@ -40,7 +40,7 @@ const message = async (nickname, chatMessage) => {
     await saveMessage(chatMessage, nickname, timestamp());
     io.emit('message', content);
     // console.log(`${nickname} sent a message at ${timestamp()}`);
-  } catch (err) { console.log(err); }
+  } catch (err) { console.error(err); }
 };
 
 io.on('connection', async (client) => {
@@ -52,7 +52,7 @@ io.on('connection', async (client) => {
     const allMessages = await fetchMessages();
     client.emit('listMessages', allMessages);
     // console.log(`${person[id]} joined at ${timestamp()}`);
-  } catch (err) { console.log(err); }
+  } catch (err) { console.error(err); }
 
   client.on('message', ({ nickname, chatMessage }) => message(nickname, chatMessage));
 
@@ -61,7 +61,7 @@ io.on('connection', async (client) => {
       const { id } = client;
       person[id] = customPerson;
       io.emit('personList', person);
-    } catch (err) { console.log(err); }
+    } catch (err) { console.error(err); }
   });
 
   client.on('disconnect', () => disconnect(client));
