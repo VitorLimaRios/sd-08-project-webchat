@@ -18,16 +18,15 @@ const renderWhoIsOnline = (persons) => {
 const createMessage = (message) => {
   const messageTag = document.createElement('li');
   messageTag.setAttribute('data-testid', 'message');
-  messageTag.classList.add('msg');
   messageTag.innerText = message;
   return messageTag;
 };
 
-client.on('enter', (person) => {
+/* client.on('enter', (person) => {
   const content = `Robocop: ${person} is here!`;
   const message = createMessage(content);
   messageList.append(message);
-});
+}); */
 
 client.on('listMessages', (messages) => {
   messageList.innerHTML = '';
@@ -65,8 +64,8 @@ client.on('message', (content) => {
   messageList.append(message);
 });
 
-client.on('exit', (person) => {
+/* client.on('exit', (person) => {
   const content = `Robocop: ${person} said goodbye!`;
   const message = createMessage(content);
   messageList.append(message);
-});
+}); */
