@@ -25,13 +25,15 @@ const disconnect = (socket) => {
 };
 
 module.exports = (io) => {
-  io.on('connection', async (socket) => {
+  io.on('connection', (socket) => {
     socket.emit('connection', usersArray);
     socket.on('users', (users) => io.emit('users', users));
 
-    const historicoMsgs = await MessageModel.getAll();
-    historicoMsgs.forEach((message) => {
-      socket.emit('message', `${message.timestamp} - ${message.nickname}: ${message.message}`);
+    socket.on('teste', async () => {
+      const historicoMsgs = await MessageModel.getAll();
+      historicoMsgs.forEach((message) => {
+        socket.emit('message', `${message.timestamp} - ${message.nickname}: ${message.message}`);
+      });
     });
 
     socket.on('message', async ({ nickname, chatMessage }) => {

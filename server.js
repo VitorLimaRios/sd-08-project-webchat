@@ -4,6 +4,7 @@ const app = express();
 const http = require('http').createServer(app);
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const io = require('socket.io')(http, {
   cors: {
@@ -16,7 +17,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.set('view engine', 'ejs');
 app.set('views', './views');
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '/public')));
 
 require('./sockets/webchat')(io);
 

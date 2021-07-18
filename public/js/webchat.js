@@ -77,6 +77,7 @@ socket.on('connection', (usersArray) => {
   usersArray.forEach((newUser) => {
     createUser(newUser.nickname);
   });
+  socket.emit('teste');
 });
 socket.on('message', (message) => createMessage(message));
 socket.emit('serverMessage', nickname);
