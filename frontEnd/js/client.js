@@ -15,6 +15,7 @@ const createMessagesList = (message) => {
 
 const createUsersList = (user) => {
   const usersList = document.querySelector('#usersList');
+  usersList.innerHTML = '';
   const usersName = document.querySelectorAll('#onlineUser');
   if (usersName) usersName.forEach((item) => item.remove()); 
 
@@ -44,6 +45,7 @@ messageForm.addEventListener('submit', (e) => {
 nicknameForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const newNickname = document.querySelector('#nicknameBox').value;
+  // console.log(newNickname);
   socket.emit('changeNick', newNickname);
   return false;
 });
