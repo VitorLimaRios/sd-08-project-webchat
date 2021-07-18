@@ -16,7 +16,7 @@ const io = require('socket.io')(http, {
   },
 });
 
-// const { saveMessage, fetchMessages } = require('./models/messages');
+const { create, getAll } = require('./models/messages');
 
 const getTimestamp = () => {
   try {
@@ -36,24 +36,24 @@ const getTimestamp = () => {
   } catch (err) { console.error(err); }
 }; */
 
-const message = /* async */ (nickname, chatMessage) => {
+const message = async (nickname, chatMessage) => {
   try {
     const timestamp = getTimestamp();
     const content = `${timestamp} - ${nickname}: ${chatMessage}`;
-    // await saveMessage(chatMessage, nickname, timestamp);
+    await create(chatMessage, nickname, timestamp);
     io.emit('message', content);
     // console.log(`${nickname} sent a message at ${timestamp}`);
   } catch (err) { console.error(err); }
 };
 
-io.on('connection', /* async */ (client) => {
+io.on('connection', async (client) => {
   try {
     const { id } = client;
     person[id] = id.slice(0, 16);
     client.emit('setCurrentPerson', person[id]);
     io.emit('personList', person);
-    // const allMessages = await fetchMessages();
-    // client.emit('listMessages', allMessages);
+    const allMessages = await getAll();
+    client.emit('listMessages', allMessages);
     // console.log(`${person[id]} joined at ${timestamp}`);
   } catch (err) { console.error(err); }
 
