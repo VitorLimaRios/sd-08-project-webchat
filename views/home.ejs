@@ -24,8 +24,7 @@
           </div>
         </header>
         <section class="msger-chat">
-          <div class="messages-list">
-            <% messages.forEach(element=>{ %> <p data-testid="message">
+          <div class="messages-list"> MessageList <% messages.forEach(element=>{%> <p data-testid="message">
                 <%=`${element.timestamp} - ${element.nickname}: ${element.message}`%>
               </p>
               <%});%>
@@ -41,10 +40,12 @@
         <form class="form-nicknames">
           <input type="text" placeholder="Insira seu Nickname" data-testid="nickname-box"
             class="nickname-box msger-input" />
-          <button type="button" data-testid="nickname-button" class="nickname-button"> Salvar </button>
+          <button type="button" data-testid="nickname-button" class="nickname-button">Salvar </button>
         </form>
         <div class="list-nicknames users-list msger-chat">
-          <ul class="ul-list"></ul>
+          <ul class="ul-list">
+            <li class="user" data-testid="online-user"></li>
+          </ul>
         </div>
       </aside>
     </div>

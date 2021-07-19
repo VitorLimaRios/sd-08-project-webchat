@@ -14,7 +14,36 @@ const io = require('socket.io')(http, {
 const viewsRoutes = require('./routes/viewsRoutes');
 const messagesRoutes = require('./routes/messagesRoutes');
 const messagesModel = require('./models/messagesModel');
-// require('./sockets/chat')(io);
+
+let clients = [];
+
+const startConnection = (socket) => {
+  socket.on('newConnection', (nickname) => {
+    const newUser = { nickname, id: socket.id };
+
+    socket.broadcast.emit('newUser', newUser);
+    clients = [...clients, newUser];
+  });
+
+  socket.on('newNickname', (nickname) => {
+    socket.broadcast.emit('newNickname', { nickname, id: socket.id });
+    const index = clients.findIndex((client) => client.id === socket.id);
+    clients[index].nickname = nickname;
+  });
+
+  socket.on('disconnect', () => {
+    const index = clients.findIndex((user) => user.id === socket.id);
+    clients.splice(index, 1);
+    socket.broadcast.emit('disconnected', socket.id);
+
+    console.log('usuario desconectado');
+  });
+};
+
+/* https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/String/replace
+https://stackoverflow.com/questions/16970237/jquery-replace-g-do-not-work-for-me-but-others
+*/
+// inspirações para a função getDate abaixo
 
 const getDate = () => {
   const date = new Date()
@@ -25,6 +54,11 @@ const getDate = () => {
 
 io.on('connection', (socket) => {
   console.log(`novo usuário conectado! ${socket.id}`);
+
+  startConnection(socket);
+
+  socket.emit('users', clients);
+
   socket.on('message', ({ chatMessage, nickname }) => {
     const date = getDate();
     const message = `${date} - ${nickname}: ${chatMessage}`;

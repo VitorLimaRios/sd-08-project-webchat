@@ -11,51 +11,74 @@ const randomNickName = () => {
   return nickname;
 };
 
-const allNicknames = JSON.parse(localStorage.getItem('nicknames')) || [];
+const dataTestId = 'data-testid';
+
+const nameLi = document.querySelector('.user');
 let nickname = randomNickName();
-localStorage.setItem('nicknames', JSON.stringify([...allNicknames, nickname]));
+nameLi.innerHTML = nickname;
 
-const createMessage = (message) => {
-  const elementP = document.createElement('p');
-  elementP.setAttribute('data-testid', 'message');
-  elementP.innerHTML = message;
-  return elementP;
+const createUser = (newUser) => {
+  const listElements = document.querySelector('.ul-list');
+  const liElement = document.createElement('li');
+  liElement.setAttribute(dataTestId, 'online-user');
+  liElement.innerHTML = newUser.nickname;
+  liElement.id = newUser.id;
+  listElements.appendChild(liElement);
 };
 
-const createUser = (usersList) => {
-  usersList.forEach((element) => {
-    const li = document.createElement('li');
-    li.setAttribute('data-testid', 'online-user');
-    li.innerHTML = element;
-    const ulList = document.querySelector('.ul-list');
-    ulList.append(li);
-  });
-};
-createUser(JSON.parse(localStorage.getItem('nicknames')));
+client.emit('newConnection', nickname);
 
-document.querySelector('.send-button').addEventListener('click', async () => {
-  const chatMessage = document.querySelector('.input-message').value;
-  client.emit('message', { chatMessage, nickname });
-  document.querySelector('.input-message').value = '';
-  // await fetchMessages(chatMessage, nickname);
+client.on('newUser', (newUser) => {
+  createUser(newUser);
 });
 
-client.on('message', (message) => {
-  const newMessage = createMessage(message);
-  document.querySelector('.messages-list').append(newMessage);
+client.on('newNickname', (user) => {
+  const userElement = document.getElementById(`${user.id}`);
+  userElement.innerText = user.nickname;
+});
+
+client.on('disconnected', (id) => {
+  const userElement = document.getElementById(`${id}`);
+  userElement.remove();
 });
 
 document.querySelector('.nickname-button').addEventListener('click', () => {
-  const newNickname = document.querySelector('.nickname-box').value;
-  const allNamesStorage = JSON.parse(localStorage.getItem('nicknames'));
-  const newArrayNames = allNamesStorage.map((element) => {
-    if (element === nickname) {
-      return newNickname;
-    }
-    return element;
-  });
-  
-  localStorage.setItem('nicknames', JSON.stringify(newArrayNames));
-  nickname = newNickname;
+  nickname = document.querySelector('.nickname-box').value;
+  nameLi.innerHTML = nickname;
+
+  client.emit('newNickname', nickname);
+
   document.querySelector('.nickname-box').value = '';
+});
+
+client.on('users', (clients) => {
+  clients.forEach((element) => {
+    const listElements = document.querySelector('.ul-list');
+    const liElement = document.createElement('li');
+    liElement.innerText = element.nickname;
+    liElement.setAttribute(dataTestId, 'online-user');
+    liElement.id = element.id;
+    listElements.appendChild(liElement);
+  });
+});
+
+const createMessage = (message) => {
+  const elementP = document.createElement('p');
+  elementP.setAttribute(dataTestId, 'message');
+  elementP.innerHTML = message;
+
+  return elementP;
+};
+
+document.querySelector('.send-button').addEventListener('click', async () => {
+  const chatMessage = document.querySelector('.input-message').value;
+
+  client.emit('message', { chatMessage, nickname });
+
+  document.querySelector('.input-message').value = '';
+});
+
+client.on('message', (message) => {
+  const newMessageUser = createMessage(message);
+  document.querySelector('.messages-list').append(newMessageUser);
 });
