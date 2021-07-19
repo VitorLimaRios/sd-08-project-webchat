@@ -34,11 +34,8 @@ const changePerson = (id, customPerson) => {
 
 const disconnect = (id) => {
   try {
-    // const disconnectedPerson = person[id];
-    // io.emit('exit', disconnectedPerson);
     delete person[id];
     io.emit('personListUpdate', person);
-    // console.log(`${disconnectedPerson} left at ${timestamp}`);
   } catch (err) { console.error(err); }
 };
 
@@ -48,19 +45,16 @@ const message = async (nickname, chatMessage) => {
     const content = `${timestamp} - ${nickname}: ${chatMessage}`;
     await create(chatMessage, nickname, timestamp);
     io.emit('message', content);
-    // console.log(`${nickname} sent a message at ${timestamp}`);
   } catch (err) { console.error(err); }
 };
 
 io.on('connection', async (client) => {
   try {
-    // const { id } = client;
     person[client.id] = client.id.slice(0, 16);
     client.emit('setCurrentPerson', person[client.id]);
     io.emit('personListUpdate', person);
     const allMessages = await getAll();
     client.emit('listMessages', allMessages);
-    // console.log(`${person[id]} joined at ${timestamp}`);
   } catch (err) { console.error(err); }
 
   client.on('message', ({ nickname, chatMessage }) => message(nickname, chatMessage));

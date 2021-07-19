@@ -60,18 +60,6 @@ client.on('message', (content) => {
   } catch (err) { console.error(err); }
 });
 
-/* client.on('exit', (person) => {
-  const content = `Robocop: ${person} said goodbye!`;
-  const message = createMessage(content);
-  messageList.append(message);
-}); */
-
-/* client.on('enter', (person) => {
-  const content = `Robocop: ${person} is here!`;
-  const message = createMessage(content);
-  messageList.append(message);
-}); */
-
 messageForm.addEventListener('submit', (e) => {
   try {
     e.preventDefault();
