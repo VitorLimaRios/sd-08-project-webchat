@@ -7,6 +7,7 @@ const messages = document.querySelector('#messageInput');
 const list = document.querySelector('#listMessages');
 const userList = document.querySelector('#users');
 let online = [];
+const users2 = [];
 
 const createMessage = (message) => {
     const msgElement = document.createElement('li');
@@ -30,23 +31,17 @@ const nameRandom = () => {
 window.onload = () => {
     const random = nameRandom();
     client.emit('newUser', random);
-    client.emit('online-users', '');
-    localStorage.setItem('user', JSON.stringify(random));
+    client.emit('online-users', users2);
 };
 
 client.on('newUser', (user) => {
     online.push(user);
-    const li = document.createElement('li');
-    li.innerText = online;
-    li.setAttribute('id', 'online');
-    li.dataset.testid = 'online-user';
-    list.appendChild(li);
     const newMessage = `${createMessage(user).innerText}, entrou no chat!`;
     list.append(newMessage);
 });
 
 client.on('online-users', (users) => {
-    console.log('Console de todos users', users, client);
+    console.log('Console de todos users', users);
     userList.innerText = '';
     const userOn = users.find((user) => user.id === client.id);
     const allUsers = users.filter((user) => user.id !== client.id);
@@ -56,19 +51,22 @@ client.on('online-users', (users) => {
     allUsers.map((item) => {
         console.log('Console de todos itens', item);
         const li = document.createElement('li');
-        li.innerText = item.nickname;
+        li.setAttribute('id', 'online');
+        li.innerText = item.nicknames;
+        li.dataset.testid = 'online-user';
         return userList.appendChild(li);
     });
 });
 
 client.on('clientExit', (obj) => {
-    console.log('Console do obj recebido', obj);
-    const newMessage = `${createMessage(obj[0].newUser).innerText}, saiu do chat!`;
+    console.log('Console do obj recebido', obj[0].nickname);
+    const newMessage = `${createMessage(obj)}, saiu do chat!`;
     list.append(newMessage);
 });
 
 form.addEventListener('submit', (e) => {
     let onlineUser = document.querySelector('#online').innerText;
+    console.log('Online User', onlineUser);
     e.preventDefault(); 
     if (newNick.value === '') {
         client.emit('message', { 

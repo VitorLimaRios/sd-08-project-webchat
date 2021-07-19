@@ -12,7 +12,7 @@ const dateFormat = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`;
 const hourFormat = `${date.getHours()}:${date.getMinutes()}`;
 const timestamps = `${dateFormat} ${hourFormat}`;
 
-let users = [];
+const users = [];
 
 const io = require('socket.io')(http, {
     cors: {
@@ -39,11 +39,14 @@ const getMessages = async () => {
 const onlineUsers = 'online-users';
 
 const newUser = (socket) => {
+    console.log('Console de todos users');
+
     socket.on('newUser', (nicknames) => {
         users.push({ id: socket.id, nicknames });
-        socket.emit('newUser', nicknames);
+        socket.broadcast.emit('newUser', nicknames);
         getMessages().then((msg) => msg.map(({ message, nickname, timestamp }) => {
         const messages = `${timestamp} ${nickname} ${message}`;
+        console.log('Console de todos users');
         return socket.emit('historyMsg', messages);
     }));
     });
@@ -51,11 +54,12 @@ const newUser = (socket) => {
 
 const disconnectUser = (socket) => {
     socket.on('disconnect', () => {
-        const attUsers = users.filter((user) => user.id !== socket.id);
-        const desconected = users.filter((user) => user.id === socket.id);
-        users = attUsers;
+        const removeIndex = users.findIndex((user) => user.id === socket.id);
+        const userToRemove = users.filter((user) => user.id === socket.id);
+        users.splice(removeIndex, 1);
         io.emit(onlineUsers, users);
-        io.emit('clientExit', desconected);
+        // estava dando problema linha de baixo
+        socket.broadcast.emit('clientExit', userToRemove);
     });
 };
 
@@ -70,7 +74,7 @@ io.on('connect', (socket) => {
     
     socket.on('updateNick', (userUp) => {
         const index = users.findIndex((user) => user.id === socket.id);
-        users[index].nickname = userUp;
+        users[index].nicknames = userUp;
         io.emit(onlineUsers, users);
     });
     
