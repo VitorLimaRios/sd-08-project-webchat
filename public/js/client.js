@@ -6,17 +6,17 @@ const messageInput = document.querySelector('#message-input');
 const personForm = document.querySelector('#person-form');
 const nicknameInput = document.querySelector('#nickname-input');
 
-const renderWhoIsOnline = (persons) => {
+const renderWhoIsOnline = (persons) => { // Referência: Thays Costa T07
   try {
     const thisPerson = sessionStorage.getItem('person');
     const otherPersons = Object.values(persons).filter((person) => person !== thisPerson);
+    const everyPersonOnline = [thisPerson, ...otherPersons];
     whoIsOnline.innerHTML = '';
-  
-    [thisPerson, ...otherPersons].forEach((person) => {
-      const personTag = document.createElement('li');
-      personTag.setAttribute('data-testid', 'online-user');
-      personTag.innerText = person;
-      whoIsOnline.appendChild(personTag);
+    everyPersonOnline.forEach((person) => {
+      const personElement = document.createElement('li');
+      personElement.setAttribute('data-testid', 'online-user');
+      personElement.innerText = person;
+      whoIsOnline.appendChild(personElement);
     });
   } catch (err) { console.error(err); }
 };
