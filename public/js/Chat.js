@@ -5,14 +5,15 @@ const messageBoard = document.querySelector('#messages');
 const inputMessage = document.querySelector('#message-box');
 const nicknameBox = document.querySelector('#nickname-box');
 const nicknameButton = document.querySelector('#nickname-button');
+const onlineUser = document.querySelector('#online-user');
 
 let nickname = '';
 
 form.addEventListener('submit', (event) => {
   event.preventDefault();
   socket.emit('message', {
+    chatMessage: inputMessage.value,
     nickname,
-    message: inputMessage.value,
   });
   inputMessage.value = '';
 });
@@ -28,4 +29,11 @@ const createMessage = (message) => {
   messageBoard.appendChild(li);
 };
 
+const newUser = (initialNick) => {
+  nickname = initialNick;
+  onlineUser.innerHTML = nickname;
+  nicknameBox.value = nickname;
+};
+
 socket.on('message', createMessage);
+socket.on('userConnected', newUser);
