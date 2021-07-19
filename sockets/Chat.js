@@ -46,9 +46,9 @@ const severConnection = (socket, io) => {
 };
 
 module.exports = (io) => {
-  io.on('connection', async (socket) => {
+  io.on('connection', (socket) => {
     generateUser(socket);
-    await generateHistory(socket);
+    generateHistory(socket);
     sendMessage(socket, io);
     updateUsers(socket, io);
     updateNickname(socket, io);
