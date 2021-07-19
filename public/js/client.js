@@ -21,12 +21,12 @@ const renderWhoIsOnline = (persons) => {
   } catch (err) { console.error(err); }
 };
 
-const createMessage = (message) => {
+const createMessage = (content) => {
   try {
-    const messageTag = document.createElement('li');
-    messageTag.setAttribute('data-testid', 'message');
-    messageTag.innerText = message;
-    return messageTag;
+    const messageElement = document.createElement('li');
+    messageElement.setAttribute('data-testid', 'message');
+    messageElement.innerText = content;
+    return messageElement;
   } catch (err) { console.error(err); }
 };
 
@@ -35,8 +35,8 @@ client.on('listMessages', (messages) => {
     messageList.innerHTML = '';
     messages.forEach((msg) => {
       const content = `${msg.timestamp} - ${msg.nickname}: ${msg.message}`;
-      const message = createMessage(content);
-      messageList.append(message);
+      const messageElement = createMessage(content);
+      messageList.append(messageElement);
     });
   } catch (err) { console.error(err); }
 });
