@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chatrybe</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+</head>
+<body>
+  <section id="users">
+    <ul id="online"></ul>
+    <form id="formNick" action="">
+      <input id="inputNickname" autocomplete="off" data-testid="nickname-box" />
+      <button type="submit" data-testid="nickname-button">Trocar Nick</button>
+    </form>
+  </section>
+  <section id="chat">
+    <ul id="mensagens"></ul>
+
+    <form id="formMsg" action="">
+      <input id="inputMensagem" autocomplete="off" data-testid="message-box" />
+      <button type="submit" data-testid="send-button">Enviar</button>
+    </form>
+  </section>
+
+  <script>
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
+    let nickname = '';
+    while (nickname.length < 16) {
+      nickname += (alphabet[Math.floor(Math.random() * alphabet.length)] || '0');
+    }
+    const socketIO = io('http://localhost:3000', {
+      query: {
+        nickname,
+      }
+    });
+
+    const formMsg = document.querySelector('#formMsg');
+    const formNick = document.querySelector('#formNick');
+    const inputMessage = document.querySelector('#inputMensagem');
+    const inputNick = document.querySelector('#inputNickname');
+    const usersOnline = document.querySelector('#online');
+    const messageList = document.querySelector('#mensagens');
+
+    socketIO.on('conn', ({onUsers}) => {
+      usersOnline.innerHTML = '';
+      const currentUserPosition = onUsers.findIndex((currName) => currName === nickname);
+      const newArrayUsers = onUsers.map((usr, index) => {
+        if (index === 0) return nickname;
+        if (index === currentUserPosition) return onUsers[0];
+        return usr;
+      });
+
+      newArrayUsers.forEach(user => {
+        const li = document.createElement('li');
+        li.innerText = user;
+
+        li.dataset.testid = 'online-user';
+        li.id = 'online-user';
+
+        usersOnline.appendChild(li);
+      })
+    });
+
+    socketIO.on('changeNick', ({onUsers}) => {
+      usersOnline.innerHTML = '';
+      const currentUserPosition = onUsers.findIndex((currName) => currName === nickname);
+      const newArrayUsers = onUsers.map((usr, index) => {
+        if (index === 0) return nickname;
+        if (index === currentUserPosition) return onUsers[0];
+        return usr;
+      });
+
+      newArrayUsers.forEach(user => {
+        const li = document.createElement('li');
+        li.innerText = user;
+
+        li.dataset.testid = 'online-user';
+        li.id = 'online-user';
+  
+        usersOnline.appendChild(li);
+      })
+    })
+    
+    formMsg.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      socketIO.emit('message', {chatMessage: inputMessage.value, nickname});
+      inputMessage.value = '';
+      return false;
+    });
+
+    formNick.addEventListener('submit', (event) => {
+      event.preventDefault();
+      
+      socketIO.emit('changeNick', {newNick: inputNick.value, nickname});
+      nickname = inputNick.value;
+      inputNick.value = '';
+      return false;
+    });
+
+    socketIO.on('message', (msg) => {
+      const li = document.createElement('li');
+      li.innerText = msg;
+      li.dataset.testid = "message";
+
+      messageList.appendChild(li);
+    })
+
+    socketIO.on('storedMessages', (messages) => {
+      messages.forEach((msg) => {
+        const li = document.createElement('li');
+        li.innerText = msg;
+        li.dataset.testid = "message";
+
+        messageList.appendChild(li);
+      });
+    });
+  </script>
+</body>
+</html>
