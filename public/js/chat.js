@@ -11,7 +11,7 @@ let nickname = null;
 const createElements = (user) => {
   const li = document.createElement('li');
   li.innerText = user;
-  li.setAttribute('data-testid', 'online-user1');
+  li.setAttribute('data-testid', 'online-user');
   ul.appendChild(li);
 };
 
