@@ -55,6 +55,15 @@ const updateUsers = (onlineUsers) => {
   onlineUsers.forEach((user) => user.id !== socket.id && modifyUserList(user));
 };
 
+const renderHistory = (messages) => {
+  messages.forEach((message) => {
+    createMessage(
+      `${message.timestamp} - ${message.nickname}: ${message.message}`,
+    );
+  });
+};
+
 socket.on('message', createMessage);
 socket.on('userConnected', newUser);
 socket.on('updateUsers', updateUsers);
+socket.on('getHistory', renderHistory);
