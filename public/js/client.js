@@ -34,7 +34,8 @@ client.on('listMessages', (messages) => {
   try {
     messageList.innerHTML = '';
     messages.forEach((msg) => {
-      const content = `${msg.timestamp} - ${msg.nickname}: ${msg.message}`;
+      const { timestamp, nickname, message } = msg;
+      const content = `${timestamp} - ${nickname}: ${message}`;
       const messageElement = createMessage(content);
       messageList.append(messageElement);
     });
