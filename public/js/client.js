@@ -1,6 +1,10 @@
 const client = window.io();
 const whoIsOnline = document.querySelector('#who-is-online');
 const messageList = document.querySelector('#message-list');
+const messageForm = document.querySelector('#message-form');
+const messageInput = document.querySelector('#message-input');
+const personForm = document.querySelector('#person-form');
+const nicknameInput = document.querySelector('#nickname-input');
 
 const renderWhoIsOnline = (persons) => {
   try {
@@ -26,12 +30,6 @@ const createMessage = (message) => {
   } catch (err) { console.error(err); }
 };
 
-/* client.on('enter', (person) => {
-  const content = `Robocop: ${person} is here!`;
-  const message = createMessage(content);
-  messageList.append(message);
-}); */
-
 client.on('listMessages', (messages) => {
   try {
     messageList.innerHTML = '';
@@ -49,27 +47,9 @@ client.on('setCurrentPerson', (person) => {
   } catch (err) { console.error(err); }
 });
 
-client.on('personList', (persons) => {
+client.on('personList', (person) => {
   try {
-    renderWhoIsOnline(persons);
-  } catch (err) { console.error(err); }
-});
-
-document.querySelector('#message-form').addEventListener('submit', (e) => {
-  try {
-    e.preventDefault();
-    const chatMessage = document.querySelector('#message-input').value;
-    const nickname = sessionStorage.getItem('person');
-    client.emit('message', { chatMessage, nickname });
-  } catch (err) { console.error(err); }
-});
-
-document.querySelector('#person-form').addEventListener('submit', (e) => {
-  try {
-    e.preventDefault();
-    const customPerson = document.querySelector('#nickname-input').value;
-    sessionStorage.setItem('person', customPerson);
-    client.emit('changePerson', customPerson);
+    renderWhoIsOnline(person);
   } catch (err) { console.error(err); }
 });
 
@@ -85,3 +65,27 @@ client.on('message', (content) => {
   const message = createMessage(content);
   messageList.append(message);
 }); */
+
+/* client.on('enter', (person) => {
+  const content = `Robocop: ${person} is here!`;
+  const message = createMessage(content);
+  messageList.append(message);
+}); */
+
+messageForm.addEventListener('submit', (e) => {
+  try {
+    e.preventDefault();
+    const chatMessage = messageInput.value;
+    const nickname = sessionStorage.getItem('person');
+    client.emit('message', { chatMessage, nickname });
+  } catch (err) { console.error(err); }
+});
+
+personForm.addEventListener('submit', (e) => {
+  try {
+    e.preventDefault();
+    const customPerson = nicknameInput.value;
+    sessionStorage.setItem('person', customPerson);
+    client.emit('changePerson', customPerson);
+  } catch (err) { console.error(err); }
+});
