@@ -47,7 +47,7 @@ client.on('setCurrentPerson', (person) => {
   } catch (err) { console.error(err); }
 });
 
-client.on('personList', (person) => {
+client.on('personListUpdate', (person) => {
   try {
     renderWhoIsOnline(person);
   } catch (err) { console.error(err); }

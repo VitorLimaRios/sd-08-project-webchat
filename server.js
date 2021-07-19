@@ -25,16 +25,22 @@ const getTimestamp = () => {
   } catch (err) { console.error(err); }
 };
 
-/* const disconnect = (client) => {
+const changePerson = (id, customPerson) => {
   try {
-    const { id } = client;
-    const disconnectedPerson = person[id];
-    io.emit('exit', disconnectedPerson);
+      person[id] = customPerson;
+      io.emit('personListUpdate', person);
+  } catch (err) { console.error(err); }
+};
+
+const disconnect = (id) => {
+  try {
+    // const disconnectedPerson = person[id];
+    // io.emit('exit', disconnectedPerson);
     delete person[id];
-    io.emit('personList', person);
+    io.emit('personListUpdate', person);
     // console.log(`${disconnectedPerson} left at ${timestamp}`);
   } catch (err) { console.error(err); }
-}; */
+};
 
 const message = async (nickname, chatMessage) => {
   try {
@@ -48,26 +54,18 @@ const message = async (nickname, chatMessage) => {
 
 io.on('connection', async (client) => {
   try {
-    const { id } = client;
-    person[id] = id.slice(0, 16);
-    client.emit('setCurrentPerson', person[id]);
-    io.emit('personList', person);
+    // const { id } = client;
+    person[client.id] = client.id.slice(0, 16);
+    client.emit('setCurrentPerson', person[client.id]);
+    io.emit('personListUpdate', person);
     const allMessages = await getAll();
     client.emit('listMessages', allMessages);
     // console.log(`${person[id]} joined at ${timestamp}`);
   } catch (err) { console.error(err); }
 
   client.on('message', ({ nickname, chatMessage }) => message(nickname, chatMessage));
-
-/*   client.on('changePerson', (customPerson) => {
-    try {
-      const { id } = client;
-      person[id] = customPerson;
-      io.emit('personList', person);
-    } catch (err) { console.error(err); }
-  }); */
-
-  // client.on('disconnect', () => disconnect(client));
+  client.on('changePerson', (customPerson) => changePerson(client.id, customPerson));
+  client.on('disconnect', () => disconnect(client.id));
 });
 
 app.use(cors());
