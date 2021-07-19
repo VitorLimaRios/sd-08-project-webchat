@@ -17,8 +17,8 @@ localStorage.setItem('nicknames', JSON.stringify([...allNicknames, nickname]));
 
 const createMessage = (message) => {
   const elementP = document.createElement('p');
-  const component = `<p data-testid="message">${message}</p>`;
-  elementP.innerHTML = component;
+  elementP.setAttribute('data-testid', 'message');
+  elementP.innerHTML = message;
   return elementP;
 };
 
@@ -33,10 +33,11 @@ const createUser = (usersList) => {
 };
 createUser(JSON.parse(localStorage.getItem('nicknames')));
 
-document.querySelector('.send-button').addEventListener('click', () => {
+document.querySelector('.send-button').addEventListener('click', async () => {
   const chatMessage = document.querySelector('.input-message').value;
   client.emit('message', { chatMessage, nickname });
   document.querySelector('.input-message').value = '';
+  // await fetchMessages(chatMessage, nickname);
 });
 
 client.on('message', (message) => {
@@ -53,7 +54,7 @@ document.querySelector('.nickname-button').addEventListener('click', () => {
     }
     return element;
   });
-
+  
   localStorage.setItem('nicknames', JSON.stringify(newArrayNames));
   nickname = newNickname;
   document.querySelector('.nickname-box').value = '';

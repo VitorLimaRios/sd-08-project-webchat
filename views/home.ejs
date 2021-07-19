@@ -24,7 +24,11 @@
           </div>
         </header>
         <section class="msger-chat">
-          <div class="messages-list"> MessageList <p data-testid="message"></p>
+          <div class="messages-list">
+            <% messages.forEach(element=>{ %> <p data-testid="message">
+                <%=`${element.timestamp} - ${element.nickname}: ${element.message}`%>
+              </p>
+              <%});%>
           </div>
         </section>
         <form class="msger-inputarea">

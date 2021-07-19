@@ -11,8 +11,9 @@ const io = require('socket.io')(http, {
   },
 });
 
-const viewsRoute = require('./routes/viewsRoute');
-
+const viewsRoutes = require('./routes/viewsRoutes');
+const messagesRoutes = require('./routes/messagesRoutes');
+const messagesModel = require('./models/messagesModel');
 // require('./sockets/chat')(io);
 
 const getDate = () => {
@@ -27,6 +28,7 @@ io.on('connection', (socket) => {
   socket.on('message', ({ chatMessage, nickname }) => {
     const date = getDate();
     const message = `${date} - ${nickname}: ${chatMessage}`;
+    messagesModel.createMessage(chatMessage, nickname, date);
     io.emit('message', message);
   });
 });
@@ -38,7 +40,8 @@ app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-app.use(viewsRoute);
+app.use(viewsRoutes);
+app.use(messagesRoutes);
 
 const port = process.env.PORT || 3000;
 
