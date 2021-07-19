@@ -105,7 +105,7 @@ describe('3 - Elabore o histórico do chat para que as mensagens persistam', () 
     );
   });
 
-  it('Será validado que ao enviar uma mensagem e recarregar a página, a mensagem persistirá', async () => {
+  it.only('Será validado que ao enviar uma mensagem e recarregar a página, a mensagem persistirá', async () => {
     await page.goto(BASE_URL);
 
     let messageBox = await page.$(`input${dataTestid('message-box')}`);
