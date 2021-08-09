@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-
 const chatModel = require('../models/chatModel');
 
 let users = [];
@@ -20,11 +19,10 @@ const createMessage = (io, socket) => {
 
 const addUser = async (io, socket) => {
   const randomName = crypto.randomBytes(8).toString('hex');
-  socket.emit('generateName', randomName);
+  const messageHistory = await chatModel.getAll();
+  socket.emit('chatInit', { messageHistory, randomName });
   users.push({ nickname: randomName, socketId: socket.id });
   io.emit('userList', users);
-  const messageHistory = await chatModel.getAll();
-  socket.emit('restoreMessages', messageHistory);
 };
 
 const updateUsers = (io, socket) => {

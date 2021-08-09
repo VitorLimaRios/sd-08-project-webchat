@@ -1,7 +1,77 @@
-main {
-  width: 70%;
+body {
+  background: #232946;
 }
 
-aside {
-  width: 29%;
+main {
+  background-color: #d4d8f0;
+  border: 1px solid #121629;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin: 10px;
+}
+
+.chat {
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-around;
+  margin: 5px;
+}
+
+.users-div {
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+}
+
+.chat-input , .users-input {
+  display: flex;
+  justify-content: center;
+  margin: 5px;
+}
+
+input {
+  background-color: #fffffe;
+  border-radius: 5px;
+  margin: 10px;
+  width: 100%;
+}
+
+input::placeholder {
+  color: #232946;
+}
+
+button {
+  background-color: #232946;
+  border-radius: 5px;
+  color: #fffffe;
+  margin: 10px;
+  padding: 10px;
+}
+
+ul {
+  background-color: #eebbc3;
+  border: 1px solid #121629;
+  border-radius: 10px;
+  font-family: sans-serif;
+  height: 100%;
+  list-style-type: none;
+
+  /* background-color: #b8c1ec; OUTRA OPCAO DE COR */
+}
+
+ul li {
+  background-color: #fffffe;
+  border-radius: 30px;
+  color: #232946;
+  font-size: large;
+  margin: 10px;
+  padding: 10px 15px;
+  width: auto;
+}
+
+.messages {
+  margin: 5px;
+  width: 100%;
 }

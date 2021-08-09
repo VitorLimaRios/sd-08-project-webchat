@@ -1,23 +1,26 @@
 const socket = window.io();
 
-const nameInput = document.querySelector('.nickname-box');
-const messageUl = document.querySelector('.messages');
-const messageInput = document.querySelector('.message-box');
+const userInput = document.querySelector('.nickname-box');
 const usersUl = document.querySelector('.users');
+const messageInput = document.querySelector('.message-box');
+const messageUl = document.querySelector('.messages');
 
 let nickname;
 
-document.querySelector('.send-button').addEventListener('click', () => {
+const addMessage = () => {
   const chatMessage = messageInput.value;
+  if (chatMessage.length === 0) return;
   socket.emit('message', { chatMessage, nickname });
   messageInput.value = '';
-});
+};
+
+document.querySelector('.send-button').addEventListener('click', addMessage);
 
 document.querySelector('.nickname-button').addEventListener('click', () => {
-  const newNickname = nameInput.value;
+  const newNickname = userInput.value;
   socket.emit('updateUsersList', { nickname, newNickname });
-  nickname = nameInput.value;
-  nameInput.value = '';
+  nickname = userInput.value;
+  userInput.value = '';
 });
 
 const createMessage = (message) => {
@@ -27,26 +30,23 @@ const createMessage = (message) => {
   messageUl.appendChild(li);
 };
 
-socket.on('generateName', (randomName) => {
+socket.on('chatInit', ({ randomName, messageHistory }) => {
   nickname = randomName;
+  messageHistory.forEach(({ message }) => createMessage(message));
 });
 
 socket.on('message', (message) => createMessage(message));
 
-socket.on('restoreMessages', (messageHistory) => {
-  messageHistory.forEach(({ message }) => createMessage(message));
-});
-
-const createNickname = (name) => {
+const createNickname = (name, user = false) => {
   const li = document.createElement('li');
     li.setAttribute('data-testid', 'online-user');
-    li.innerText = name;
+    li.innerText = (user) ? `${name} (you)` : name;
     usersUl.appendChild(li);
 };
 
 socket.on('userList', (userList) => {
   usersUl.innerHTML = '';
-  createNickname(userList.find(({ socketId }) => socket.id === socketId).nickname);
+  createNickname(userList.find(({ socketId }) => socket.id === socketId).nickname, true);
   userList.forEach((obj) => {
     if (socket.id === obj.socketId) return;
     createNickname(obj.nickname);

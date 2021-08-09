@@ -9,15 +9,21 @@
 </head>
 <body>
   <main>
-    <ul class="messages"></ul>
-    <input class="message-box" data-testid="message-box" name="message" type="text" placeholder="message" />
-    <button class="send-button" data-testid="send-button">Send</button>
+    <div class="chat">
+      <div class="users-div">
+        <div class="users-input">
+          <input class="nickname-box" data-testid="nickname-box" name="nickname" type="text" placeholder="nickname" />
+          <button class="nickname-button" data-testid="nickname-button">Change</button>
+        </div>
+        <ul class="users"></ul>
+      </div>
+      <ul class="messages"></ul>
+    </div>
+    <div class="chat-input">
+      <input class="message-box" data-testid="message-box" name="message" type="text" placeholder="message" />
+      <button class="send-button" data-testid="send-button">Send</button>
+    </div>
   </main>
-  <aside>
-    <input class="nickname-box" data-testid="nickname-box" name="nickname" type="text" placeholder="nickname" />
-    <button class="nickname-button" data-testid="nickname-button">Change Username</button>
-    <ul class="users"></ul>
-  </aside>
   <script src="/socket.io/socket.io.js"></script>
   <script src='./js/chat.js'></script>
 </body>
