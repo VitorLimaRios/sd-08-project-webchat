@@ -1,3 +1,18 @@
+## Projeto de Web Chat
+
+Este projeto é um web chat desenvolvido com socket.io e foi organizado seguindo a arquitetura MVC (Model, View, Controller). Neste chat é possível enviar mensagens para todos os usuários conectados em tempo real e trocar o nome do usuário, além disso todas as mensagens são salvas no banco de dados e são carregadas assim que a pagina é carregada.
+
+## Como usar
+
+Faça o clone do projeto:
+- `git clone https://github.com/VitorLimaRios/sd-08-project-webchat.git`.
+
+Após clonar o projeto faça a instalação das dependencias através do npm:
+- `npm install`.
+
+---
+---
+
 ### Termos e acordos
 
 Ao iniciar este projeto, você concorda com as diretrizes do Código de Ética e Conduta e do Manual da Pessoa Estudante da Trybe.
