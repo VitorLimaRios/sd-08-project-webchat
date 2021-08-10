@@ -10,6 +10,10 @@ Faça o clone do projeto:
 Após clonar o projeto faça a instalação das dependencias através do npm:
 - `npm install`.
 
+Crie um arquivo .env na pasta raiz do projeto com as seguintes variáveis:
+- `DB_URL` _(caminho para seu banco de dados)_;
+- `DB_NAME` _(nome do seu banco de dados)_;
+
 ---
 ---
 
