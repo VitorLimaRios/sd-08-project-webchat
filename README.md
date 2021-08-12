@@ -1,6 +1,6 @@
 ## Projeto de Web Chat
 
-Este projeto é um web chat desenvolvido com socket.io e foi organizado seguindo a arquitetura MVC (Model, View, Controller). Neste chat é possível enviar mensagens para todos os usuários conectados em tempo real e trocar o nome do usuário, além disso todas as mensagens são salvas no banco de dados e são carregadas assim que a pagina é carregada.
+Este projeto é um web chat desenvolvido com socket.io e foi organizado seguindo a arquitetura MVC (Model, View, Controller). Neste chat é possível enviar mensagens e atualizar o nome do usuário para todos os usuários conectados em tempo real, além disso todas as mensagens são salvas no banco de dados e são carregadas assim que a pagina é carregada.
 
 ## Como usar
 
